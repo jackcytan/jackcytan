@@ -1,0 +1,1369 @@
+<!doctype html>
+<html lang="vi" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Bản Đồ Kiếm Tiền · Tân AI</title>
+<meta name="description" content="Bách khoa toàn thư về mọi cách kiếm tiền: từ xưa đến nay, online đến offline, đầu tư, kinh doanh, nghề nghiệp. Phát triển bởi Tân AI.">
+<meta name="author" content="Tân AI">
+<meta name="theme-color" content="#07090f">
+<meta property="og:title" content="Bản Đồ Kiếm Tiền · Tân AI">
+<meta property="og:description" content="Hơn 100 cách kiếm tiền được hướng dẫn chi tiết từng bước — phát triển bởi Tân AI.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💰</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07090f;--bg2:#0d111b;--card:rgba(255,255,255,.045);--card2:rgba(255,255,255,.08);
+  --line:rgba(255,255,255,.09);--text:#eef1f7;--muted:#9aa3b5;--dim:#6b7488;
+  --gold:#f5c451;--gold2:#ffdf8a;--em:#2ee6a6;--sky:#5cc8ff;--rose:#ff6b8b;--vio:#a78bfa;
+  --grad:linear-gradient(120deg,#f5c451 0%,#ffdf8a 30%,#2ee6a6 70%,#5cc8ff 100%);
+  --shadow:0 20px 60px -20px rgba(0,0,0,.7);--r:20px;
+  --glass:blur(18px) saturate(140%);
+}
+:root[data-theme="light"]{
+  --bg:#f6f4ee;--bg2:#ffffff;--card:rgba(255,255,255,.75);--card2:#ffffff;
+  --line:rgba(20,24,40,.09);--text:#141826;--muted:#5a6275;--dim:#8a91a2;
+  --gold:#c98a00;--gold2:#e0a210;--em:#0aa877;--sky:#1388d6;--rose:#e0335a;--vio:#7c5ce0;
+  --grad:linear-gradient(120deg,#c98a00 0%,#e0a210 30%,#0aa877 70%,#1388d6 100%);
+  --shadow:0 20px 50px -24px rgba(40,40,80,.35);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{font-family:"Be Vietnam Pro",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;transition:background .4s,color .4s}
+a{color:inherit;text-decoration:none}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+::selection{background:var(--gold);color:#111}
+
+/* ---------- ambient background ---------- */
+.bgfx{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.35;animation:float 22s ease-in-out infinite}
+.b1{width:520px;height:520px;background:#f5c451;top:-160px;left:-120px}
+.b2{width:460px;height:460px;background:#2ee6a6;top:30%;right:-160px;animation-delay:-7s}
+.b3{width:420px;height:420px;background:#5c7cff;bottom:-180px;left:25%;animation-delay:-13s}
+:root[data-theme="light"] .blob{opacity:.18}
+.grid-bg{position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:56px 56px;mask-image:radial-gradient(ellipse at 50% 0%,#000 0%,transparent 70%);opacity:.6}
+@keyframes float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(60px,-40px) scale(1.08)}66%{transform:translate(-40px,50px) scale(.95)}}
+
+/* ---------- nav ---------- */
+.nav{position:sticky;top:0;z-index:50;backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);background:color-mix(in srgb,var(--bg) 72%,transparent);border-bottom:1px solid var(--line)}
+.nav-in{max-width:1240px;margin:auto;display:flex;align-items:center;gap:18px;padding:12px 20px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.02em;white-space:nowrap}
+.logo-mark{width:38px;height:38px;border-radius:12px;background:var(--grad);display:grid;place-items:center;color:#111;font-size:19px;box-shadow:0 8px 24px -8px var(--gold)}
+.logo small{display:block;font-size:10.5px;font-weight:600;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-top:-3px}
+.links{display:flex;gap:4px;margin-left:auto}
+.links a{padding:8px 13px;border-radius:999px;font-size:14px;font-weight:500;color:var(--muted);transition:.2s}
+.links a:hover,.links a.on{color:var(--text);background:var(--card2)}
+.icon-btn{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--card);border:1px solid var(--line);font-size:17px;transition:.2s;flex-shrink:0;position:relative}
+.icon-btn:hover{transform:translateY(-2px);border-color:var(--gold)}
+.badge[hidden]{display:none}
+.badge{position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;border-radius:9px;background:var(--rose);color:#fff;font-size:10.5px;font-weight:700;display:grid;place-items:center;padding:0 5px}
+.menu-btn{display:none}
+
+/* ---------- layout ---------- */
+.wrap{max-width:1240px;margin:auto;padding:0 20px}
+section{padding:84px 0}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);padding:6px 14px;border-radius:999px;background:color-mix(in srgb,var(--gold) 12%,transparent);border:1px solid color-mix(in srgb,var(--gold) 30%,transparent)}
+.h2{font-size:clamp(28px,4vw,44px);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin:16px 0 12px}
+.sub{color:var(--muted);font-size:17px;max-width:680px}
+.grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.head{margin-bottom:40px}
+.head.center{text-align:center}.head.center .sub{margin:auto}
+
+/* ---------- hero ---------- */
+.hero{padding:90px 0 60px;text-align:center;position:relative}
+.hero h1{font-size:clamp(38px,7vw,82px);font-weight:900;letter-spacing:-.045em;line-height:1.02;margin:22px auto 20px;max-width:980px}
+.hero p.lead{font-size:clamp(16px,2vw,20px);color:var(--muted);max-width:720px;margin:auto}
+.search{max-width:640px;margin:36px auto 0;position:relative}
+.search input{width:100%;padding:20px 130px 20px 56px;border-radius:20px;border:1px solid var(--line);background:var(--card);backdrop-filter:var(--glass);font-size:16.5px;outline:none;transition:.25s;box-shadow:var(--shadow)}
+.search input:focus{border-color:var(--gold);box-shadow:0 0 0 4px color-mix(in srgb,var(--gold) 18%,transparent),var(--shadow)}
+.search .s-ic{position:absolute;left:20px;top:50%;transform:translateY(-50%);font-size:20px;opacity:.7}
+.search button{position:absolute;right:8px;top:8px;bottom:8px;padding:0 22px;border-radius:14px;background:var(--grad);color:#111;font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:18px}
+.chip{padding:7px 14px;border-radius:999px;font-size:13.5px;background:var(--card);border:1px solid var(--line);color:var(--muted);transition:.2s}
+.chip:hover{color:var(--text);border-color:var(--gold)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;max-width:880px;margin:54px auto 0}
+.stat{padding:22px 14px;border-radius:var(--r);background:var(--card);border:1px solid var(--line);backdrop-filter:var(--glass)}
+.stat b{display:block;font-size:34px;font-weight:800;letter-spacing:-.03em}
+.stat span{font-size:13.5px;color:var(--muted)}
+.cta-row{display:flex;gap:12px;justify-content:center;margin-top:30px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 24px;border-radius:14px;font-weight:700;font-size:15px;transition:.25s}
+.btn-pri{background:var(--grad);color:#111;box-shadow:0 12px 30px -10px var(--gold)}
+.btn-pri:hover{transform:translateY(-2px);box-shadow:0 18px 40px -10px var(--gold)}
+.btn-ghost{background:var(--card);border:1px solid var(--line)}
+.btn-ghost:hover{border-color:var(--gold);transform:translateY(-2px)}
+
+/* ---------- ladder ---------- */
+.ladder{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;align-items:end}
+.step{padding:22px 18px;border-radius:var(--r);background:var(--card);border:1px solid var(--line);position:relative;overflow:hidden;transition:.3s}
+.step:hover{transform:translateY(-6px);border-color:var(--gold)}
+.step::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--grad)}
+.step .n{font-size:13px;font-weight:700;color:var(--gold)}
+.step h4{font-size:17px;margin:6px 0 6px}
+.step p{font-size:13.5px;color:var(--muted)}
+.step:nth-child(1){min-height:170px}.step:nth-child(2){min-height:200px}.step:nth-child(3){min-height:230px}.step:nth-child(4){min-height:260px}.step:nth-child(5){min-height:290px}
+
+/* ---------- categories ---------- */
+.cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+.cat{padding:24px;border-radius:var(--r);background:var(--card);border:1px solid var(--line);cursor:pointer;transition:.3s;position:relative;overflow:hidden;text-align:left}
+.cat::after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;background:var(--c);filter:blur(60px);opacity:0;top:-60px;right:-60px;transition:.4s}
+.cat:hover{transform:translateY(-5px);border-color:color-mix(in srgb,var(--c) 60%,transparent);box-shadow:var(--shadow)}
+.cat:hover::after{opacity:.35}
+.cat .ic{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;font-size:26px;background:color-mix(in srgb,var(--c) 18%,transparent);border:1px solid color-mix(in srgb,var(--c) 35%,transparent);margin-bottom:16px}
+.cat h3{font-size:18.5px;letter-spacing:-.01em}
+.cat p{font-size:14px;color:var(--muted);margin:6px 0 14px;position:relative;z-index:1}
+.cat .cnt{font-size:12.5px;font-weight:600;color:var(--c)}
+
+/* ---------- explorer ---------- */
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:14px;border-radius:var(--r);background:var(--card);border:1px solid var(--line);backdrop-filter:var(--glass);position:sticky;top:72px;z-index:20;margin-bottom:22px}
+.toolbar input{flex:1 1 220px;padding:11px 16px;border-radius:12px;border:1px solid var(--line);background:var(--bg2);outline:none}
+.toolbar input:focus{border-color:var(--gold)}
+.sel{padding:11px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg2);outline:none;cursor:pointer}
+.seg{display:flex;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:3px}
+.seg button{padding:8px 13px;border-radius:9px;font-size:13.5px;color:var(--muted);font-weight:500}
+.seg button.on{background:var(--card2);color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.tg{padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg2);font-size:13.5px;color:var(--muted)}
+.tg.on{border-color:var(--rose);color:var(--rose);background:color-mix(in srgb,var(--rose) 10%,transparent)}
+.cat-pills{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:20px;scrollbar-width:none}
+.cat-pills::-webkit-scrollbar{display:none}
+.pill{white-space:nowrap;padding:9px 16px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:14px;color:var(--muted);transition:.2s}
+.pill.on{background:var(--text);color:var(--bg);border-color:var(--text);font-weight:600}
+.pill:hover:not(.on){border-color:var(--gold);color:var(--text)}
+.result-info{font-size:14px;color:var(--muted);margin-bottom:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.card{padding:22px;border-radius:var(--r);background:var(--card);border:1px solid var(--line);cursor:pointer;transition:.28s;display:flex;flex-direction:column;position:relative;animation:pop .45s both}
+.card:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--c) 55%,transparent);box-shadow:var(--shadow)}
+@keyframes pop{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.card-top{display:flex;gap:14px;align-items:flex-start}
+.card .em{width:48px;height:48px;flex-shrink:0;border-radius:14px;display:grid;place-items:center;font-size:24px;background:color-mix(in srgb,var(--c) 15%,transparent)}
+.card h3{font-size:16.5px;line-height:1.35;letter-spacing:-.01em}
+.card .ctag{font-size:12px;color:var(--c);font-weight:600}
+.card p{font-size:14px;color:var(--muted);margin:12px 0 16px;flex:1;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.meta{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:12px;padding:4px 10px;border-radius:8px;background:var(--bg2);border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.tag.g{color:var(--em);border-color:color-mix(in srgb,var(--em) 35%,transparent)}
+.tag.y{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 35%,transparent)}
+.tag.r{color:var(--rose);border-color:color-mix(in srgb,var(--rose) 35%,transparent)}
+.fav{position:absolute;top:16px;right:16px;font-size:18px;opacity:.45;transition:.2s}
+.fav:hover{opacity:1;transform:scale(1.2)}
+.fav.on{opacity:1}
+.empty{text-align:center;padding:60px 20px;color:var(--muted);grid-column:1/-1}
+.empty div{font-size:46px;margin-bottom:10px}
+.more{display:flex;justify-content:center;margin-top:26px}
+
+/* ---------- meters ---------- */
+.bars{display:flex;gap:3px}
+.bars i{width:14px;height:6px;border-radius:3px;background:var(--line)}
+.bars i.f{background:var(--mc)}
+
+/* ---------- modal ---------- */
+.modal{position:fixed;inset:0;z-index:100;display:none;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto;background:rgba(3,5,10,.62);backdrop-filter:blur(8px)}
+.modal.open{display:flex;animation:fade .25s}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.sheet{width:100%;max-width:860px;border-radius:26px;background:var(--bg2);border:1px solid var(--line);box-shadow:0 40px 120px -20px rgba(0,0,0,.8);overflow:hidden;animation:up .35s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes up{from{transform:translateY(40px) scale(.97);opacity:0}to{transform:none;opacity:1}}
+.sheet-hd{padding:34px 34px 26px;position:relative;background:radial-gradient(circle at 15% 0%,color-mix(in srgb,var(--c) 28%,transparent),transparent 60%)}
+.sheet-hd .em{width:68px;height:68px;border-radius:20px;display:grid;place-items:center;font-size:36px;background:color-mix(in srgb,var(--c) 18%,transparent);border:1px solid color-mix(in srgb,var(--c) 40%,transparent);margin-bottom:16px}
+.sheet-hd h2{font-size:clamp(24px,3.4vw,32px);letter-spacing:-.025em;line-height:1.2;padding-right:90px}
+.sheet-hd p{color:var(--muted);margin-top:10px;font-size:16px}
+.x{position:absolute;top:22px;right:22px;display:flex;gap:8px}
+.sheet-bd{padding:0 34px 34px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:26px}
+.kpi{padding:14px;border-radius:14px;background:var(--card);border:1px solid var(--line)}
+.kpi small{font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);font-weight:600}
+.kpi b{display:block;font-size:14.5px;margin-top:4px;line-height:1.35}
+.blk{margin-bottom:24px}
+.blk h4{font-size:15px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.steps-list{counter-reset:s;list-style:none}
+.steps-list li{counter-increment:s;position:relative;padding:12px 14px 12px 54px;border-radius:12px;margin-bottom:8px;background:var(--card);border:1px solid var(--line);font-size:15px}
+.steps-list li::before{content:counter(s);position:absolute;left:14px;top:11px;width:28px;height:28px;border-radius:9px;background:var(--grad);color:#111;font-weight:800;font-size:13.5px;display:grid;place-items:center}
+.pc{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pc ul{list-style:none;padding:16px;border-radius:14px;background:var(--card);border:1px solid var(--line)}
+.pc li{font-size:14.5px;padding:5px 0 5px 24px;position:relative}
+.pc .pro li::before{content:"✓";position:absolute;left:0;color:var(--em);font-weight:800}
+.pc .con li::before{content:"✕";position:absolute;left:0;color:var(--rose);font-weight:800}
+.tip{padding:18px 20px;border-radius:14px;background:color-mix(in srgb,var(--gold) 10%,transparent);border:1px solid color-mix(in srgb,var(--gold) 30%,transparent);font-size:15px}
+.tip b{color:var(--gold)}
+.related{display:flex;flex-wrap:wrap;gap:8px}
+.related button{padding:8px 14px;border-radius:10px;background:var(--card);border:1px solid var(--line);font-size:13.5px;transition:.2s}
+.related button:hover{border-color:var(--gold)}
+
+/* ---------- quiz ---------- */
+.quiz{max-width:820px;margin:auto;border-radius:28px;background:var(--card);border:1px solid var(--line);padding:38px;backdrop-filter:var(--glass);box-shadow:var(--shadow)}
+.progress{height:6px;border-radius:3px;background:var(--line);overflow:hidden;margin-bottom:26px}
+.progress i{display:block;height:100%;background:var(--grad);transition:width .4s}
+.q-num{font-size:13px;color:var(--gold);font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.q-title{font-size:clamp(21px,3vw,27px);font-weight:800;letter-spacing:-.02em;margin:8px 0 22px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.opt{padding:18px;border-radius:16px;background:var(--bg2);border:1.5px solid var(--line);text-align:left;transition:.2s;display:flex;gap:12px;align-items:center}
+.opt:hover{border-color:var(--gold);transform:translateY(-2px)}
+.opt.on{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 12%,var(--bg2))}
+.opt .oi{font-size:26px}
+.opt b{display:block;font-size:15.5px}
+.opt small{color:var(--muted);font-size:13px}
+.q-nav{display:flex;justify-content:space-between;margin-top:26px}
+.result-hd{text-align:center;margin-bottom:24px}
+.result-hd .emo{font-size:52px}
+.rec{display:flex;gap:14px;align-items:center;padding:16px;border-radius:16px;background:var(--bg2);border:1px solid var(--line);margin-bottom:10px;cursor:pointer;transition:.2s;text-align:left;width:100%}
+.rec:hover{border-color:var(--gold);transform:translateX(4px)}
+.rec .rk{width:34px;height:34px;border-radius:10px;background:var(--grad);color:#111;font-weight:800;display:grid;place-items:center;flex-shrink:0}
+.rec .em{font-size:26px}
+.rec .info{flex:1;min-width:0}
+.rec .info b{display:block;font-size:15.5px}
+.rec .info small{color:var(--muted);font-size:13px}
+.match{font-weight:800;color:var(--em);font-size:15px;white-space:nowrap}
+
+/* ---------- tools ---------- */
+.tools-tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:24px}
+.tool{display:none;grid-template-columns:1fr 1.15fr;gap:20px}
+.tool.on{display:grid;animation:pop .4s}
+.panel{padding:28px;border-radius:24px;background:var(--card);border:1px solid var(--line);backdrop-filter:var(--glass)}
+.panel h3{font-size:20px;margin-bottom:6px}
+.panel>p{color:var(--muted);font-size:14.5px;margin-bottom:20px}
+.field{margin-bottom:16px}
+.field label{display:flex;justify-content:space-between;font-size:14px;font-weight:600;margin-bottom:8px}
+.field label span{color:var(--gold);font-weight:700}
+.field input[type=number],.field input[type=text]{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg2);outline:none;font-size:15px}
+.field input:focus{border-color:var(--gold)}
+input[type=range]{width:100%;accent-color:var(--gold)}
+.big{font-size:clamp(28px,4vw,40px);font-weight:900;letter-spacing:-.03em;line-height:1.1}
+.res-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}
+.res-grid div{padding:14px;border-radius:14px;background:var(--bg2);border:1px solid var(--line)}
+.res-grid small{font-size:12px;color:var(--muted)}
+.res-grid b{display:block;font-size:17px}
+.chart{width:100%;height:220px;display:block}
+.jars{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.jar{padding:16px;border-radius:16px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden}
+.jar .fill{position:absolute;left:0;right:0;bottom:0;background:var(--jc);opacity:.16;transition:height .5s}
+.jar *{position:relative}
+.jar .pct{font-size:12px;font-weight:700;color:var(--jc)}
+.jar b{display:block;font-size:14px;margin:2px 0}
+.jar .amt{font-size:17px;font-weight:800}
+.jar small{display:block;font-size:12px;color:var(--muted);margin-top:4px;line-height:1.4}
+
+/* ---------- timeline ---------- */
+.timeline{position:relative;max-width:980px;margin:auto}
+.timeline::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:2px;background:linear-gradient(var(--gold),var(--em),var(--sky));transform:translateX(-50%)}
+.tl{width:50%;padding:0 40px 34px;position:relative}
+.tl:nth-child(odd){margin-left:0;text-align:right}
+.tl:nth-child(even){margin-left:50%}
+.tl::before{content:"";position:absolute;top:22px;width:16px;height:16px;border-radius:50%;background:var(--bg);border:3px solid var(--gold);box-shadow:0 0 0 5px color-mix(in srgb,var(--gold) 20%,transparent)}
+.tl:nth-child(odd)::before{right:-8px}.tl:nth-child(even)::before{left:-8px}
+.tl-card{padding:20px 22px;border-radius:18px;background:var(--card);border:1px solid var(--line);transition:.3s;display:inline-block;text-align:left;max-width:100%}
+.tl-card:hover{border-color:var(--gold);transform:scale(1.02)}
+.tl .yr{font-size:13px;font-weight:800;color:var(--gold);letter-spacing:.06em}
+.tl h4{font-size:17px;margin:4px 0 6px}
+.tl p{font-size:14px;color:var(--muted)}
+.tl .les{font-size:13px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);color:var(--em)}
+
+/* ---------- scam ---------- */
+.scams{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+.scam{padding:24px;border-radius:var(--r);background:var(--card);border:1px solid color-mix(in srgb,var(--rose) 25%,var(--line));transition:.3s}
+.scam:hover{transform:translateY(-4px);border-color:var(--rose)}
+.scam .ic{font-size:30px}
+.scam h4{font-size:17px;margin:10px 0 6px}
+.scam p{font-size:14px;color:var(--muted)}
+.scam .sign{margin-top:12px;font-size:13px;color:var(--rose);font-weight:600}
+.redflags{margin-top:28px;padding:28px;border-radius:24px;background:linear-gradient(135deg,color-mix(in srgb,var(--rose) 14%,transparent),color-mix(in srgb,var(--gold) 8%,transparent));border:1px solid color-mix(in srgb,var(--rose) 35%,transparent)}
+.redflags h3{font-size:21px;margin-bottom:14px}
+.redflags ol{padding-left:22px;display:grid;grid-template-columns:1fr 1fr;gap:8px 30px}
+.redflags li{font-size:15px}
+
+/* ---------- principles ---------- */
+.princ{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.pr{padding:22px;border-radius:var(--r);background:var(--card);border:1px solid var(--line)}
+.pr .n{font-size:36px;font-weight:900;line-height:1}
+.pr h4{font-size:16px;margin:10px 0 4px}
+.pr p{font-size:14px;color:var(--muted)}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--line);padding:50px 0 36px;margin-top:40px}
+.foot{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;align-items:flex-start}
+.foot p{color:var(--muted);font-size:14px;max-width:520px;margin-top:12px}
+.made{display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:16px;background:var(--card);border:1px solid var(--line);font-weight:600}
+.made b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:900;font-size:17px}
+.disc{font-size:12.5px;color:var(--dim);margin-top:26px;text-align:center}
+
+/* ---------- toast & top ---------- */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(120px);padding:13px 22px;border-radius:14px;background:var(--text);color:var(--bg);font-weight:600;font-size:14.5px;z-index:200;transition:.35s cubic-bezier(.2,.9,.3,1.2);box-shadow:var(--shadow)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.totop{position:fixed;right:20px;bottom:20px;z-index:40;opacity:0;pointer-events:none;transition:.3s}
+.totop.show{opacity:1;pointer-events:auto}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s,transform .7s}
+.reveal.in{opacity:1;transform:none}
+
+/* ---------- responsive ---------- */
+@media (max-width:1020px){
+  .links{display:none;position:absolute;top:64px;left:12px;right:12px;flex-direction:column;padding:10px;border-radius:18px;background:var(--bg2);border:1px solid var(--line);box-shadow:var(--shadow)}
+  .links.open{display:flex}
+  .links a{padding:12px 16px}
+  .menu-btn{display:grid}
+  #favBtn{margin-left:auto}
+  .ladder{grid-template-columns:1fr 1fr}
+  .step{min-height:0!important}
+  .tool.on{grid-template-columns:1fr}
+}
+@media (max-width:680px){
+  .scams{grid-template-columns:1fr}
+  section{padding:60px 0}
+  .wrap,.nav-in{padding-left:16px;padding-right:16px}
+  .hero{padding:56px 0 40px}
+  .stats{grid-template-columns:1fr 1fr}
+  .stat b{font-size:28px}
+  .search input{padding:17px 16px 17px 48px;font-size:15.5px}
+  .search button{display:none}
+  .ladder{grid-template-columns:1fr}
+  .toolbar{position:static}
+  .grid{grid-template-columns:1fr}
+  .kpis{grid-template-columns:1fr 1fr}
+  .pc{grid-template-columns:1fr}
+  .sheet-hd,.sheet-bd{padding-left:20px;padding-right:20px}
+  .sheet-hd h2{padding-right:0;margin-top:40px}
+  .modal{padding:12px 8px}
+  .quiz{padding:24px 18px}
+  .opts{grid-template-columns:1fr}
+  .jars{grid-template-columns:1fr 1fr}
+  .res-grid{grid-template-columns:1fr}
+  .timeline::before{left:10px}
+  .tl,.tl:nth-child(even){width:100%;margin-left:0;padding:0 0 26px 38px;text-align:left}
+  .tl:nth-child(odd){text-align:left}
+  .tl:nth-child(odd)::before,.tl:nth-child(even)::before{left:2px;right:auto}
+  .redflags ol{grid-template-columns:1fr}
+  .logo small{display:none}
+  .nav-in{gap:8px}
+  .logo{font-size:15px;gap:8px;min-width:0}
+  .logo>span:last-child{overflow:hidden;text-overflow:ellipsis}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+</style>
+</head>
+<body>
+<div class="bgfx"><div class="grid-bg"></div><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+
+<nav class="nav">
+ <div class="nav-in">
+  <a href="#top" class="logo"><span class="logo-mark">₫</span><span>Bản Đồ Kiếm Tiền<small>by Tân AI</small></span></a>
+  <div class="links" id="links">
+   <a href="#cats">Danh mục</a>
+   <a href="#explore">Khám phá</a>
+   <a href="#quiz">Gợi ý cho bạn</a>
+   <a href="#tools">Công cụ</a>
+   <a href="#history">Lịch sử</a>
+   <a href="#scam">Cảnh báo</a>
+  </div>
+  <button class="icon-btn" id="favBtn" title="Cách đã lưu" aria-label="Cách đã lưu">♥<span class="badge" id="favCount" hidden>0</span></button>
+  <button class="icon-btn" id="themeBtn" title="Đổi giao diện" aria-label="Đổi giao diện sáng tối">🌙</button>
+  <button class="icon-btn menu-btn" id="menuBtn" aria-label="Mở menu">☰</button>
+ </div>
+</nav>
+
+<main id="top">
+<!-- HERO -->
+<header class="hero wrap">
+ <span class="eyebrow reveal">✦ Bách khoa toàn thư kiếm tiền · Tân AI</span>
+ <h1 class="reveal">Mọi con đường <span class="grad-text">kiếm tiền</span> — trong một tấm bản đồ</h1>
+ <p class="lead reveal">Từ trao đổi hàng hóa thời cổ đại đến kỷ nguyên AI. Từ gánh hàng rong đến sàn chứng khoán. Online, offline, đầu tư, kinh doanh — tất cả được hướng dẫn rõ ràng từng bước.</p>
+ <form class="search reveal" id="heroSearch">
+  <span class="s-ic">🔎</span>
+  <input id="heroQ" type="search" placeholder="Tìm: bán hàng online, chứng khoán, homestay, AI…" autocomplete="off">
+  <button type="submit">Tìm kiếm</button>
+ </form>
+ <div class="chips reveal" id="chips">
+  <button class="chip" data-preset="nocap">💸 Không cần vốn</button>
+  <button class="chip" data-preset="online">🏠 Online tại nhà</button>
+  <button class="chip" data-preset="passive">💤 Thu nhập thụ động</button>
+  <button class="chip" data-preset="ai">🤖 Ứng dụng AI</button>
+  <button class="chip" data-preset="lowrisk">🛡️ Rủi ro thấp</button>
+  <button class="chip" data-preset="easy">🌱 Dễ cho người mới</button>
+ </div>
+ <div class="stats">
+  <div class="stat reveal"><b data-count="methods">0</b><span>cách kiếm tiền</span></div>
+  <div class="stat reveal"><b data-count="cats">0</b><span>lĩnh vực</span></div>
+  <div class="stat reveal"><b>5.000+</b><span>năm lịch sử</span></div>
+  <div class="stat reveal"><b>100%</b><span>miễn phí</span></div>
+ </div>
+ <div class="cta-row reveal">
+  <a href="#quiz" class="btn btn-pri">✨ Tìm cách phù hợp với tôi</a>
+  <a href="#explore" class="btn btn-ghost">Khám phá tất cả →</a>
+ </div>
+</header>
+
+<!-- LADDER -->
+<section class="wrap">
+ <div class="head center reveal">
+  <span class="eyebrow">Lộ trình</span>
+  <h2 class="h2">5 bậc thang <span class="grad-text">tự do tài chính</span></h2>
+  <p class="sub">Đừng nhảy cóc. Người giàu bền vững đều đi qua những bậc thang này theo đúng thứ tự.</p>
+ </div>
+ <div class="ladder">
+  <div class="step reveal"><div class="n">BẬC 1</div><h4>🔥 Kiếm tiền chủ động</h4><p>Có thu nhập ổn định từ công việc, nghề tay nghề hoặc freelance.</p></div>
+  <div class="step reveal"><div class="n">BẬC 2</div><h4>🛡️ Quỹ dự phòng</h4><p>Tích lũy 3–6 tháng chi tiêu, trả hết nợ tiêu dùng lãi cao.</p></div>
+  <div class="step reveal"><div class="n">BẬC 3</div><h4>🚀 Tăng thu nhập</h4><p>Nâng kỹ năng, mở nghề tay trái, kinh doanh nhỏ để có nhiều nguồn thu.</p></div>
+  <div class="step reveal"><div class="n">BẬC 4</div><h4>📈 Đầu tư tích sản</h4><p>Đều đặn đưa 20–50% thu nhập vào quỹ, cổ phiếu, bất động sản.</p></div>
+  <div class="step reveal"><div class="n">BẬC 5</div><h4>🏝️ Tự do tài chính</h4><p>Thu nhập thụ động đủ chi trả cuộc sống. Làm việc vì đam mê, không vì tiền.</p></div>
+ </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="wrap" id="cats">
+ <div class="head reveal">
+  <span class="eyebrow">Danh mục</span>
+  <h2 class="h2">12 lĩnh vực kiếm tiền</h2>
+  <p class="sub">Chọn một lĩnh vực để xem toàn bộ các cách kiếm tiền bên trong.</p>
+ </div>
+ <div class="cats" id="catGrid"></div>
+</section>
+
+<!-- EXPLORE -->
+<section class="wrap" id="explore">
+ <div class="head reveal">
+  <span class="eyebrow">Khám phá</span>
+  <h2 class="h2">Thư viện <span class="grad-text">cách kiếm tiền</span></h2>
+  <p class="sub">Lọc theo vốn, hình thức, độ khó. Bấm vào từng thẻ để xem hướng dẫn chi tiết từng bước.</p>
+ </div>
+ <div class="cat-pills" id="catPills"></div>
+ <div class="toolbar">
+  <input id="q" type="search" placeholder="🔎 Tìm theo tên, mô tả, kỹ năng…" autocomplete="off">
+  <select class="sel" id="fVon" aria-label="Vốn tối đa">
+   <option value="9">💰 Mọi mức vốn</option>
+   <option value="0">0đ – không vốn</option>
+   <option value="1">Dưới 10 triệu</option>
+   <option value="2">Dưới 100 triệu</option>
+   <option value="3">Dưới 1 tỷ</option>
+  </select>
+  <select class="sel" id="fSort" aria-label="Sắp xếp">
+   <option value="pop">⭐ Phổ biến</option>
+   <option value="von">Vốn thấp → cao</option>
+   <option value="k">Dễ → khó</option>
+   <option value="r">Rủi ro thấp → cao</option>
+   <option value="az">A → Z</option>
+  </select>
+  <div class="seg" id="fMode">
+   <button data-v="all" class="on">Tất cả</button><button data-v="on">Online</button><button data-v="off">Offline</button>
+  </div>
+  <button class="tg" id="fPassive">💤 Thụ động</button>
+  <button class="tg" id="fFav">♥ Đã lưu</button>
+ </div>
+ <div class="result-info" id="resultInfo"></div>
+ <div class="grid" id="grid"></div>
+ <div class="more"><button class="btn btn-ghost" id="moreBtn" hidden>Xem thêm</button></div>
+</section>
+
+<!-- QUIZ -->
+<section class="wrap" id="quiz">
+ <div class="head center reveal">
+  <span class="eyebrow">Tân AI gợi ý</span>
+  <h2 class="h2">Cách kiếm tiền nào <span class="grad-text">hợp với bạn?</span></h2>
+  <p class="sub">Trả lời 6 câu hỏi nhanh — Tân AI sẽ chấm điểm hơn 100 phương án và đề xuất những con đường phù hợp nhất.</p>
+ </div>
+ <div class="quiz reveal" id="quizBox"></div>
+</section>
+
+<!-- TOOLS -->
+<section class="wrap" id="tools">
+ <div class="head center reveal">
+  <span class="eyebrow">Công cụ</span>
+  <h2 class="h2">Máy tính <span class="grad-text">tài chính</span></h2>
+  <p class="sub">Biến con số thành kế hoạch: xem sức mạnh lãi kép, tính mục tiêu tự do tài chính và chia thu nhập thông minh.</p>
+ </div>
+ <div class="tools-tabs" id="toolTabs">
+  <button class="pill on" data-t="compound">📈 Lãi kép</button>
+  <button class="pill" data-t="fire">🏝️ Tự do tài chính</button>
+  <button class="pill" data-t="jars">🫙 6 chiếc hũ</button>
+ </div>
+
+ <div class="tool on" id="t-compound">
+  <div class="panel">
+   <h3>Sức mạnh lãi kép</h3>
+   <p>“Lãi kép là kỳ quan thứ 8 của thế giới.” Thử xem tiền của bạn lớn lên thế nào.</p>
+   <div class="field"><label>Vốn ban đầu <span id="cPv"></span></label><input type="range" id="cP" min="0" max="2000" step="10" value="50"></div>
+   <div class="field"><label>Góp thêm mỗi tháng <span id="cCv"></span></label><input type="range" id="cC" min="0" max="100" step="0.5" value="5"></div>
+   <div class="field"><label>Lợi nhuận kỳ vọng / năm <span id="cRv"></span></label><input type="range" id="cR" min="1" max="25" step="0.5" value="10"></div>
+   <div class="field"><label>Số năm <span id="cNv"></span></label><input type="range" id="cN" min="1" max="40" step="1" value="20"></div>
+  </div>
+  <div class="panel">
+   <small style="color:var(--muted)">Tài sản sau <b id="cYears"></b></small>
+   <div class="big grad-text" id="cFV">0</div>
+   <div class="res-grid">
+    <div><small>Tổng tiền bạn bỏ vào</small><b id="cIn"></b></div>
+    <div><small>Tiền lãi sinh ra</small><b id="cInt" style="color:var(--em)"></b></div>
+    <div><small>Quy tắc 72 – thời gian nhân đôi</small><b id="c72"></b></div>
+    <div><small>Lãi chiếm bao nhiêu %</small><b id="cPct"></b></div>
+   </div>
+   <svg class="chart" id="cChart" viewBox="0 0 600 220" preserveAspectRatio="none" role="img" aria-label="Biểu đồ tăng trưởng tài sản"></svg>
+   <div style="display:flex;gap:16px;font-size:12.5px;color:var(--muted);margin-top:8px"><span>▮ <span style="color:var(--sky)">Tiền gốc</span></span><span>▮ <span style="color:var(--gold)">Tiền lãi</span></span></div>
+  </div>
+ </div>
+
+ <div class="tool" id="t-fire">
+  <div class="panel">
+   <h3>Bao giờ bạn tự do tài chính?</h3>
+   <p>Theo quy tắc 4%: bạn cần tài sản ≈ 25 lần chi tiêu một năm để sống bằng lợi nhuận đầu tư.</p>
+   <div class="field"><label>Chi tiêu mỗi tháng <span id="fEv"></span></label><input type="range" id="fE" min="3" max="200" step="1" value="20"></div>
+   <div class="field"><label>Tài sản đầu tư hiện có <span id="fSv"></span></label><input type="range" id="fS" min="0" max="10000" step="50" value="200"></div>
+   <div class="field"><label>Tiết kiệm đầu tư mỗi tháng <span id="fCv"></span></label><input type="range" id="fC" min="0" max="200" step="0.5" value="8"></div>
+   <div class="field"><label>Lợi nhuận đầu tư / năm <span id="fRv"></span></label><input type="range" id="fR" min="2" max="20" step="0.5" value="9"></div>
+  </div>
+  <div class="panel">
+   <small style="color:var(--muted)">Con số tự do tài chính của bạn</small>
+   <div class="big grad-text" id="fTarget">0</div>
+   <div class="res-grid">
+    <div><small>Thời gian cần</small><b id="fYears" style="color:var(--em)"></b></div>
+    <div><small>Thu nhập thụ động ước tính / tháng</small><b id="fPassiveOut"></b></div>
+    <div><small>Tiến độ hiện tại</small><b id="fProg"></b></div>
+    <div><small>Tỷ lệ tiết kiệm cần thiết</small><b id="fRate"></b></div>
+   </div>
+   <div class="progress" style="margin:10px 0 16px"><i id="fBar" style="width:0"></i></div>
+   <div class="tip" id="fTip"></div>
+  </div>
+ </div>
+
+ <div class="tool" id="t-jars">
+  <div class="panel">
+   <h3>Quy tắc 6 chiếc hũ</h3>
+   <p>Phương pháp quản lý tiền nổi tiếng của T. Harv Eker: chia mọi khoản thu nhập vào 6 “hũ” với mục đích riêng.</p>
+   <div class="field"><label>Thu nhập mỗi tháng <span id="jIv"></span></label><input type="range" id="jI" min="3" max="300" step="1" value="25"></div>
+   <div class="tip"><b>Mẹo:</b> Hãy chuyển tiền vào các tài khoản/ví riêng ngay ngày nhận lương. Hũ “Tự do tài chính” là con gà đẻ trứng vàng — không bao giờ tiêu tiền gốc trong hũ này.</div>
+  </div>
+  <div class="panel"><div class="jars" id="jars"></div></div>
+ </div>
+</section>
+
+<!-- HISTORY -->
+<section class="wrap" id="history">
+ <div class="head center reveal">
+  <span class="eyebrow">Từ xưa đến nay</span>
+  <h2 class="h2">Lịch sử <span class="grad-text">kiếm tiền</span> của loài người</h2>
+  <p class="sub">Công cụ thay đổi, nhưng nguyên lý tạo ra giá trị thì vẫn vậy. Hiểu quá khứ để nắm bắt cơ hội tương lai.</p>
+ </div>
+ <div class="timeline" id="timeline"></div>
+</section>
+
+<!-- PRINCIPLES -->
+<section class="wrap" id="principles">
+ <div class="head center reveal">
+  <span class="eyebrow">Nguyên tắc vàng</span>
+  <h2 class="h2">8 nguyên tắc <span class="grad-text">giữ tiền & làm giàu</span></h2>
+  <p class="sub">Kiếm tiền mới là một nửa câu chuyện. Giữ và nhân tiền là nửa còn lại.</p>
+ </div>
+ <div class="princ" id="princ"></div>
+</section>
+
+<!-- SCAM -->
+<section class="wrap" id="scam">
+ <div class="head center reveal">
+  <span class="eyebrow" style="color:var(--rose);background:color-mix(in srgb,var(--rose) 12%,transparent);border-color:color-mix(in srgb,var(--rose) 30%,transparent)">⚠ Cảnh báo</span>
+  <h2 class="h2">Những “cách kiếm tiền” <span style="color:var(--rose)">cần tránh xa</span></h2>
+  <p class="sub">Người muốn kiếm tiền nhanh là mục tiêu số 1 của kẻ lừa đảo. Nhận diện để bảo vệ bản thân và gia đình.</p>
+ </div>
+ <div class="scams" id="scams"></div>
+ <div class="redflags reveal">
+  <h3>🚩 8 dấu hiệu nhận biết lừa đảo</h3>
+  <ol id="flags"></ol>
+ </div>
+</section>
+</main>
+
+<footer>
+ <div class="wrap">
+  <div class="foot">
+   <div>
+    <a href="#top" class="logo"><span class="logo-mark">₫</span><span>Bản Đồ Kiếm Tiền<small>by Tân AI</small></span></a>
+    <p>Bách khoa toàn thư về mọi cách kiếm tiền — giúp bạn tìm ra con đường phù hợp, bắt đầu đúng cách và tránh những cạm bẫy phổ biến.</p>
+   </div>
+   <div class="made">⚡ Ứng dụng được phát triển bởi <b>Tân AI</b></div>
+  </div>
+  <p class="disc">Nội dung mang tính tham khảo và giáo dục, không phải lời khuyên đầu tư hay pháp lý. Thu nhập minh họa có thể khác nhau tùy năng lực, thị trường và thời điểm. Mọi quyết định tài chính là trách nhiệm của bạn.<br>© <span id="yr"></span> Tân AI · Bảo lưu mọi quyền.</p>
+ </div>
+</footer>
+
+<div class="modal" id="modal" aria-hidden="true"><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
+<div class="toast" id="toast"></div>
+<button class="icon-btn totop" id="toTop" aria-label="Lên đầu trang">↑</button>
+
+<script>
+/* Bản Đồ Kiếm Tiền — dữ liệu (phần 1) — © Tân AI */
+const CATS=[
+ {id:"dautu",n:"Đầu tư tài chính",i:"📈",c:"#f5c451",d:"Để tiền làm việc cho bạn: tiết kiệm, cổ phiếu, quỹ, trái phiếu, vàng, tài sản số."},
+ {id:"bds",n:"Bất động sản",i:"🏠",c:"#ff9f5a",d:"Kênh làm giàu kinh điển: cho thuê, homestay, đất nền, môi giới, cải tạo bán lại."},
+ {id:"kinhdoanh",n:"Kinh doanh truyền thống",i:"🏪",c:"#ff6b8b",d:"Quán xá, cửa hàng, nhượng quyền, sản xuất, phân phối, buôn bán."},
+ {id:"tmdt",n:"Thương mại điện tử",i:"🛒",c:"#ff7ad9",d:"Bán hàng trên sàn, TikTok Shop, dropshipping, Amazon, Print on Demand."},
+ {id:"noidung",n:"Sáng tạo nội dung",i:"🎬",c:"#a78bfa",d:"YouTube, TikTok, blog, podcast, affiliate, KOC — biến sự chú ý thành tiền."},
+ {id:"freelance",n:"Freelance & Kỹ năng",i:"💼",c:"#5cc8ff",d:"Bán thời gian & chuyên môn: lập trình, thiết kế, viết, dịch, marketing."},
+ {id:"giaoduc",n:"Giáo dục & Tri thức",i:"🎓",c:"#3ddbd9",d:"Dạy học, khóa học online, coaching, đào tạo doanh nghiệp, ebook."},
+ {id:"congnghe",n:"Công nghệ & AI",i:"🤖",c:"#2ee6a6",d:"SaaS, app, dịch vụ AI, tự động hóa, template số, game indie."},
+ {id:"dichvu",n:"Dịch vụ & Nghề tay nghề",i:"🛠️",c:"#7dd87d",d:"Tài xế, sửa chữa, làm đẹp, sự kiện, nấu ăn, chăm sóc, du lịch."},
+ {id:"nongnghiep",n:"Nông nghiệp & Chăn nuôi",i:"🌾",c:"#b5e550",d:"Rau sạch, cây ăn trái, chăn nuôi, thủy sản, nấm, yến, farmstay."},
+ {id:"thudong",n:"Thu nhập thụ động",i:"💤",c:"#8fa8ff",d:"Kiếm tiền cả khi ngủ: cho thuê tài sản, bản quyền, máy tự động, tài sản số."},
+ {id:"sunghiep",n:"Sự nghiệp & Việc làm",i:"🧭",c:"#ffb86b",d:"Tăng lương, nghề kỹ năng cao, làm remote cho nước ngoài, sales hoa hồng."}
+];
+const VON=["0đ – gần như không vốn","Dưới 10 triệu","10 – 100 triệu","100 triệu – 1 tỷ","Trên 1 tỷ"];
+const VON_S=["0đ","< 10tr","10–100tr","100tr–1 tỷ","> 1 tỷ"];
+const MODE={on:"Online",off:"Offline",mix:"Online + Offline"};
+const SKILL={tech:"Công nghệ",creative:"Sáng tạo",sales:"Bán hàng & giao tiếp",hand:"Tay nghề",finance:"Phân tích & tài chính",teach:"Chia sẻ & giảng dạy",care:"Phục vụ & chăm sóc"};
+
+const M=[
+/* ===================== ĐẦU TƯ TÀI CHÍNH ===================== */
+{id:"tietkiem",c:"dautu",n:"Gửi tiết kiệm ngân hàng",i:"🏦",d:"Cách an toàn nhất để giữ và tăng tiền nhẹ nhàng. Là nền móng cho quỹ dự phòng trước khi bước sang mọi kênh đầu tư khác.",v:1,k:1,r:1,t:"Ngay lập tức (theo kỳ hạn)",inc:"Lãi ~4–6%/năm",m:"mix",p:1,s:["finance"],
+ st:["Lập quỹ dự phòng tối thiểu 3–6 tháng chi tiêu","So sánh lãi suất giữa các ngân hàng (gửi online thường cao hơn tại quầy)","Chia nhỏ thành nhiều sổ kỳ hạn khác nhau (bậc thang) để linh hoạt rút","Tái tục tự động và cộng dồn lãi để hưởng lãi kép"],
+ pro:["Gần như không rủi ro, được bảo hiểm tiền gửi","Đơn giản, ai cũng làm được","Thanh khoản tốt"],con:["Lợi suất thấp, có lúc chỉ ngang lạm phát","Rút trước hạn mất lãi","Không giúp giàu nhanh"],
+ tip:"Hãy coi tiết kiệm là “bãi đỗ” của tiền, không phải đích đến. Khi quỹ dự phòng đã đủ, phần dư nên chuyển sang kênh sinh lời cao hơn."},
+{id:"quymo",c:"dautu",n:"Chứng chỉ quỹ mở & ETF",i:"🧺",d:"Ủy thác tiền cho chuyên gia hoặc mua cả “rổ” cổ phiếu chỉ số. Phù hợp người bận rộn muốn đầu tư dài hạn có kỷ luật.",v:1,k:2,r:3,t:"Dài hạn 3–10 năm",inc:"Kỳ vọng ~8–15%/năm dài hạn",m:"on",p:1,s:["finance"],
+ st:["Mở tài khoản tại công ty quản lý quỹ hoặc qua app ngân hàng/chứng khoán","Chọn quỹ cổ phiếu, trái phiếu hoặc cân bằng theo khẩu vị rủi ro","Đầu tư định kỳ hàng tháng (DCA) — chỉ từ vài trăm nghìn","Giữ tối thiểu 3–5 năm, xem lại danh mục mỗi năm 1 lần"],
+ pro:["Đa dạng hóa tự động","Không cần theo dõi bảng điện","Vốn khởi đầu rất nhỏ"],con:["Có phí quản lý","Biến động theo thị trường chung","Không “đánh bại” thị trường trong ngắn hạn"],
+ tip:"DCA đều đặn + thời gian dài là công thức giúp người bình thường tích lũy tài sản hiệu quả nhất. Đừng dừng mua khi thị trường giảm — đó là lúc mua được giá rẻ."},
+{id:"cophieu",c:"dautu",n:"Đầu tư cổ phiếu dài hạn",i:"📊",d:"Trở thành đồng sở hữu doanh nghiệp tốt và lớn lên cùng họ. Đầu tư giá trị theo trường phái Warren Buffett.",v:1,k:3,r:3,t:"Dài hạn 3–10+ năm",inc:"10–20%/năm nếu chọn đúng",m:"on",p:1,s:["finance"],
+ st:["Học đọc báo cáo tài chính cơ bản: doanh thu, lợi nhuận, nợ, dòng tiền","Mở tài khoản chứng khoán (eKYC online 5 phút)","Chọn doanh nghiệp có lợi thế cạnh tranh, ban lãnh đạo tốt, định giá hợp lý","Giải ngân từng phần, đa dạng 5–10 mã ở các ngành khác nhau","Nắm giữ dài hạn, chỉ bán khi câu chuyện doanh nghiệp thay đổi"],
+ pro:["Lợi nhuận dài hạn cao nhất trong các tài sản phổ biến","Thanh khoản cao","Được nhận cổ tức"],con:["Biến động mạnh, có lúc giảm 30–50%","Cần kiến thức và tâm lý vững","Dễ bị cuốn vào tin đồn"],
+ tip:"Chỉ đầu tư tiền nhàn rỗi mà 5 năm tới bạn không cần dùng. Không vay margin khi chưa có kinh nghiệm."},
+{id:"trading",c:"dautu",n:"Lướt sóng / Trading chứng khoán",i:"⚡",d:"Mua bán ngắn hạn dựa trên phân tích kỹ thuật và dòng tiền. Lợi nhuận nhanh nhưng phần lớn người mới thua lỗ.",v:2,k:5,r:5,t:"Vài ngày – vài tuần",inc:"Rất biến động: lãi lớn hoặc lỗ lớn",m:"on",p:0,s:["finance"],
+ st:["Học phân tích kỹ thuật: xu hướng, hỗ trợ/kháng cự, khối lượng","Viết ra hệ thống giao dịch: điểm vào, điểm cắt lỗ, điểm chốt lời","Giao dịch thử bằng vốn nhỏ ít nhất 6 tháng, ghi nhật ký mọi lệnh","Quản trị vốn: mỗi lệnh không rủi ro quá 1–2% tài khoản"],
+ pro:["Có thể sinh lời nhanh","Rèn tư duy kỷ luật","Tận dụng được cả thị trường đi ngang"],con:["Đa số trader nhỏ lẻ thua lỗ","Áp lực tâm lý cực lớn","Tốn thời gian theo dõi"],
+ tip:"Cắt lỗ là kỹ năng số 1. Nếu không có kỷ luật cắt lỗ, đừng trading."},
+{id:"traiphieu",c:"dautu",n:"Trái phiếu",i:"📜",d:"Cho Chính phủ hoặc doanh nghiệp vay tiền để nhận lãi cố định. Ổn định hơn cổ phiếu, lãi cao hơn tiết kiệm.",v:2,k:2,r:2,t:"1–5 năm",inc:"~5–10%/năm",m:"on",p:1,s:["finance"],
+ st:["Phân biệt trái phiếu Chính phủ (an toàn) và doanh nghiệp (lãi cao, rủi ro cao)","Kiểm tra sức khỏe tài chính, tài sản đảm bảo, xếp hạng tín nhiệm của tổ chức phát hành","Mua qua công ty chứng khoán uy tín hoặc chứng chỉ quỹ trái phiếu","Đa dạng nhiều tổ chức phát hành, không dồn hết vào một mã"],
+ pro:["Dòng tiền lãi đều đặn","Ít biến động","Phù hợp người thích ổn định"],con:["Rủi ro vỡ nợ với trái phiếu doanh nghiệp yếu","Thanh khoản thấp","Lợi suất bị giới hạn"],
+ tip:"Lãi suất càng cao bất thường so với mặt bằng, rủi ro càng lớn. Quỹ trái phiếu là cách dễ nhất để tiếp cận cho người mới."},
+{id:"vang",c:"dautu",n:"Vàng & kim loại quý",i:"🥇",d:"Tài sản trú ẩn hàng nghìn năm. Giữ giá trị khi lạm phát, khủng hoảng, đồng tiền mất giá.",v:1,k:1,r:2,t:"Dài hạn",inc:"Bảo toàn giá trị, tăng theo chu kỳ",m:"off",p:1,s:["finance"],
+ st:["Xác định tỷ trọng hợp lý (thường 5–15% tài sản)","Chọn vàng miếng/nhẫn trơn của thương hiệu uy tín, giữ hóa đơn","Mua rải rác theo thời gian thay vì một lần","Bảo quản an toàn hoặc gửi ngân hàng"],
+ pro:["Phòng thủ khi khủng hoảng","Dễ hiểu, dễ mua bán","Được tin tưởng toàn cầu"],con:["Không tạo dòng tiền","Chênh lệch mua – bán cao","Có giai đoạn đi ngang rất lâu"],
+ tip:"Vàng là “bảo hiểm” cho tài sản, không phải cỗ máy sinh lời. Tránh mua đuổi khi giá đang nóng và chênh lệch mua bán lớn."},
+{id:"crypto",c:"dautu",n:"Tài sản số (Crypto)",i:"🪙",d:"Bitcoin, Ethereum và hệ sinh thái blockchain. Tiềm năng lớn nhưng biến động cực mạnh, nhiều dự án lừa đảo.",v:1,k:4,r:5,t:"Không xác định",inc:"Có thể x lần hoặc mất trắng",m:"on",p:0,s:["finance","tech"],
+ st:["Tìm hiểu kỹ công nghệ và khung pháp lý hiện hành tại nơi bạn sống","Chỉ dùng số tiền chấp nhận mất 100%","Ưu tiên tài sản vốn hóa lớn, tránh coin rác và dự án hứa lãi","Tự bảo quản ví, bảo mật seed phrase, bật xác thực 2 lớp"],
+ pro:["Tiềm năng tăng trưởng cao","Giao dịch 24/7 toàn cầu","Công nghệ mới"],con:["Biến động 50–80% là bình thường","Rất nhiều lừa đảo, rug-pull","Rủi ro pháp lý và rủi ro sàn"],
+ tip:"Không bao giờ tham gia dự án “cam kết lợi nhuận cố định hằng ngày” — đó gần như chắc chắn là mô hình Ponzi."},
+{id:"cotuc",c:"dautu",n:"Đầu tư cổ tức",i:"💵",d:"Xây danh mục cổ phiếu trả cổ tức đều đặn để tạo dòng tiền thụ động hàng năm, tái đầu tư để lãi kép.",v:3,k:3,r:2,t:"5–15 năm để có dòng tiền đáng kể",inc:"Cổ tức ~5–8%/năm + tăng giá",m:"on",p:1,s:["finance"],
+ st:["Lọc doanh nghiệp trả cổ tức tiền mặt đều đặn nhiều năm","Kiểm tra tỷ lệ chi trả bền vững (không vay nợ để trả cổ tức)","Mua tích lũy dần, tái đầu tư cổ tức","Theo dõi kết quả kinh doanh hàng quý"],
+ pro:["Dòng tiền thụ động thật sự","Ít áp lực hơn lướt sóng","Lãi kép mạnh theo thời gian"],con:["Cần vốn lớn để sống được từ cổ tức","Tăng trưởng có thể chậm","Cổ tức có thể bị cắt"],
+ tip:"Quy tắc 4%: muốn nhận 20 triệu/tháng từ cổ tức ~6%, bạn cần danh mục khoảng 4 tỷ. Hãy bắt đầu từ sớm."},
+{id:"thienthan",c:"dautu",n:"Đầu tư thiên thần / Startup",i:"🦄",d:"Rót vốn vào startup giai đoạn sớm để đổi lấy cổ phần. Phần lớn thất bại, nhưng một thương vụ thắng có thể gấp hàng chục lần.",v:4,k:5,r:5,t:"5–10 năm",inc:"0 hoặc x10–x100",m:"mix",p:1,s:["finance","sales"],
+ st:["Tham gia mạng lưới nhà đầu tư thiên thần, sự kiện khởi nghiệp","Đánh giá đội ngũ sáng lập, thị trường, sản phẩm, mô hình kinh doanh","Đầu tư nhỏ vào nhiều startup (10–20 công ty)","Đồng hành, hỗ trợ kết nối để tăng giá trị khoản đầu tư"],
+ pro:["Tiềm năng lợi nhuận cực lớn","Được đồng hành cùng người tài","Tạo tác động xã hội"],con:["Đa số startup thất bại","Vốn bị “khóa” nhiều năm","Đòi hỏi kinh nghiệm và quan hệ"],
+ tip:"Không bao giờ dành quá 10% tài sản cho đầu tư mạo hiểm."},
+{id:"phaisinh",c:"dautu",n:"Chứng khoán phái sinh",i:"🎢",d:"Hợp đồng tương lai chỉ số với đòn bẩy cao, cho phép kiếm lời cả khi thị trường tăng hay giảm. Chỉ dành cho người có kinh nghiệm.",v:2,k:5,r:5,t:"Trong ngày – vài ngày",inc:"Biến động rất lớn theo đòn bẩy",m:"on",p:0,s:["finance"],
+ st:["Thành thạo chứng khoán cơ sở trước","Học cơ chế ký quỹ, đòn bẩy, ngày đáo hạn","Luôn đặt lệnh cắt lỗ tự động","Giao dịch khối lượng nhỏ cho đến khi có lãi ổn định nhiều tháng"],
+ pro:["Kiếm lời cả hai chiều","Vốn yêu cầu thấp nhờ đòn bẩy","Thanh khoản cao"],con:["Đòn bẩy khuếch đại thua lỗ","Áp lực tâm lý rất lớn","Không phù hợp người mới"],
+ tip:"Chỉ giao dịch trên sàn được cấp phép hợp pháp. Tránh xa các sàn forex/“quyền chọn nhị phân” không phép quảng cáo trên mạng."},
+
+/* ===================== BẤT ĐỘNG SẢN ===================== */
+{id:"chothuenha",c:"bds",n:"Mua nhà/căn hộ cho thuê",i:"🏢",d:"Mua bất động sản để cho thuê dài hạn: vừa có dòng tiền hàng tháng, vừa hưởng tăng giá tài sản theo thời gian.",v:4,k:3,r:2,t:"Ngay khi có khách thuê",inc:"Lợi suất thuê ~3–6%/năm + tăng giá",m:"off",p:1,s:["finance"],
+ st:["Chọn khu vực gần trường, khu công nghiệp, văn phòng — nơi nhu cầu thuê ổn định","Tính dòng tiền: tiền thuê – lãi vay – phí quản lý – sửa chữa","Kiểm tra pháp lý kỹ (sổ, quy hoạch, tranh chấp)","Trang bị nội thất vừa đủ, ký hợp đồng rõ ràng, đặt cọc","Thuê dịch vụ quản lý nếu có nhiều căn"],
+ pro:["Tài sản hữu hình, giữ giá tốt","Thu nhập thụ động hàng tháng","Có thể dùng đòn bẩy ngân hàng"],con:["Vốn rất lớn, thanh khoản chậm","Rủi ro khách thuê, trống phòng","Chi phí bảo trì, thuế"],
+ tip:"Đừng chỉ nhìn giá tăng — một bất động sản tốt phải tự “nuôi” được khoản vay bằng tiền thuê."},
+{id:"homestay",c:"bds",n:"Homestay / Airbnb / Căn hộ dịch vụ",i:"🛏️",d:"Cho thuê ngắn ngày theo đêm cho khách du lịch, công tác. Lợi suất cao hơn cho thuê dài hạn nhưng cần vận hành.",v:3,k:3,r:3,t:"1–3 tháng",inc:"Lợi suất 8–20%/năm tùy công suất",m:"mix",p:0,s:["care","creative","sales"],
+ st:["Chọn vị trí du lịch/trung tâm, kiểm tra quy định cho thuê ngắn ngày","Thuê hoặc mua căn hộ, thiết kế đẹp “sống ảo”, đủ tiện nghi","Đăng trên Airbnb, Booking, Agoda với ảnh chuyên nghiệp","Chuẩn hóa quy trình dọn phòng, check-in tự động","Tối ưu đánh giá 5 sao và giá linh hoạt theo mùa"],
+ pro:["Lợi suất cao","Có thể bắt đầu bằng cách thuê lại nhà","Mở rộng thành chuỗi"],con:["Phụ thuộc mùa du lịch","Vận hành vất vả","Rủi ro pháp lý, hàng xóm"],
+ tip:"Đánh giá của khách là tài sản lớn nhất. Một chi tiết nhỏ như nước suối, bản đồ ăn uống viết tay có thể đổi lấy hàng chục đánh giá 5 sao."},
+{id:"datnen",c:"bds",n:"Đầu tư đất nền dài hạn",i:"🗺️",d:"Mua đất ở khu vực có tiềm năng hạ tầng, đô thị hóa để chờ tăng giá. Kênh làm giàu của nhiều thế hệ.",v:4,k:4,r:4,t:"3–10 năm",inc:"Có thể x2–x5 nếu đúng vùng",m:"off",p:1,s:["finance","sales"],
+ st:["Nghiên cứu quy hoạch hạ tầng: đường cao tốc, sân bay, khu công nghiệp","Đi thực địa, hỏi người dân bản địa, kiểm tra pháp lý tại cơ quan chức năng","Chỉ mua đất có sổ riêng, đúng quy hoạch, có lối đi","Không dùng đòn bẩy quá cao; chuẩn bị tinh thần giữ lâu"],
+ pro:["Biên lợi nhuận lớn","Ít chi phí bảo trì","Tài sản để lại cho con cháu"],con:["Không tạo dòng tiền","Rủi ro sốt ảo, quy hoạch treo","Thanh khoản rất kém khi thị trường trầm lắng"],
+ tip:"Mua khi thị trường im ắng, bán khi đám đông hào hứng. Tránh xa “dự án ma” và đất phân lô chưa có pháp lý."},
+{id:"moigioi",c:"bds",n:"Môi giới bất động sản",i:"🤝",d:"Kết nối người mua – người bán và nhận hoa hồng. Không cần vốn, thu nhập không giới hạn nếu giỏi bán hàng.",v:0,k:3,r:2,t:"1–6 tháng cho giao dịch đầu",inc:"Hoa hồng 1–3% giá trị giao dịch",m:"mix",p:0,s:["sales"],
+ st:["Tham gia sàn/công ty môi giới uy tín để được đào tạo và có nguồn hàng","Học chứng chỉ hành nghề môi giới theo quy định","Chọn một khu vực/phân khúc để trở thành chuyên gia","Xây kênh cá nhân (Facebook, TikTok, Zalo) để có khách hàng","Chăm sóc khách sau giao dịch để có giới thiệu"],
+ pro:["Không cần vốn","Thu nhập cao","Học được kiến thức BĐS để tự đầu tư sau này"],con:["Thu nhập thất thường","Cạnh tranh khốc liệt","Phụ thuộc chu kỳ thị trường"],
+ tip:"Người môi giới giỏi bán sự tin tưởng chứ không bán nhà. Trung thực về nhược điểm sản phẩm sẽ giúp bạn có khách quay lại."},
+{id:"thuelai",c:"bds",n:"Thuê lại & cho thuê lại (Sublease)",i:"🔁",d:"Thuê nguyên căn nhà dài hạn, cải tạo thành phòng trọ/căn hộ mini/homestay để cho thuê lại với giá cao hơn.",v:2,k:3,r:3,t:"1–3 tháng",inc:"5–30 triệu/tháng mỗi căn",m:"off",p:0,s:["sales","care"],
+ st:["Tìm nhà nguyên căn giá tốt, đàm phán hợp đồng 3–5 năm, cho phép cho thuê lại","Cải tạo, ngăn phòng hợp lý, đảm bảo phòng cháy chữa cháy","Định giá và đăng tin cho thuê trên nhiều kênh","Quản lý thu tiền, điện nước bằng phần mềm"],
+ pro:["Không cần mua bất động sản","Hoàn vốn nhanh","Dễ nhân rộng"],con:["Phụ thuộc chủ nhà","Rủi ro trống phòng","Cần quản lý liên tục"],
+ tip:"Hợp đồng gốc là sinh mệnh của mô hình: ghi rõ quyền cho thuê lại, giá cố định nhiều năm và điều khoản đền bù."},
+{id:"flip",c:"bds",n:"Mua nhà cũ cải tạo bán lại (Flip)",i:"🔨",d:"Mua nhà xuống cấp giá rẻ, sửa chữa nâng cấp, bán lại có lời. Mô hình phổ biến ở Mỹ và các đô thị lớn.",v:4,k:4,r:4,t:"3–12 tháng mỗi thương vụ",inc:"Lợi nhuận 10–30%/thương vụ",m:"off",p:0,s:["hand","creative","finance"],
+ st:["Tìm nhà có vị trí tốt nhưng xuống cấp, giá dưới thị trường","Ước tính chi phí cải tạo chính xác (cộng dự phòng 20%)","Cải tạo những phần tăng giá nhiều nhất: bếp, nhà vệ sinh, mặt tiền","Chụp ảnh đẹp, bán nhanh để giảm chi phí vốn"],
+ pro:["Lợi nhuận nhanh hơn chờ tăng giá","Tạo giá trị thực","Có thể làm lặp lại"],con:["Vốn lớn","Rủi ro đội chi phí","Phụ thuộc thanh khoản thị trường"],
+ tip:"Lợi nhuận được tạo ra lúc mua, không phải lúc bán. Mua đủ rẻ là yếu tố quyết định."},
+{id:"reits",c:"bds",n:"Quỹ REITs / Quỹ bất động sản",i:"🏙️",d:"Đầu tư bất động sản chỉ với vài triệu đồng qua chứng chỉ quỹ, nhận cổ tức từ tiền cho thuê văn phòng, trung tâm thương mại.",v:1,k:2,r:3,t:"Dài hạn",inc:"Cổ tức + tăng giá ~6–10%/năm",m:"on",p:1,s:["finance"],
+ st:["Tìm hiểu các quỹ REIT/quỹ BĐS đang hoạt động hợp pháp","Đọc bản cáo bạch: tài sản, công suất cho thuê, phí","Mua qua tài khoản chứng khoán","Giữ dài hạn và tái đầu tư cổ tức"],
+ pro:["Vốn nhỏ","Không phải quản lý nhà","Đa dạng nhiều bất động sản"],con:["Lựa chọn còn hạn chế ở một số thị trường","Biến động theo lãi suất","Có phí quản lý"],
+ tip:"Với người trẻ ít vốn, REITs là cửa ngõ để “sở hữu” bất động sản trước khi đủ tiền mua căn đầu tiên."},
+{id:"matbang",c:"bds",n:"Cho thuê mặt bằng, kho bãi",i:"🏬",d:"Sở hữu hoặc thuê dài hạn mặt bằng kinh doanh, kho xưởng để cho các doanh nghiệp, cửa hàng thuê lại.",v:4,k:3,r:2,t:"Ngay khi có khách thuê",inc:"Lợi suất 5–8%/năm",m:"off",p:1,s:["finance","sales"],
+ st:["Chọn vị trí mặt tiền đông đúc hoặc gần cảng, KCN cho kho bãi","Xây dựng/cải tạo phù hợp nhu cầu khách thuê","Ký hợp đồng dài hạn có điều khoản tăng giá định kỳ","Kiểm tra năng lực tài chính khách thuê"],
+ pro:["Hợp đồng dài, ổn định","Khách thuê tự lo nội thất","Lợi suất cao hơn nhà ở"],con:["Vốn rất lớn","Trống mặt bằng thì thiệt hại lớn","Phụ thuộc kinh tế"],
+ tip:"Kho bãi gần các trung tâm thương mại điện tử đang là phân khúc tăng trưởng mạnh."},
+
+/* ===================== KINH DOANH TRUYỀN THỐNG ===================== */
+{id:"cafe",c:"kinhdoanh",n:"Quán cà phê / Trà sữa",i:"☕",d:"Mô hình được nhiều người mơ ước. Lợi nhuận tốt nếu vị trí đúng và có điểm khác biệt, nhưng tỷ lệ đóng cửa cũng rất cao.",v:3,k:4,r:4,t:"6–18 tháng hoàn vốn",inc:"10–100+ triệu/tháng",m:"off",p:0,s:["creative","care","sales"],
+ st:["Xác định khách hàng mục tiêu và concept khác biệt","Khảo sát vị trí: lưu lượng người, đối thủ, chỗ để xe","Lập bảng dự toán vốn + quỹ duy trì ít nhất 6 tháng","Chuẩn hóa công thức, quy trình pha chế, đào tạo nhân viên","Marketing khai trương + bán online qua app giao đồ ăn"],
+ pro:["Biên lợi nhuận đồ uống cao","Xây được thương hiệu","Có thể nhân rộng chuỗi"],con:["Cạnh tranh rất khốc liệt","Tiền mặt bằng cao","Vận hành mệt"],
+ tip:"Đừng mở quán vì “thích cà phê”. Hãy mở vì bạn đã tính được điểm hòa vốn và có lý do khiến khách chọn bạn thay vì quán bên cạnh."},
+{id:"quanan",c:"kinhdoanh",n:"Quán ăn / Xe đẩy / Food stall",i:"🍜",d:"Bán món ăn sở trường: từ xe bánh mì, gánh xôi đến quán cơm văn phòng. Nhu cầu ăn uống không bao giờ biến mất.",v:2,k:3,r:3,t:"1–6 tháng",inc:"10–60 triệu/tháng",m:"off",p:0,s:["hand","care"],
+ st:["Chọn 1–3 món đặc trưng làm thật ngon","Bắt đầu nhỏ: xe đẩy, gian hàng, bán online trước","Tìm nguồn nguyên liệu ổn định, giá tốt","Đăng ký trên GrabFood, ShopeeFood","Chuẩn hóa công thức để mở rộng"],
+ pro:["Vốn khởi đầu linh hoạt","Thu tiền mặt hằng ngày","Khách quen trung thành"],con:["Vất vả, thời gian dài","Vệ sinh an toàn thực phẩm","Phụ thuộc vị trí"],
+ tip:"Một món làm xuất sắc đánh bại một thực đơn 50 món làm bình thường."},
+{id:"taphoa",c:"kinhdoanh",n:"Tiệm tạp hóa / Minimart",i:"🧃",d:"Cửa hàng bán lẻ nhu yếu phẩm cho khu dân cư. Biên lợi nhuận mỏng nhưng ổn định, khách đều.",v:3,k:3,r:2,t:"3–12 tháng",inc:"10–40 triệu/tháng",m:"off",p:0,s:["sales","care"],
+ st:["Chọn mặt bằng trong khu dân cư đông, ít đối thủ","Tìm nhà phân phối, đại lý cấp 1 để lấy hàng giá tốt","Dùng phần mềm quản lý bán hàng, tồn kho","Bổ sung dịch vụ: giao hàng tận nhà, thanh toán QR, bán online qua Zalo"],
+ pro:["Nhu cầu thiết yếu, ổn định","Rủi ro thấp","Dễ vận hành"],con:["Lợi nhuận mỏng","Cạnh tranh với chuỗi lớn","Trói buộc thời gian"],
+ tip:"Hiểu khách trong bán kính 500m: bạn có thể thắng chuỗi lớn bằng sự thân quen, giao nhanh và bán chịu có kiểm soát."},
+{id:"franchise",c:"kinhdoanh",n:"Nhượng quyền thương hiệu (Franchise)",i:"🏷️",d:"Mua quyền kinh doanh một thương hiệu đã thành công: có sẵn công thức, quy trình, nhận diện và hỗ trợ.",v:3,k:3,r:3,t:"6–24 tháng hoàn vốn",inc:"Tùy thương hiệu",m:"off",p:0,s:["sales","finance"],
+ st:["So sánh nhiều thương hiệu: phí nhượng quyền, phí hằng tháng, tỷ lệ cửa hàng sống sót","Nói chuyện trực tiếp với các chủ cửa hàng đang vận hành","Đọc kỹ hợp đồng: độc quyền khu vực, thời hạn, điều kiện chấm dứt","Tuân thủ chuẩn vận hành và tập trung bán hàng địa phương"],
+ pro:["Giảm rủi ro thử nghiệm","Có sẵn thương hiệu","Được đào tạo, hỗ trợ"],con:["Phí nhượng quyền, phí duy trì","Ít tự do sáng tạo","Phụ thuộc danh tiếng chuỗi"],
+ tip:"Hỏi chủ nhượng quyền: “Bao nhiêu cửa hàng đã đóng cửa trong 2 năm qua?” — câu trả lời nói lên tất cả."},
+{id:"cho",c:"kinhdoanh",n:"Bán hàng chợ / Sạp / Chợ đêm",i:"🧺",d:"Hình thức buôn bán lâu đời nhất: thuê sạp ở chợ, chợ đêm, hội chợ. Vốn nhỏ, học được kỹ năng bán hàng thực chiến.",v:1,k:2,r:2,t:"Ngay lập tức",inc:"5–30 triệu/tháng",m:"off",p:0,s:["sales"],
+ st:["Chọn mặt hàng phù hợp khách của chợ (quần áo, phụ kiện, đồ ăn vặt…)","Lấy hàng từ chợ đầu mối, xưởng sản xuất","Trưng bày bắt mắt, giá rõ ràng","Kết bạn Zalo với khách để bán thêm online"],
+ pro:["Vốn rất nhỏ","Học bán hàng thực tế","Tiền về hằng ngày"],con:["Phụ thuộc thời tiết","Thu nhập không ổn định","Vất vả"],
+ tip:"Chợ đêm, hội chợ cuối tuần là nơi tuyệt vời để thử nghiệm sản phẩm trước khi đầu tư lớn."},
+{id:"daily",c:"kinhdoanh",n:"Đại lý / Nhà phân phối",i:"🚚",d:"Làm cầu nối giữa nhà sản xuất và điểm bán lẻ: nhận hàng số lượng lớn, phân phối cho các cửa hàng trong khu vực.",v:3,k:3,r:3,t:"3–12 tháng",inc:"Chiết khấu 5–30%",m:"off",p:0,s:["sales","finance"],
+ st:["Chọn ngành hàng có nhu cầu ổn định (FMCG, vật liệu xây dựng, nông sản…)","Đàm phán với nhà sản xuất về chiết khấu, khu vực độc quyền","Xây mạng lưới điểm bán và đội giao hàng","Quản lý công nợ chặt chẽ"],
+ pro:["Doanh thu lớn","Quan hệ bền vững","Có thể độc quyền khu vực"],con:["Vốn lưu động lớn","Rủi ro công nợ","Biên lợi nhuận bị ép"],
+ tip:"Công nợ là kẻ giết chết nhà phân phối. Hãy có chính sách hạn mức nợ rõ ràng cho từng khách."},
+{id:"xuong",c:"kinhdoanh",n:"Xưởng sản xuất nhỏ",i:"🏭",d:"Tự sản xuất sản phẩm: may mặc, đồ gỗ, đồ thủ công, thực phẩm đóng gói, mỹ phẩm handmade… để bán sỉ và lẻ.",v:3,k:4,r:3,t:"6–18 tháng",inc:"Biên 20–50%",m:"off",p:0,s:["hand","creative"],
+ st:["Chọn sản phẩm bạn có lợi thế (tay nghề, nguyên liệu địa phương)","Làm mẫu, thử nghiệm thị trường với số lượng nhỏ","Đăng ký kinh doanh, công bố chất lượng, nhãn mác","Bán sỉ cho cửa hàng + bán lẻ online","Đầu tư máy móc khi đơn hàng ổn định"],
+ pro:["Kiểm soát chất lượng và giá","Biên lợi nhuận tốt","Xây thương hiệu riêng"],con:["Vốn máy móc, nhân công","Quản lý phức tạp","Rủi ro tồn kho"],
+ tip:"Bán trước, sản xuất sau: nhận đặt hàng, thu cọc rồi mới sản xuất số lượng lớn."},
+{id:"xnk",c:"kinhdoanh",n:"Xuất nhập khẩu & Buôn hàng",i:"🚢",d:"Mua hàng ở nơi rẻ, bán ở nơi đắt — nguyên lý từ thời Con đường Tơ lụa. Nhập hàng quốc tế hoặc xuất nông sản, thủ công ra nước ngoài.",v:3,k:4,r:3,t:"3–12 tháng",inc:"Biên 15–50%",m:"mix",p:0,s:["sales","finance"],
+ st:["Học thủ tục hải quan, Incoterms, thanh toán quốc tế","Tìm nhà cung cấp trên Alibaba, hội chợ, hoặc người mua qua các sàn B2B","Đặt hàng mẫu, kiểm định chất lượng","Tính đủ chi phí: thuế, vận chuyển, lưu kho","Bắt đầu lô nhỏ, mở rộng dần"],
+ pro:["Biên chênh lệch lớn","Thị trường toàn cầu","Có thể làm sỉ quy mô lớn"],con:["Thủ tục phức tạp","Rủi ro tỷ giá, chất lượng","Vốn lưu động lớn"],
+ tip:"Thuê dịch vụ logistics/ủy thác xuất nhập khẩu cho vài lô đầu để học quy trình mà giảm rủi ro."},
+{id:"thoivu",c:"kinhdoanh",n:"Kinh doanh thời vụ",i:"🧧",d:"Bán hàng theo mùa: giỏ quà Tết, bánh trung thu, hoa 8/3, 14/2, đồ Noel, áo mưa mùa mưa, đồ mùa tựu trường…",v:1,k:2,r:2,t:"Vài tuần",inc:"5–100 triệu/mùa",m:"mix",p:0,s:["sales","creative"],
+ st:["Lên lịch các mùa cao điểm trong năm","Chuẩn bị hàng và nhập trước 1–2 tháng","Bán qua mạng xã hội + quầy tạm","Thanh lý hàng tồn ngay sau mùa"],
+ pro:["Vốn quay vòng nhanh","Có thể làm song song công việc chính","Nhu cầu cao, chốt đơn dễ"],con:["Rủi ro tồn kho sau mùa","Cạnh tranh tăng vọt","Không ổn định"],
+ tip:"Bán cho doanh nghiệp (quà tặng nhân viên, đối tác) thường có đơn lớn hơn bán lẻ rất nhiều."},
+
+/* ===================== THƯƠNG MẠI ĐIỆN TỬ ===================== */
+{id:"san",c:"tmdt",n:"Bán hàng trên Shopee / Lazada / Tiki",i:"🛍️",d:"Mở gian hàng trên sàn thương mại điện tử để tiếp cận hàng triệu người mua mà không cần mặt bằng.",v:1,k:2,r:2,t:"1–3 tháng",inc:"Vài triệu – hàng trăm triệu/tháng",m:"on",p:0,s:["sales","creative"],
+ st:["Chọn ngách sản phẩm: có nhu cầu, ít cạnh tranh, lợi nhuận ≥ 30%","Tìm nguồn hàng: xưởng, chợ sỉ, nhập khẩu","Chụp ảnh đẹp, viết tiêu đề chuẩn SEO trên sàn","Chạy quảng cáo nội sàn, tham gia chương trình khuyến mãi","Chăm sóc đánh giá, tối ưu tỷ lệ chuyển đổi"],
+ pro:["Lượng khách khổng lồ sẵn có","Vốn ban đầu nhỏ","Hệ thống vận chuyển, thanh toán có sẵn"],con:["Cạnh tranh giá gắt","Phí sàn ngày càng tăng","Phụ thuộc thuật toán"],
+ tip:"Đừng cạnh tranh bằng giá rẻ nhất. Cạnh tranh bằng ảnh đẹp hơn, mô tả rõ hơn, đóng gói tốt hơn và phản hồi nhanh hơn."},
+{id:"tiktokshop",c:"tmdt",n:"TikTok Shop & Livestream bán hàng",i:"📱",d:"Kết hợp video ngắn và livestream để bán hàng. “Mua sắm giải trí” đang bùng nổ, người mới vẫn có cơ hội nổ đơn.",v:1,k:3,r:2,t:"1–3 tháng",inc:"Vài triệu – hàng tỷ/tháng",m:"on",p:0,s:["creative","sales"],
+ st:["Mở TikTok Shop, chọn sản phẩm có tính “trình diễn” cao","Làm 1–3 video ngắn/ngày: review, trước-sau, mẹo dùng","Livestream đều đặn cùng khung giờ, có kịch bản chốt đơn","Hợp tác với KOC/affiliate để họ bán giúp","Phân tích video nào ra đơn để nhân bản"],
+ pro:["Lan truyền tự nhiên mạnh","Chi phí thấp","Xây được thương hiệu cá nhân"],con:["Cần làm nội dung liên tục","Thuật toán thay đổi","Áp lực livestream"],
+ tip:"3 giây đầu quyết định tất cả. Mở video bằng kết quả/vấn đề, không mở bằng lời chào."},
+{id:"dropship",c:"tmdt",n:"Dropshipping",i:"📦",d:"Bán hàng không cần ôm hàng: khách đặt trên cửa hàng của bạn, nhà cung cấp giao trực tiếp. Bạn tập trung marketing.",v:1,k:3,r:3,t:"1–6 tháng",inc:"Biên 20–40%",m:"on",p:0,s:["tech","sales"],
+ st:["Tạo website bằng Shopify/Haravan/WordPress hoặc bán trên sàn","Tìm nhà cung cấp dropship uy tín, đặt mẫu kiểm tra","Test sản phẩm bằng quảng cáo ngân sách nhỏ","Giữ sản phẩm thắng, tắt sản phẩm thua","Dần chuyển sang thương hiệu riêng"],
+ pro:["Không rủi ro tồn kho","Vốn thấp","Bán toàn cầu"],con:["Kiểm soát chất lượng kém","Giao hàng chậm","Biên mỏng do chi phí quảng cáo"],
+ tip:"Dropshipping là trường học marketing tuyệt vời. Người thành công thường dùng nó để tìm sản phẩm thắng, sau đó nhập hàng làm thương hiệu riêng."},
+{id:"amazon",c:"tmdt",n:"Amazon FBA",i:"🌎",d:"Bán hàng trên Amazon tại Mỹ, châu Âu, Nhật: gửi hàng vào kho Amazon, họ lo lưu kho, giao hàng, chăm sóc khách.",v:3,k:4,r:3,t:"6–12 tháng",inc:"Biên 20–35% bằng USD",m:"on",p:0,s:["sales","finance","tech"],
+ st:["Nghiên cứu sản phẩm bằng công cụ (Helium10, Jungle Scout)","Tìm nhà sản xuất (Việt Nam là lợi thế cho đồ gỗ, thủ công, may mặc)","Đăng ký tài khoản người bán, đăng ký thương hiệu","Tối ưu listing: ảnh, tiêu đề, A+ content","Chạy Amazon PPC và thu thập đánh giá hợp lệ"],
+ pro:["Thị trường giàu sức mua","Amazon lo hậu cần","Thu nhập bằng ngoại tệ"],con:["Vốn và kiến thức lớn","Chính sách nghiêm ngặt","Cạnh tranh toàn cầu"],
+ tip:"Sản phẩm “Made in Vietnam” có câu chuyện văn hóa thường có lợi thế khác biệt trên Amazon và Etsy."},
+{id:"pod",c:"tmdt",n:"Print on Demand (POD)",i:"👕",d:"Thiết kế hình in lên áo, cốc, tranh… chỉ khi có đơn đối tác mới in và giao. Không vốn, không tồn kho.",v:0,k:2,r:1,t:"1–6 tháng",inc:"Vài trăm – vài nghìn USD/tháng",m:"on",p:1,s:["creative","tech"],
+ st:["Chọn ngách: nghề nghiệp, sở thích, thú cưng, câu nói vui…","Thiết kế bằng Canva, Illustrator hoặc AI tạo ảnh (chú ý bản quyền)","Đăng bán trên Etsy, Redbubble, Amazon Merch, TeeSpring","Nghiên cứu từ khóa, đăng số lượng lớn","Nhân bản các thiết kế bán chạy"],
+ pro:["Không vốn, không tồn kho","Thiết kế 1 lần bán mãi mãi","Bán toàn cầu"],con:["Lợi nhuận mỗi đơn thấp","Cạnh tranh lớn","Rủi ro vi phạm bản quyền/thương hiệu"],
+ tip:"Tuyệt đối không dùng hình nhân vật, logo, thương hiệu của người khác — tài khoản có thể bị khóa vĩnh viễn."},
+{id:"d2c",c:"tmdt",n:"Website & Thương hiệu riêng (D2C)",i:"✨",d:"Xây thương hiệu bán trực tiếp đến người tiêu dùng qua website riêng, kiểm soát hoàn toàn dữ liệu khách hàng.",v:2,k:4,r:3,t:"6–18 tháng",inc:"Biên 40–70%",m:"on",p:0,s:["creative","tech","sales"],
+ st:["Định vị thương hiệu: khách hàng là ai, vì sao chọn bạn","Phát triển sản phẩm khác biệt, bao bì đẹp","Làm website, kết nối thanh toán, vận chuyển","Kéo traffic: SEO, quảng cáo, KOL, email marketing","Xây cộng đồng khách hàng trung thành"],
+ pro:["Biên lợi nhuận cao","Sở hữu thương hiệu và dữ liệu","Giá trị doanh nghiệp lớn"],con:["Tốn chi phí kéo khách","Cần nhiều kỹ năng","Thời gian xây dựng lâu"],
+ tip:"Đầu tư vào danh sách email/Zalo khách hàng — đó là tài sản không ai lấy đi được."},
+{id:"social",c:"tmdt",n:"Bán hàng qua Facebook / Zalo",i:"💬",d:"Bán online qua trang cá nhân, fanpage, nhóm và Zalo. Cách khởi nghiệp phổ biến nhất của người Việt.",v:1,k:2,r:2,t:"Vài tuần",inc:"3–50 triệu/tháng",m:"on",p:0,s:["sales","creative"],
+ st:["Xây trang cá nhân đáng tin: ảnh thật, chia sẻ đời sống, phản hồi khách","Chọn sản phẩm bạn thật sự dùng và hiểu","Đăng nội dung giá trị 80%, bán hàng 20%","Chăm sóc khách qua Zalo, tạo nhóm khách hàng thân thiết"],
+ pro:["Dễ bắt đầu","Tận dụng quan hệ sẵn có","Chi phí thấp"],con:["Phụ thuộc nền tảng","Dễ bị coi là “spam”","Khó mở rộng lớn"],
+ tip:"Người ta mua từ người họ tin. Hãy bán bằng câu chuyện thật, không bán bằng ảnh copy."},
+{id:"secondhand",c:"tmdt",n:"Mua bán đồ cũ / Săn đồ secondhand",i:"♻️",d:"Săn đồ cũ giá rẻ (quần áo vintage, đồ điện tử, sách, đồ cổ, sneaker) rồi làm sạch, bán lại giá cao hơn.",v:1,k:2,r:2,t:"Vài tuần",inc:"3–30 triệu/tháng",m:"mix",p:0,s:["sales"],
+ st:["Chọn ngách bạn am hiểu để định giá đúng","Săn hàng ở chợ đồ cũ, thanh lý, kiện hàng, hội nhóm","Làm sạch, sửa chữa, chụp ảnh đẹp","Bán trên Facebook Marketplace, Chợ Tốt, sàn TMĐT, live"],
+ pro:["Vốn nhỏ","Biên lợi nhuận cao","Thân thiện môi trường"],con:["Nguồn hàng không đều","Mất thời gian săn và xử lý","Khó tăng quy mô"],
+ tip:"Kiến thức chuyên sâu là lợi nhuận: người biết phân biệt hàng hiếm luôn mua được giá hời."},
+{id:"order",c:"tmdt",n:"Order hàng quốc tế",i:"✈️",d:"Nhận đặt hộ hàng từ Trung Quốc, Mỹ, Nhật, Hàn… thu phí dịch vụ hoặc chênh lệch giá.",v:1,k:2,r:2,t:"Vài tuần",inc:"Phí 5–15%/đơn",m:"on",p:0,s:["sales"],
+ st:["Chọn thị trường nguồn và tìm đơn vị vận chuyển uy tín","Xây bảng giá rõ ràng: giá gốc, phí ship, phí dịch vụ","Thu cọc trước khi đặt hàng","Theo dõi đơn, cập nhật khách thường xuyên"],
+ pro:["Không ôm hàng","Vốn nhỏ","Có thể làm thêm"],con:["Rủi ro thất lạc, hư hỏng","Thời gian giao lâu","Thủ tục thuế, hải quan"],
+ tip:"Minh bạch là chìa khóa: báo trước mọi chi phí và thời gian để khách không bất ngờ."}
+];
+
+/* Bản Đồ Kiếm Tiền — dữ liệu (phần 2) — © Tân AI */
+M.push(
+/* ===================== SÁNG TẠO NỘI DUNG ===================== */
+{id:"youtube",c:"noidung",n:"Kênh YouTube",i:"▶️",d:"Làm video về chủ đề bạn giỏi hoặc đam mê. Kiếm tiền từ quảng cáo, tài trợ, affiliate, bán sản phẩm riêng.",v:1,k:3,r:2,t:"6–24 tháng",inc:"0 – hàng trăm triệu/tháng",m:"on",p:1,s:["creative","teach"],
+ st:["Chọn ngách: giao điểm của đam mê, chuyên môn và nhu cầu người xem","Nghiên cứu từ khóa, đối thủ, video đang thịnh hành","Đăng đều đặn 1–2 video/tuần, tối ưu tiêu đề + thumbnail","Đạt điều kiện bật kiếm tiền (YouTube Partner Program)","Đa dạng nguồn thu: tài trợ, affiliate, khóa học, membership"],
+ pro:["Video cũ vẫn kiếm tiền nhiều năm","Thu nhập toàn cầu","Xây thương hiệu cá nhân mạnh"],con:["Rất lâu mới có thu nhập","Cần kiên trì và kỹ năng","Phụ thuộc thuật toán"],
+ tip:"100 video đầu tiên là học phí. Đừng bỏ cuộc trước khi chạm mốc đó."},
+{id:"tiktok",c:"noidung",n:"Nhà sáng tạo TikTok / Reels / Shorts",i:"🎵",d:"Làm video ngắn để xây lượng theo dõi nhanh, sau đó kiếm tiền từ quảng cáo, booking, affiliate, bán hàng.",v:0,k:3,r:2,t:"3–12 tháng",inc:"Vài triệu – hàng trăm triệu/tháng",m:"on",p:0,s:["creative"],
+ st:["Chọn một chủ đề cố định và một “nhân vật” dễ nhớ","Đăng 1–3 video/ngày, thử nhiều định dạng","Phân tích số liệu: tỷ lệ xem hết, chia sẻ","Khi có ~10.000 follow, nhận booking và affiliate","Chuyển người xem sang kênh riêng (Zalo, email, sản phẩm)"],
+ pro:["Tăng trưởng nhanh nhất","Chỉ cần điện thoại","Nhiều nguồn thu"],con:["Xu hướng thay đổi rất nhanh","Áp lực sáng tạo liên tục","Thu nhập không ổn định"],
+ tip:"Nhất quán quan trọng hơn hoàn hảo. Một video “ổn” mỗi ngày tốt hơn một video “hoàn hảo” mỗi tháng."},
+{id:"blog",c:"noidung",n:"Blog / Website SEO",i:"✍️",d:"Viết bài chất lượng để lên top Google, kiếm tiền từ quảng cáo hiển thị, affiliate và khách hàng tiềm năng.",v:1,k:3,r:2,t:"6–18 tháng",inc:"Vài trăm – vài nghìn USD/tháng",m:"on",p:1,s:["creative","tech","teach"],
+ st:["Chọn ngách có nhu cầu tìm kiếm và giá trị thương mại","Mua tên miền, hosting, cài WordPress","Nghiên cứu từ khóa, viết bài chuyên sâu trả lời đúng câu hỏi","Xây backlink tự nhiên, tối ưu tốc độ","Gắn quảng cáo (AdSense, Ezoic) và affiliate"],
+ pro:["Thu nhập thụ động lâu dài","Tài sản có thể bán","Không cần xuất hiện"],con:["Lâu có kết quả","Cập nhật thuật toán có thể làm mất traffic","Cạnh tranh với AI search"],
+ tip:"Viết từ trải nghiệm thật (đã dùng, đã thử, có ảnh tự chụp) — đó là thứ AI và đối thủ khó sao chép."},
+{id:"affiliate",c:"noidung",n:"Tiếp thị liên kết (Affiliate)",i:"🔗",d:"Giới thiệu sản phẩm của người khác bằng link riêng và nhận hoa hồng khi có người mua.",v:0,k:3,r:1,t:"1–6 tháng",inc:"Hoa hồng 3–50%",m:"on",p:1,s:["creative","sales"],
+ st:["Đăng ký chương trình affiliate: Shopee, Lazada, TikTok, AccessTrade, Amazon…","Chọn sản phẩm bạn thật sự dùng và phù hợp người theo dõi","Làm nội dung review, so sánh, hướng dẫn","Đặt link ở bio, mô tả, bài viết, nhóm","Theo dõi số liệu và tối ưu sản phẩm chuyển đổi tốt"],
+ pro:["Không vốn, không hàng","Không chăm sóc khách","Kết hợp với mọi kênh nội dung"],con:["Hoa hồng có thể bị giảm","Phụ thuộc nền tảng","Cần lượng truy cập lớn"],
+ tip:"Sản phẩm phần mềm, khóa học, dịch vụ tài chính thường có hoa hồng cao và định kỳ hàng tháng."},
+{id:"podcast",c:"noidung",n:"Podcast",i:"🎙️",d:"Chương trình âm thanh/video dài về một chủ đề. Thính giả trung thành cao, giá trị tài trợ lớn.",v:1,k:3,r:2,t:"6–24 tháng",inc:"Tài trợ, membership, sự kiện",m:"on",p:0,s:["creative","teach"],
+ st:["Chọn chủ đề và định dạng (độc thoại, phỏng vấn, đối thoại)","Đầu tư micro tốt, phòng thu ít vang","Phát trên Spotify, Apple Podcasts, YouTube","Cắt clip ngắn để quảng bá trên mạng xã hội","Bán tài trợ, gói hội viên, tổ chức sự kiện"],
+ pro:["Khán giả trung thành","Kết nối người có ảnh hưởng","Dễ làm khi đang bận việc khác"],con:["Tăng trưởng chậm","Khó đo lường","Cần nội dung sâu"],
+ tip:"Mời khách mời có tệp người theo dõi riêng — mỗi tập là một lần “mượn” khán giả mới."},
+{id:"newsletter",c:"noidung",n:"Bản tin trả phí (Newsletter)",i:"📨",d:"Gửi thư định kỳ chứa phân tích, kiến thức độc quyền. Người đọc trả phí hằng tháng hoặc nhà tài trợ trả tiền quảng cáo.",v:0,k:3,r:1,t:"6–12 tháng",inc:"Thu nhập định kỳ",m:"on",p:1,s:["creative","finance","teach"],
+ st:["Chọn ngách cụ thể mà bạn có góc nhìn sâu","Dùng Substack, Beehiiv, Ghost hoặc tự xây","Gửi miễn phí để xây danh sách, sau đó mở gói trả phí","Đăng tóm tắt lên mạng xã hội để kéo người đăng ký"],
+ pro:["Sở hữu trực tiếp người đọc","Doanh thu định kỳ","Chi phí thấp"],con:["Cần viết đều đặn chất lượng","Tăng trưởng chậm","Khó thuyết phục trả phí"],
+ tip:"1.000 người trả 100.000đ/tháng = 100 triệu/tháng. Bạn không cần hàng triệu người theo dõi."},
+{id:"koc",c:"noidung",n:"KOL / KOC – Review sản phẩm",i:"⭐",d:"Người có ảnh hưởng nhận booking từ nhãn hàng để trải nghiệm và giới thiệu sản phẩm đến người theo dõi.",v:0,k:3,r:2,t:"3–12 tháng",inc:"500k – hàng chục triệu/booking",m:"on",p:0,s:["creative","sales"],
+ st:["Xây kênh với tệp người theo dõi rõ ràng (mẹ bỉm, làm đẹp, công nghệ…)","Tạo media kit: số liệu, giá booking, case cũ","Đăng ký trên nền tảng kết nối KOC hoặc chủ động liên hệ nhãn hàng","Giữ uy tín: chỉ nhận sản phẩm phù hợp và trung thực"],
+ pro:["Nhận sản phẩm miễn phí","Thu nhập cao khi có tiếng","Linh hoạt"],con:["Uy tín dễ mất","Áp lực hình ảnh","Phụ thuộc xu hướng"],
+ tip:"KOC nhỏ (micro) có tỷ lệ tương tác cao thường được nhãn hàng ưa chuộng hơn KOL lớn nhưng xa cách."},
+{id:"stream",c:"noidung",n:"Livestream game / Streaming",i:"🎮",d:"Phát trực tiếp chơi game, trò chuyện, sáng tạo. Kiếm tiền từ donate, quà tặng, quảng cáo, tài trợ.",v:2,k:4,r:3,t:"6–24 tháng",inc:"0 – hàng trăm triệu/tháng",m:"on",p:0,s:["creative"],
+ st:["Đầu tư máy tính, mic, webcam, mạng ổn định","Chọn nền tảng và khung giờ phát cố định","Tương tác với người xem, xây cộng đồng Discord/nhóm","Cắt highlight đăng TikTok, YouTube để kéo người mới"],
+ pro:["Biến sở thích thành nghề","Cộng đồng gắn kết","Nhiều nguồn thu"],con:["Rất cạnh tranh","Ảnh hưởng sức khỏe nếu thức khuya","Thu nhập bất ổn"],
+ tip:"Tính cách mới là sản phẩm, game chỉ là bối cảnh."},
+{id:"fanpage",c:"noidung",n:"Fanpage / Nhóm cộng đồng",i:"👥",d:"Xây fanpage hoặc group lớn về một chủ đề, kiếm tiền từ quảng cáo, đăng bài tài trợ, bán hàng, affiliate.",v:0,k:2,r:2,t:"3–12 tháng",inc:"Vài triệu – vài chục triệu/tháng",m:"on",p:0,s:["creative","sales"],
+ st:["Chọn chủ đề có cộng đồng rõ ràng (nghề nghiệp, địa phương, sở thích)","Đăng nội dung hữu ích, khuyến khích thành viên tương tác","Đặt luật nhóm, kiểm duyệt chống spam","Bán bài quảng cáo, hợp tác với nhãn hàng phù hợp"],
+ pro:["Không vốn","Tài sản cộng đồng giá trị","Hiệu ứng lan truyền"],con:["Phụ thuộc chính sách nền tảng","Quản trị tốn thời gian","Dễ bị đánh sập"],
+ tip:"Luôn có kênh dự phòng (Zalo, email, website) để không mất cộng đồng nếu tài khoản gặp sự cố."},
+{id:"viettruyen",c:"noidung",n:"Viết truyện / Viết sách",i:"📚",d:"Xuất bản sách, viết truyện online trả phí theo chương, tự xuất bản ebook trên Amazon Kindle.",v:0,k:3,r:1,t:"6–24 tháng",inc:"Nhuận bút, tiền bản quyền",m:"on",p:1,s:["creative","teach"],
+ st:["Chọn thể loại có độc giả trả tiền (ngôn tình, kỹ năng, kinh doanh…)","Viết đều mỗi ngày, xây độc giả trên nền tảng truyện","Hợp tác nhà xuất bản hoặc tự xuất bản","Bán bản quyền chuyển thể, sách nói, bản dịch"],
+ pro:["Thu nhập bản quyền lâu dài","Nâng tầm uy tín cá nhân","Có thể làm từ bất cứ đâu"],con:["Thu nhập ban đầu thấp","Cần kỷ luật cao","Khó đoán thành công"],
+ tip:"Một cuốn sách là “danh thiếp” mạnh nhất: nó mở ra cơ hội diễn thuyết, đào tạo, tư vấn có giá trị gấp nhiều lần nhuận bút."},
+
+/* ===================== FREELANCE ===================== */
+{id:"dev",c:"freelance",n:"Lập trình viên Freelance",i:"💻",d:"Nhận dự án web, app, phần mềm, tự động hóa cho khách hàng trong nước và quốc tế.",v:1,k:4,r:2,t:"1–3 tháng",inc:"20–150+ triệu/tháng",m:"on",p:0,s:["tech"],
+ st:["Thành thạo một stack được thị trường cần (web, mobile, data…)","Làm 3–5 dự án mẫu đưa lên GitHub/portfolio","Tạo hồ sơ trên Upwork, Freelancer, Toptal, LinkedIn","Bắt đầu với dự án nhỏ, xin đánh giá tốt","Nâng giá và chuyển sang khách quen, hợp đồng dài hạn"],
+ pro:["Thu nhập cao, có thể bằng USD","Làm từ xa","Nhu cầu lớn"],con:["Áp lực deadline","Khách hàng khó tính","Phải liên tục học"],
+ tip:"Chuyên môn hóa sâu (ví dụ: “Shopify cho thương hiệu mỹ phẩm”) giúp bạn tính giá cao gấp 3 lần lập trình viên đa năng."},
+{id:"design",c:"freelance",n:"Thiết kế đồ họa / UI-UX",i:"🎨",d:"Thiết kế logo, bộ nhận diện, banner, giao diện web/app cho doanh nghiệp và cá nhân.",v:1,k:3,r:2,t:"1–3 tháng",inc:"10–80 triệu/tháng",m:"on",p:0,s:["creative","tech"],
+ st:["Học công cụ: Figma, Photoshop, Illustrator, Canva","Xây portfolio trên Behance, Dribbble","Nhận việc trên Fiverr, Upwork, hội nhóm freelancer","Đóng gói dịch vụ có giá rõ ràng","Bán thêm template, mockup, font"],
+ pro:["Sáng tạo, thú vị","Làm từ xa","Kết hợp được với bán sản phẩm số"],con:["Khách sửa nhiều lần","AI làm giảm giá việc đơn giản","Cạnh tranh nhiều"],
+ tip:"Dùng AI như trợ lý để làm nhanh gấp đôi — và tập trung vào tư duy chiến lược thương hiệu mà AI chưa thay thế được."},
+{id:"content",c:"freelance",n:"Viết content / Copywriting",i:"🖋️",d:"Viết bài website, quảng cáo, kịch bản video, email marketing, trang bán hàng cho doanh nghiệp.",v:0,k:2,r:1,t:"Vài tuần",inc:"5–50 triệu/tháng",m:"on",p:0,s:["creative","sales"],
+ st:["Luyện viết mỗi ngày, học công thức copywriting (AIDA, PAS)","Làm mẫu cho 3–5 thương hiệu giả định","Nhận việc trên hội nhóm, Fiverr, agency","Chuyên sâu một ngành (bất động sản, tài chính, y tế…)"],
+ pro:["Không vốn","Có thể làm thêm","Kỹ năng dùng cả đời"],con:["Giá thấp khi mới bắt đầu","AI cạnh tranh mảng viết cơ bản","Phụ thuộc phản hồi khách"],
+ tip:"Copywriter giỏi được trả tiền theo kết quả bán hàng, không theo số chữ. Hãy đo lường và chứng minh hiệu quả."},
+{id:"dich",c:"freelance",n:"Dịch thuật / Phiên dịch",i:"🌐",d:"Dịch tài liệu, phụ đề, website, hoặc phiên dịch trực tiếp cho sự kiện, đàm phán, du lịch.",v:0,k:3,r:1,t:"Vài tuần",inc:"10–60 triệu/tháng",m:"mix",p:0,s:["teach","care"],
+ st:["Đạt trình độ ngoại ngữ cao, có chứng chỉ nếu được","Chọn chuyên ngành: pháp lý, y tế, kỹ thuật, game…","Đăng ký với công ty dịch thuật, nền tảng freelance","Học dùng công cụ CAT và AI để tăng năng suất","Nhận phiên dịch sự kiện, hội thảo để tăng thu nhập"],
+ pro:["Nhu cầu ổn định","Làm linh hoạt","Phiên dịch có thù lao cao"],con:["Dịch máy làm giảm giá việc cơ bản","Áp lực độ chính xác","Cần chuyên môn sâu"],
+ tip:"Ngôn ngữ hiếm (Hàn, Nhật, Đức) và lĩnh vực chuyên ngành có thù lao cao hơn nhiều so với dịch Anh–Việt phổ thông."},
+{id:"edit",c:"freelance",n:"Dựng video / Motion graphics",i:"🎞️",d:"Nhu cầu video bùng nổ: dựng video YouTube, TikTok, quảng cáo, đám cưới, sự kiện cho nhà sáng tạo và doanh nghiệp.",v:1,k:3,r:1,t:"1–2 tháng",inc:"10–60 triệu/tháng",m:"on",p:0,s:["creative","tech"],
+ st:["Học CapCut, Premiere, DaVinci Resolve, After Effects","Dựng lại video mẫu để làm portfolio","Liên hệ YouTuber, nhãn hàng, agency nhận việc","Ký hợp đồng tháng với nhà sáng tạo để có thu nhập ổn định"],
+ pro:["Nhu cầu rất cao","Làm từ xa","Kết hợp sáng tạo và kỹ thuật"],con:["Tốn thời gian","Cần máy cấu hình tốt","Deadline gắt"],
+ tip:"Nhận làm “trọn gói hằng tháng” cho 3–5 nhà sáng tạo là cách ổn định thu nhập tốt nhất."},
+{id:"ads",c:"freelance",n:"Chạy quảng cáo / Digital Marketing",i:"🎯",d:"Quản lý quảng cáo Facebook, Google, TikTok, SEO cho doanh nghiệp. Kỹ năng được trả tiền theo hiệu quả.",v:1,k:3,r:2,t:"1–3 tháng",inc:"10–100 triệu/tháng",m:"on",p:0,s:["tech","sales","finance"],
+ st:["Học nền tảng quảng cáo và đo lường (Pixel, GA4, chuyển đổi)","Tự chạy thử với ngân sách nhỏ để có case thật","Nhận khách nhỏ, chứng minh kết quả bằng số liệu","Tính phí cố định + % ngân sách hoặc theo kết quả","Mở rộng thành agency"],
+ pro:["Kỹ năng doanh nghiệp nào cũng cần","Có thể phát triển thành agency","Dùng được cho kinh doanh của chính mình"],con:["Nền tảng thay đổi liên tục","Áp lực kết quả","Khách hay so sánh giá"],
+ tip:"Marketer giỏi nhất là người hiểu kinh doanh của khách: biên lợi nhuận, giá trị vòng đời khách hàng, không chỉ giá mỗi click."},
+{id:"va",c:"freelance",n:"Trợ lý ảo (Virtual Assistant)",i:"🗂️",d:"Hỗ trợ từ xa cho doanh nhân, nhà sáng tạo: quản lý email, lịch, chăm sóc khách, nhập liệu, quản lý mạng xã hội.",v:0,k:1,r:1,t:"Vài tuần",inc:"5–30 triệu/tháng (hoặc 4–15 USD/giờ)",m:"on",p:0,s:["care","tech"],
+ st:["Thành thạo công cụ văn phòng, Google Workspace, Notion, Canva","Có tiếng Anh giao tiếp tốt để nhận khách nước ngoài","Tạo hồ sơ trên OnlineJobs, Upwork, LinkedIn","Tạo quy trình làm việc chuyên nghiệp, báo cáo đều đặn"],
+ pro:["Dễ bắt đầu","Làm từ xa","Có thể thành quản lý vận hành"],con:["Thu nhập ban đầu khiêm tốn","Lệch múi giờ","Công việc lặp lại"],
+ tip:"Học thêm tự động hóa (Zapier, Make, AI) để nâng cấp từ VA thành “chuyên gia vận hành” với mức phí cao hơn."},
+{id:"photo",c:"freelance",n:"Nhiếp ảnh & Quay phim",i:"📷",d:"Chụp ảnh cưới, kỷ yếu, sản phẩm, sự kiện, profile doanh nhân, quay TVC cho doanh nghiệp.",v:2,k:3,r:2,t:"1–6 tháng",inc:"10–100 triệu/tháng",m:"off",p:0,s:["creative","care"],
+ st:["Đầu tư thiết bị cơ bản phù hợp ngách","Luyện tay nghề, chụp miễn phí/giá rẻ để có portfolio","Xây Instagram, fanpage, TikTok chia sẻ hậu trường","Đóng gói dịch vụ, giá rõ ràng, hợp đồng chuyên nghiệp"],
+ pro:["Nghề sáng tạo, gặp gỡ nhiều người","Thù lao tốt mùa cao điểm","Bán thêm ảnh stock"],con:["Thiết bị đắt","Theo mùa","Cạnh tranh giá"],
+ tip:"Chụp sản phẩm cho shop online là ngách ổn định quanh năm, không theo mùa như ảnh cưới."},
+{id:"ketoan",c:"freelance",n:"Kế toán / Thuế / Pháp lý tự do",i:"🧾",d:"Làm dịch vụ kế toán, báo cáo thuế, thành lập doanh nghiệp, tư vấn pháp lý cho hộ kinh doanh và doanh nghiệp nhỏ.",v:0,k:3,r:1,t:"1–3 tháng",inc:"1–3 triệu/khách/tháng",m:"mix",p:0,s:["finance"],
+ st:["Có chứng chỉ, kinh nghiệm chuyên môn phù hợp","Đóng gói dịch vụ theo tháng cho doanh nghiệp nhỏ","Tìm khách qua giới thiệu, hội doanh nhân, online","Dùng phần mềm để phục vụ nhiều khách cùng lúc"],
+ pro:["Thu nhập định kỳ ổn định","Nhu cầu bắt buộc theo luật","Ít cạnh tranh về giá"],con:["Trách nhiệm pháp lý cao","Mùa quyết toán rất bận","Quy định thay đổi"],
+ tip:"20 khách × 2 triệu/tháng = 40 triệu thu nhập định kỳ — đây là một trong những nghề tự do ổn định nhất."},
+{id:"voice",c:"freelance",n:"Lồng tiếng / Voice-over",i:"🗣️",d:"Đọc quảng cáo, thuyết minh phim, sách nói, video doanh nghiệp, bài giảng e-learning.",v:1,k:3,r:1,t:"1–3 tháng",inc:"500k – vài triệu/bản thu",m:"on",p:0,s:["creative"],
+ st:["Luyện giọng, phát âm chuẩn, cảm xúc","Đầu tư micro thu âm và xử lý cách âm cơ bản","Làm demo nhiều giọng (quảng cáo, kể chuyện, tin tức)","Đăng ký với studio, nền tảng freelance"],
+ pro:["Làm tại nhà","Thù lao/giờ cao","Nghề độc đáo"],con:["Cạnh tranh với giọng AI","Cần năng khiếu","Việc không đều"],
+ tip:"Sách nói và e-learning là thị trường đang tăng mạnh, cần giọng đọc dài hơi và truyền cảm."}
+);
+
+/* Bản Đồ Kiếm Tiền — dữ liệu (phần 3) — © Tân AI */
+M.push(
+/* ===================== GIÁO DỤC ===================== */
+{id:"giasu",c:"giaoduc",n:"Gia sư (offline & online)",i:"📖",d:"Dạy kèm các môn học, luyện thi, ngoại ngữ, năng khiếu. Nghề kiếm tiền phổ biến của sinh viên và giáo viên.",v:0,k:2,r:1,t:"Vài tuần",inc:"150k – 1 triệu/buổi",m:"mix",p:0,s:["teach"],
+ st:["Chọn môn bạn giỏi nhất và nhóm học sinh phù hợp","Đăng ký trung tâm gia sư hoặc tự tìm qua hội nhóm phụ huynh","Chuẩn bị giáo án, theo dõi tiến bộ học sinh","Mở lớp nhóm nhỏ để tăng thu nhập/giờ","Dạy online để phục vụ học sinh mọi tỉnh thành"],
+ pro:["Không vốn","Giờ giấc linh hoạt","Ý nghĩa"],con:["Thu nhập theo giờ, có giới hạn","Mùa hè/Tết ít lớp","Đi lại nhiều nếu dạy offline"],
+ tip:"Kết quả của học sinh là quảng cáo tốt nhất. Một phụ huynh hài lòng giới thiệu cho bạn 3 phụ huynh khác."},
+{id:"khoahoc",c:"giaoduc",n:"Khóa học online",i:"🖥️",d:"Đóng gói kiến thức thành khóa học video, bán một lần cho hàng nghìn học viên.",v:1,k:3,r:2,t:"3–12 tháng",inc:"Vài triệu – hàng tỷ/năm",m:"on",p:1,s:["teach","creative"],
+ st:["Xác định vấn đề cụ thể mà khóa học giải quyết","Bán trước (pre-sale) để kiểm chứng nhu cầu","Quay bài giảng ngắn gọn, có bài tập thực hành","Đăng trên Udemy, Unica, Gitiho hoặc nền tảng riêng","Xây phễu: nội dung miễn phí → webinar → khóa học"],
+ pro:["Làm một lần bán nhiều lần","Biên lợi nhuận rất cao","Xây uy tín chuyên gia"],con:["Cần thương hiệu cá nhân","Cạnh tranh nội dung miễn phí","Phải cập nhật nội dung"],
+ tip:"Người ta không mua kiến thức, họ mua sự chuyển đổi. Hãy bán “kết quả sau 30 ngày” thay vì “30 bài giảng”."},
+{id:"coach",c:"giaoduc",n:"Coaching / Mentoring 1:1",i:"🧑‍🏫",d:"Hướng dẫn trực tiếp cá nhân đạt mục tiêu: sự nghiệp, kinh doanh, sức khỏe, tài chính, kỹ năng.",v:0,k:3,r:1,t:"1–3 tháng",inc:"500k – 10 triệu/buổi",m:"mix",p:0,s:["teach","sales","care"],
+ st:["Xác định chuyên môn đã được chứng minh bằng kết quả","Coach miễn phí 5–10 người đầu để có lời chứng thực","Đóng gói chương trình 4–12 tuần có giá rõ ràng","Tìm khách qua nội dung, giới thiệu, LinkedIn"],
+ pro:["Thu nhập/giờ rất cao","Vốn gần như bằng 0","Tác động sâu"],con:["Giới hạn bởi thời gian","Cần uy tín","Khó mở rộng"],
+ tip:"Chuyển từ 1:1 sang coaching nhóm để phục vụ nhiều người hơn mà không tăng giờ làm."},
+{id:"trainer",c:"giaoduc",n:"Đào tạo doanh nghiệp / Trainer",i:"🎤",d:"Thiết kế và giảng dạy chương trình đào tạo cho nhân viên doanh nghiệp: kỹ năng mềm, bán hàng, quản lý, marketing, AI…",v:0,k:4,r:1,t:"3–12 tháng",inc:"5–50 triệu/buổi đào tạo",m:"off",p:0,s:["teach","sales"],
+ st:["Có chuyên môn và kinh nghiệm thực chiến được chứng minh","Thiết kế chương trình có mục tiêu đo lường được","Hợp tác với công ty đào tạo hoặc tự bán trực tiếp cho phòng nhân sự","Xây thương hiệu cá nhân qua sách, bài viết, diễn thuyết"],
+ pro:["Thù lao cao","Uy tín xã hội","Khách hàng doanh nghiệp lớn"],con:["Cần nhiều năm xây uy tín","Áp lực đứng lớp","Doanh nghiệp cắt ngân sách khi khó khăn"],
+ tip:"Đào tạo về AI ứng dụng cho doanh nghiệp đang là ngách có nhu cầu tăng mạnh nhất hiện nay."},
+{id:"ebook",c:"giaoduc",n:"Ebook / Tài liệu / Template",i:"📘",d:"Bán sản phẩm số: ebook, bộ tài liệu, checklist, template Excel/Notion/Canva, bộ prompt AI.",v:0,k:2,r:1,t:"1–3 tháng",inc:"Vài triệu – vài chục triệu/tháng",m:"on",p:1,s:["teach","creative"],
+ st:["Tìm vấn đề người ta sẵn sàng trả tiền để giải quyết nhanh","Tạo sản phẩm số gọn, dễ dùng","Bán trên Gumroad, Etsy, website, hoặc qua Zalo/Facebook","Dùng nội dung miễn phí để dẫn khách"],
+ pro:["Chi phí sản xuất 1 lần","Không giao hàng","Biên lợi nhuận gần 100%"],con:["Dễ bị sao chép","Giá bán thấp","Cần kênh bán hàng"],
+ tip:"Template giúp tiết kiệm thời gian (lập kế hoạch tài chính, quản lý shop) thường bán tốt hơn ebook lý thuyết."},
+{id:"membership",c:"giaoduc",n:"Cộng đồng Membership trả phí",i:"🔐",d:"Xây cộng đồng kín thu phí hằng tháng/năm: học tập, kết nối, nội dung độc quyền, hỏi đáp trực tiếp.",v:0,k:3,r:2,t:"6–12 tháng",inc:"Doanh thu định kỳ",m:"on",p:1,s:["teach","sales"],
+ st:["Có tệp người theo dõi tin tưởng bạn","Thiết kế giá trị định kỳ: livestream, tài liệu, thử thách","Dùng Skool, Discord, Facebook Group kín, Zalo","Giữ chân thành viên bằng hoạt động đều đặn"],
+ pro:["Thu nhập lặp lại","Gắn kết cao","Dễ bán thêm sản phẩm"],con:["Phải duy trì giá trị liên tục","Tỷ lệ rời bỏ","Tốn công quản trị"],
+ tip:"Người ta ở lại vì cộng đồng (bạn bè cùng chí hướng) nhiều hơn vì nội dung."},
+{id:"daytiengviet",c:"giaoduc",n:"Dạy ngoại ngữ / Dạy tiếng Việt cho người nước ngoài",i:"🗺️",d:"Dạy trên nền tảng quốc tế như iTalki, Preply hoặc trung tâm. Người nước ngoài học tiếng Việt ngày càng nhiều.",v:0,k:2,r:1,t:"1–2 tháng",inc:"8–30 USD/giờ",m:"on",p:0,s:["teach"],
+ st:["Tạo hồ sơ giáo viên với video giới thiệu ấn tượng","Chuẩn bị giáo trình theo cấp độ","Định giá thấp lúc đầu để có đánh giá","Tăng giá dần khi lịch kín"],
+ pro:["Thu nhập bằng ngoại tệ","Làm tại nhà","Kết nối văn hóa"],con:["Lệch múi giờ","Cạnh tranh giá","Thu nhập theo giờ"],
+ tip:"Dạy tiếng Việt cho người Việt kiều thế hệ 2 và người nước ngoài làm việc tại Việt Nam là ngách ít cạnh tranh."},
+{id:"workshop",c:"giaoduc",n:"Tổ chức workshop / Sự kiện thu phí",i:"🎟️",d:"Tổ chức buổi học thực hành, hội thảo, lớp làm bánh, vẽ tranh, cắm hoa, kỹ năng… thu phí tham gia.",v:1,k:3,r:2,t:"1–2 tháng",inc:"5–50 triệu/sự kiện",m:"off",p:0,s:["teach","sales","creative"],
+ st:["Chọn chủ đề có trải nghiệm thực hành hấp dẫn","Thuê địa điểm phù hợp, chuẩn bị nguyên vật liệu","Bán vé qua mạng xã hội, đối tác","Chụp ảnh, quay video để quảng bá lần sau"],
+ pro:["Tiền về nhanh","Xây cộng đồng","Bán thêm sản phẩm/khóa học"],con:["Rủi ro không đủ người","Chi phí địa điểm","Tốn sức tổ chức"],
+ tip:"Workshop trải nghiệm (làm nến, gốm, vẽ) cho dân văn phòng cuối tuần và team building doanh nghiệp rất được ưa chuộng."},
+
+/* ===================== CÔNG NGHỆ & AI ===================== */
+{id:"saas",c:"congnghe",n:"SaaS – Phần mềm thuê bao",i:"☁️",d:"Xây phần mềm giải quyết vấn đề cụ thể, thu phí hàng tháng. Mô hình kinh doanh có giá trị định giá cao nhất.",v:2,k:5,r:4,t:"12–36 tháng",inc:"Doanh thu định kỳ, có thể rất lớn",m:"on",p:1,s:["tech","sales"],
+ st:["Tìm “nỗi đau” lặp lại của một ngành cụ thể","Phỏng vấn 20–30 khách tiềm năng trước khi viết code","Làm bản MVP tối giản, bán cho 10 khách đầu","Lắng nghe phản hồi, cải tiến liên tục","Tối ưu giữ chân khách và giảm tỷ lệ hủy"],
+ pro:["Doanh thu định kỳ","Mở rộng gần như không giới hạn","Giá trị doanh nghiệp cao"],con:["Thời gian phát triển lâu","Cạnh tranh toàn cầu","Cần cả kỹ năng kỹ thuật và kinh doanh"],
+ tip:"Phần mềm “nhàm chán” cho ngành truyền thống (phòng khám, nhà xe, tiệm sửa) thường kiếm tiền tốt hơn ý tưởng “hot”."},
+{id:"app",c:"congnghe",n:"Ứng dụng di động",i:"📲",d:"Phát triển app tiện ích, giáo dục, sức khỏe, game nhỏ. Kiếm tiền từ quảng cáo, mua trong app, thuê bao.",v:2,k:4,r:4,t:"6–24 tháng",inc:"0 – rất lớn",m:"on",p:1,s:["tech","creative"],
+ st:["Nghiên cứu thị trường trên App Store/Google Play","Thiết kế trải nghiệm đơn giản, giải quyết một việc thật tốt","Phát triển bằng Flutter/React Native để chạy 2 nền tảng","Tối ưu ASO (từ khóa, ảnh, đánh giá)","Thử nghiệm mô hình kiếm tiền"],
+ pro:["Tiếp cận hàng tỷ người dùng","Thu nhập thụ động khi app ổn định","Có thể bán lại app"],con:["Tỷ lệ thành công thấp","Chi phí thu hút người dùng cao","Cập nhật liên tục"],
+ tip:"Hàng nghìn app nhỏ kiếm vài nghìn USD/tháng nhờ giải quyết một nhu cầu ngách rất cụ thể."},
+{id:"aiagency",c:"congnghe",n:"Dịch vụ AI & Tự động hóa cho doanh nghiệp",i:"🧠",d:"Giúp doanh nghiệp ứng dụng AI: chatbot chăm sóc khách, tự động hóa quy trình, trợ lý AI nội bộ, đào tạo nhân viên dùng AI.",v:1,k:4,r:2,t:"1–6 tháng",inc:"10–500 triệu/dự án",m:"mix",p:0,s:["tech","sales","teach"],
+ st:["Thành thạo các công cụ AI phổ biến và nền tảng tự động hóa","Chọn một ngành để chuyên sâu (bất động sản, spa, giáo dục…)","Làm demo giải quyết vấn đề thật của ngành đó","Bán gói triển khai + phí duy trì hằng tháng","Đóng gói thành sản phẩm để nhân rộng"],
+ pro:["Nhu cầu đang bùng nổ","Giá trị hợp đồng cao","Thu nhập định kỳ từ bảo trì"],con:["Công nghệ thay đổi rất nhanh","Khách hàng còn hoài nghi","Cần cả kỹ thuật lẫn tư vấn"],
+ tip:"Đừng bán “AI”, hãy bán kết quả: “giảm 50% thời gian trả lời khách”, “tăng 30% lead”. Doanh nghiệp mua lợi ích, không mua công nghệ."},
+{id:"aicontent",c:"congnghe",n:"Sáng tạo nội dung với AI",i:"🪄",d:"Dùng AI tạo ảnh, video, nhạc, giọng đọc, bài viết để làm dịch vụ hoặc xây kênh nội dung với tốc độ gấp nhiều lần.",v:1,k:2,r:2,t:"1–3 tháng",inc:"Vài triệu – vài chục triệu/tháng",m:"on",p:0,s:["creative","tech"],
+ st:["Thành thạo các công cụ AI tạo ảnh, video, giọng nói","Chọn hướng: làm dịch vụ cho doanh nghiệp hoặc xây kênh riêng","Kết hợp AI với tư duy sáng tạo và biên tập của con người","Tuân thủ bản quyền, gắn nhãn nội dung AI khi cần"],
+ pro:["Năng suất cực cao","Chi phí thấp","Kỹ năng của tương lai"],con:["Nội dung AI đại trà bị đánh giá thấp","Vấn đề bản quyền","Rào cản gia nhập thấp"],
+ tip:"AI làm 80% công việc, giá trị của bạn nằm ở 20% còn lại: ý tưởng, gu thẩm mỹ, câu chuyện và sự thấu hiểu khách hàng."},
+{id:"template",c:"congnghe",n:"Bán template / Plugin / Theme",i:"🧩",d:"Tạo template Notion, Canva, Figma, theme WordPress, plugin, bộ công cụ cho nhà phát triển và bán nhiều lần.",v:0,k:3,r:1,t:"1–6 tháng",inc:"Vài trăm – vài nghìn USD/tháng",m:"on",p:1,s:["tech","creative"],
+ st:["Xác định nhu cầu cụ thể của một nhóm người dùng","Thiết kế sản phẩm đẹp, dễ dùng, có hướng dẫn","Bán trên Gumroad, ThemeForest, Notion Marketplace, Etsy","Quảng bá qua nội dung hướng dẫn"],
+ pro:["Thu nhập thụ động","Bán toàn cầu","Vốn gần bằng 0"],con:["Phải hỗ trợ người mua","Cạnh tranh nhiều","Cập nhật theo phiên bản nền tảng"],
+ tip:"Template giải quyết công việc cụ thể (quản lý đơn hàng, kế hoạch nội dung) bán tốt hơn template “đẹp” chung chung."},
+{id:"nocode",c:"congnghe",n:"Làm website / No-code cho khách",i:"🌐",d:"Dùng công cụ no-code (WordPress, Webflow, Wix, Framer) làm website, landing page cho doanh nghiệp nhỏ.",v:0,k:2,r:1,t:"Vài tuần",inc:"3–30 triệu/website",m:"on",p:0,s:["tech","creative"],
+ st:["Thành thạo một nền tảng no-code","Làm 3 website mẫu cho các ngành khác nhau","Tìm khách: tiệm spa, nhà hàng, phòng khám, cửa hàng địa phương","Bán thêm gói bảo trì, SEO, hosting hằng tháng"],
+ pro:["Học nhanh","Nhu cầu luôn có","Thu phí duy trì định kỳ"],con:["Cạnh tranh giá rẻ","AI tạo web tự động","Khách nhỏ ngân sách hạn chế"],
+ tip:"Gói “website + duy trì + cập nhật hằng tháng” giúp bạn có thu nhập định kỳ thay vì chỉ thu một lần."},
+{id:"bugbounty",c:"congnghe",n:"Bug Bounty / Bảo mật",i:"🛡️",d:"Tìm lỗ hổng bảo mật hợp pháp trong các chương trình bug bounty của doanh nghiệp và nhận tiền thưởng.",v:0,k:5,r:2,t:"6–24 tháng",inc:"Vài trăm – hàng chục nghìn USD/lỗi",m:"on",p:0,s:["tech"],
+ st:["Học nền tảng mạng, web, bảo mật ứng dụng","Luyện tập trên môi trường thực hành hợp pháp (CTF, lab)","Tham gia HackerOne, Bugcrowd, chương trình trong nước","Chỉ kiểm thử trong phạm vi được cho phép, viết báo cáo chất lượng"],
+ pro:["Tiền thưởng lớn","Kỹ năng cực kỳ được săn đón","Làm từ xa"],con:["Đường học rất dài","Thu nhập không đều","Cạnh tranh với chuyên gia toàn cầu"],
+ tip:"Luôn tuân thủ phạm vi và quy định của chương trình — kiểm thử trái phép là vi phạm pháp luật."},
+{id:"datalabel",c:"congnghe",n:"Gắn nhãn dữ liệu AI / Kiểm thử phần mềm",i:"🏷️",d:"Làm việc vi mô: gắn nhãn hình ảnh, đánh giá câu trả lời AI, kiểm thử ứng dụng, khảo sát người dùng.",v:0,k:1,r:1,t:"Vài tuần",inc:"3–20 triệu/tháng",m:"on",p:0,s:["tech","care"],
+ st:["Đăng ký với các nền tảng đánh giá AI, kiểm thử, khảo sát uy tín","Hoàn thành bài kiểm tra đầu vào","Làm chính xác để tăng hạng và nhận việc giá cao","Học kiểm thử chuyên nghiệp để chuyển thành nghề QA"],
+ pro:["Dễ bắt đầu","Linh hoạt thời gian","Cửa ngõ vào ngành công nghệ"],con:["Thu nhập thấp lúc đầu","Việc không đều","Có nhiều nền tảng lừa đảo giả danh"],
+ tip:"Cảnh giác: công việc thật KHÔNG BAO GIỜ yêu cầu bạn nạp tiền, đặt cọc hay “làm nhiệm vụ” để được trả lương."},
+{id:"gameindie",c:"congnghe",n:"Làm game indie",i:"🕹️",d:"Phát triển game nhỏ (mobile, PC, web) và phát hành trên Steam, App Store, Google Play.",v:1,k:5,r:4,t:"12–36 tháng",inc:"0 – rất lớn",m:"on",p:1,s:["tech","creative"],
+ st:["Học engine: Unity, Godot, Unreal","Làm nhiều game rất nhỏ để học trọn quy trình","Xây cộng đồng sớm, chia sẻ quá trình phát triển","Phát hành, lắng nghe người chơi, cập nhật"],
+ pro:["Sáng tạo tự do","Thu nhập thụ động khi game thành công","Thị trường toàn cầu"],con:["Rủi ro rất cao","Tốn nhiều thời gian","Cần nhiều kỹ năng"],
+ tip:"Hoàn thành một game nhỏ tốt hơn bỏ dở một game lớn. Hãy phát hành sớm và thường xuyên."},
+
+/* ===================== DỊCH VỤ & NGHỀ ===================== */
+{id:"taixe",c:"dichvu",n:"Tài xế công nghệ / Giao hàng",i:"🛵",d:"Chạy xe ôm, taxi công nghệ, giao đồ ăn, giao hàng. Bắt đầu ngay, thu nhập theo công sức.",v:1,k:1,r:2,t:"Ngay lập tức",inc:"8–25 triệu/tháng",m:"off",p:0,s:["care"],
+ st:["Chuẩn bị phương tiện, giấy tờ, bằng lái hợp lệ","Đăng ký với các ứng dụng gọi xe/giao hàng","Chạy vào giờ cao điểm, khu vực đông đơn","Theo dõi chi phí xăng, bảo dưỡng để tính lợi nhuận thật"],
+ pro:["Bắt đầu ngay","Linh hoạt giờ","Không cần bằng cấp"],con:["Vất vả, rủi ro giao thông","Thu nhập bị giới hạn","Hao mòn phương tiện"],
+ tip:"Hãy coi đây là thu nhập bắc cầu. Dùng thời gian rảnh để học một kỹ năng có giá trị cao hơn."},
+{id:"suachua",c:"dichvu",n:"Sửa chữa điện lạnh / điện nước / xe",i:"🔧",d:"Nghề có tay nghề luôn có việc: sửa điều hòa, máy giặt, điện nước, xe máy, điện thoại, máy tính.",v:2,k:3,r:1,t:"3–12 tháng học nghề",inc:"10–40 triệu/tháng",m:"off",p:0,s:["hand"],
+ st:["Học nghề tại trường nghề hoặc theo thợ giỏi","Đầu tư bộ đồ nghề cơ bản","Đăng ký trên các app dịch vụ tại nhà, Google Maps","Làm uy tín, bảo hành rõ ràng để có khách quen","Mở cửa hàng, thuê thợ khi khách đông"],
+ pro:["Nhu cầu thiết yếu","Khó bị AI thay thế","Có thể mở tiệm riêng"],con:["Vất vả","Cần học nghề bài bản","Rủi ro an toàn lao động"],
+ tip:"Thợ trung thực, báo giá rõ ràng là “hàng hiếm”. Uy tín sẽ giúp bạn kín lịch nhờ truyền miệng."},
+{id:"vesinh",c:"dichvu",n:"Dọn dẹp nhà / Vệ sinh công nghiệp",i:"🧹",d:"Dịch vụ dọn nhà theo giờ, vệ sinh sau xây dựng, giặt sofa, vệ sinh máy lạnh, văn phòng.",v:1,k:2,r:1,t:"Vài tuần",inc:"8–50 triệu/tháng",m:"off",p:0,s:["care","hand"],
+ st:["Bắt đầu tự làm, đăng ký trên app giúp việc","Đầu tư máy móc chuyên dụng để tăng giá trị dịch vụ","Xây quy trình, checklist chất lượng","Tuyển và đào tạo nhân viên, nhận hợp đồng văn phòng"],
+ pro:["Nhu cầu lớn ở đô thị","Vốn thấp","Dễ mở rộng thành công ty"],con:["Lao động nặng","Quản lý nhân sự khó","Biên lợi nhuận vừa phải"],
+ tip:"Hợp đồng vệ sinh định kỳ với văn phòng, chung cư mang lại doanh thu ổn định hơn khách lẻ."},
+{id:"lamdep",c:"dichvu",n:"Làm đẹp: Nail, Tóc, Spa, Makeup",i:"💅",d:"Ngành dịch vụ làm đẹp tăng trưởng mạnh. Tay nghề tốt có thể làm tại nhà, mở tiệm, hoặc làm việc ở nước ngoài.",v:2,k:3,r:2,t:"3–6 tháng học nghề",inc:"10–60 triệu/tháng",m:"off",p:0,s:["hand","creative","care"],
+ st:["Học nghề tại học viện uy tín, có chứng chỉ","Làm cho tiệm lớn để học kinh nghiệm và tệp khách","Xây Instagram/TikTok chia sẻ tác phẩm","Mở tiệm riêng hoặc làm dịch vụ tại nhà"],
+ pro:["Nhu cầu cao, khách quay lại","Nghề sáng tạo","Cơ hội làm ở nước ngoài"],con:["Đứng nhiều, hóa chất","Cạnh tranh","Phụ thuộc tay nghề cá nhân"],
+ tip:"Khách làm đẹp quay lại đều đặn mỗi 2–6 tuần — giá trị vòng đời khách rất lớn, hãy chăm sóc thật tốt."},
+{id:"sukien",c:"dichvu",n:"Tổ chức sự kiện / Tiệc cưới",i:"🎉",d:"Lên kế hoạch và tổ chức tiệc cưới, sinh nhật, khai trương, hội nghị, team building.",v:2,k:4,r:3,t:"3–6 tháng",inc:"10–200 triệu/sự kiện (doanh thu)",m:"off",p:0,s:["creative","sales","care"],
+ st:["Làm việc cho công ty sự kiện để học nghề","Xây mạng lưới nhà cung cấp: âm thanh, ánh sáng, trang trí, MC","Bắt đầu với sự kiện nhỏ, chụp ảnh portfolio","Định vị phong cách riêng, nhận dự án lớn hơn"],
+ pro:["Giá trị hợp đồng lớn","Sáng tạo","Nhiều cơ hội kết nối"],con:["Áp lực cao","Theo mùa","Rủi ro phát sinh"],
+ tip:"Mạng lưới nhà cung cấp tin cậy là lợi thế cạnh tranh lớn nhất của người tổ chức sự kiện."},
+{id:"pet",c:"dichvu",n:"Dịch vụ thú cưng",i:"🐶",d:"Spa, cắt tỉa lông, trông giữ, dắt chó đi dạo, huấn luyện, bán thức ăn và phụ kiện thú cưng.",v:2,k:2,r:2,t:"1–6 tháng",inc:"10–50 triệu/tháng",m:"off",p:0,s:["care","hand"],
+ st:["Học kỹ năng grooming, chăm sóc, huấn luyện cơ bản","Bắt đầu với dịch vụ tại nhà hoặc trông giữ","Xây cộng đồng chủ nuôi thú cưng trên mạng xã hội","Mở pet shop kết hợp spa khi có tệp khách"],
+ pro:["Thị trường đang tăng mạnh","Khách chi tiêu mạnh tay","Công việc vui"],con:["Rủi ro thú cưng bị thương","Cần không gian","Vất vả"],
+ tip:"Người nuôi thú cưng coi chúng như con — sự tận tâm và minh bạch (gửi ảnh/video cập nhật) là chìa khóa giữ khách."},
+{id:"nauan",c:"dichvu",n:"Nấu ăn tại nhà / Suất ăn / Bánh handmade",i:"🧁",d:"Nấu cơm văn phòng, đồ ăn healthy, bánh ngọt, món đặc sản bán online từ căn bếp nhà mình.",v:1,k:2,r:2,t:"Vài tuần",inc:"5–40 triệu/tháng",m:"mix",p:0,s:["hand","creative","care"],
+ st:["Chọn món tủ, chuẩn hóa công thức","Chụp ảnh món ăn đẹp, bán qua Facebook, Zalo, app giao đồ ăn","Nhận đặt trước theo ngày để giảm lãng phí","Đảm bảo vệ sinh an toàn thực phẩm, đăng ký khi mở rộng"],
+ pro:["Làm tại nhà","Vốn nhỏ","Khách quen trung thành"],con:["Vất vả","Hạn chế quy mô","Phụ thuộc thời gian giao"],
+ tip:"Mô hình đặt trước – giao theo khung giờ cố định giúp bạn chủ động nguyên liệu và tối ưu lợi nhuận."},
+{id:"dulich",c:"dichvu",n:"Hướng dẫn viên / Tự tổ chức tour",i:"🧳",d:"Dẫn tour cho khách trong nước và quốc tế, tổ chức tour trải nghiệm ẩm thực, phượt, trekking.",v:1,k:3,r:2,t:"1–6 tháng",inc:"10–50 triệu/tháng + tip",m:"off",p:0,s:["care","teach","sales"],
+ st:["Học ngoại ngữ, kiến thức văn hóa – lịch sử địa phương","Lấy thẻ hướng dẫn viên theo quy định","Đăng tour trải nghiệm trên Airbnb Experiences, Klook, GetYourGuide","Xây đánh giá tốt, hợp tác với khách sạn, homestay"],
+ pro:["Đi nhiều, gặp nhiều người","Tiền tip từ khách quốc tế","Biến đam mê thành nghề"],con:["Theo mùa du lịch","Sức khỏe","Thu nhập biến động"],
+ tip:"Tour trải nghiệm nhỏ (food tour, làng nghề, nấu ăn) có giá trị cao và ít cạnh tranh hơn tour đại trà."},
+{id:"vantai",c:"dichvu",n:"Chuyển nhà / Vận tải",i:"🚛",d:"Dịch vụ chuyển nhà, chuyển văn phòng, xe tải chở hàng theo chuyến, giao hàng cồng kềnh.",v:3,k:2,r:2,t:"1–3 tháng",inc:"15–60 triệu/tháng",m:"off",p:0,s:["hand","care"],
+ st:["Đầu tư hoặc thuê xe tải phù hợp","Đăng ký trên các app vận tải, Google Maps","Xây đội bốc xếp đáng tin cậy, có bảo hiểm hàng hóa","Báo giá rõ ràng, trọn gói"],
+ pro:["Nhu cầu ổn định","Giá trị mỗi đơn cao","Dễ mở rộng đội xe"],con:["Vốn phương tiện","Rủi ro hư hỏng hàng","Lao động nặng"],
+ tip:"Đánh giá 5 sao trên Google Maps là nguồn khách miễn phí lớn nhất cho dịch vụ địa phương."},
+{id:"chamsoc",c:"dichvu",n:"Chăm sóc người già / Trẻ em",i:"🤲",d:"Giúp việc, bảo mẫu, chăm sóc người cao tuổi, điều dưỡng tại nhà — nhu cầu tăng mạnh khi dân số già hóa.",v:0,k:2,r:1,t:"Vài tuần",inc:"7–20 triệu/tháng",m:"off",p:0,s:["care"],
+ st:["Học khóa chăm sóc, sơ cứu cơ bản, có chứng chỉ điều dưỡng nếu được","Đăng ký với trung tâm, app dịch vụ chăm sóc","Xây uy tín qua giới thiệu","Mở trung tâm cung ứng khi có kinh nghiệm"],
+ pro:["Nhu cầu tăng mạnh","Không cần vốn","Ý nghĩa nhân văn"],con:["Áp lực tinh thần","Thời gian dài","Thu nhập vừa phải"],
+ tip:"Chăm sóc người cao tuổi là ngành có tương lai lớn tại Việt Nam và nhiều nước như Nhật, Đức."},
+{id:"pt",c:"dichvu",n:"Huấn luyện viên thể hình / Yoga",i:"🏋️",d:"Dạy cá nhân, lớp nhóm, coaching online về tập luyện, dinh dưỡng, giảm cân.",v:1,k:3,r:1,t:"3–6 tháng",inc:"10–60 triệu/tháng",m:"mix",p:0,s:["teach","care"],
+ st:["Có chứng chỉ huấn luyện viên uy tín","Làm tại phòng gym để xây tệp khách","Chia sẻ kiến thức, hành trình học viên trên mạng xã hội","Mở coaching online, bán giáo án, thực đơn"],
+ pro:["Sống khỏe khi làm nghề","Khách gắn bó lâu","Kết hợp online"],con:["Phụ thuộc thể lực","Thu nhập theo giờ","Cạnh tranh"],
+ tip:"Kết quả “trước – sau” của học viên (có đồng ý) là nội dung marketing mạnh nhất."},
+
+/* ===================== NÔNG NGHIỆP ===================== */
+{id:"rausach",c:"nongnghiep",n:"Rau sạch / Thủy canh / Nhà màng",i:"🥬",d:"Trồng rau sạch, rau thủy canh, nông nghiệp công nghệ cao để bán cho gia đình, nhà hàng, siêu thị.",v:2,k:3,r:3,t:"2–6 tháng",inc:"10–50 triệu/tháng",m:"off",p:0,s:["hand"],
+ st:["Học kỹ thuật canh tác, thủy canh, nhà màng","Bắt đầu quy mô nhỏ (sân thượng, vườn nhà)","Tìm đầu ra trước: bếp ăn, nhà hàng, nhóm cư dân","Đạt chứng nhận VietGAP để vào siêu thị","Bán online trực tiếp đến người tiêu dùng"],
+ pro:["Nhu cầu thực phẩm sạch tăng","Chu kỳ thu hoạch nhanh","Có thể kết hợp du lịch"],con:["Phụ thuộc thời tiết, sâu bệnh","Đầu ra bấp bênh","Lao động vất vả"],
+ tip:"Đầu ra quyết định thành bại trong nông nghiệp. Có khách trước rồi mới mở rộng diện tích."},
+{id:"channuoi",c:"nongnghiep",n:"Chăn nuôi (gà, heo, bò, dê)",i:"🐓",d:"Chăn nuôi quy mô hộ gia đình hoặc trang trại. Gà thả vườn, dê, bò thịt là các mô hình phổ biến.",v:2,k:3,r:3,t:"3–12 tháng",inc:"Tùy quy mô",m:"off",p:0,s:["hand"],
+ st:["Học kỹ thuật chăn nuôi, phòng dịch bệnh","Bắt đầu số lượng nhỏ để học kinh nghiệm","Xây chuồng trại đúng quy chuẩn, xử lý môi trường","Tìm đầu ra ổn định (thương lái, nhà hàng, bán lẻ)"],
+ pro:["Nhu cầu thực phẩm ổn định","Tận dụng đất đai","Có thể liên kết doanh nghiệp"],con:["Rủi ro dịch bệnh","Giá thị trường biến động","Ô nhiễm môi trường"],
+ tip:"Liên kết bao tiêu với doanh nghiệp giúp giảm rủi ro giá, đặc biệt với người mới."},
+{id:"thuysan",c:"nongnghiep",n:"Nuôi trồng thủy sản",i:"🦐",d:"Nuôi tôm, cá, ốc, cua… Lợi nhuận cao nhưng rủi ro lớn, đòi hỏi kỹ thuật.",v:3,k:4,r:4,t:"3–8 tháng/vụ",inc:"Lợi nhuận cao nếu thành công",m:"off",p:0,s:["hand"],
+ st:["Chọn đối tượng nuôi phù hợp vùng nước","Học kỹ thuật quản lý nước, thức ăn, dịch bệnh","Đầu tư ao nuôi, hệ thống sục khí","Bắt đầu từ diện tích nhỏ, ghi chép kỹ","Tìm đầu ra, liên kết doanh nghiệp chế biến"],
+ pro:["Biên lợi nhuận lớn","Thị trường xuất khẩu","Việt Nam có lợi thế tự nhiên"],con:["Rủi ro dịch bệnh rất cao","Vốn lớn","Biến đổi khí hậu"],
+ tip:"Mô hình nuôi kết hợp (tôm – lúa, cá – lúa) giảm rủi ro và thân thiện môi trường."},
+{id:"caytrai",c:"nongnghiep",n:"Cây ăn trái đặc sản",i:"🥭",d:"Trồng sầu riêng, bưởi, xoài, cam, mít, dừa… Cây lâu năm mang lại thu nhập ổn định nhiều năm.",v:3,k:3,r:3,t:"3–5 năm",inc:"Hàng trăm triệu/ha/năm khi cho trái",m:"off",p:1,s:["hand","finance"],
+ st:["Chọn giống phù hợp thổ nhưỡng, có thị trường xuất khẩu","Trồng xen cây ngắn ngày để có thu nhập trong thời gian chờ","Áp dụng quy trình canh tác chuẩn, mã số vùng trồng","Liên kết hợp tác xã, doanh nghiệp xuất khẩu"],
+ pro:["Thu nhập lâu dài","Giá trị đất tăng","Cơ hội xuất khẩu"],con:["Thời gian chờ lâu","Rủi ro giá khi trồng ồ ạt","Thời tiết cực đoan"],
+ tip:"Cẩn trọng khi đám đông đổ xô trồng một loại cây — giá có thể sụp khi cung vượt cầu."},
+{id:"ocop",c:"nongnghiep",n:"Đặc sản vùng miền / Nông sản chế biến",i:"🍯",d:"Đóng gói đặc sản quê nhà (mật ong, cà phê, trà, khô, mắm, bánh) thành sản phẩm có thương hiệu, bán online toàn quốc.",v:1,k:3,r:2,t:"2–6 tháng",inc:"5–100 triệu/tháng",m:"mix",p:0,s:["sales","creative","hand"],
+ st:["Chọn đặc sản có câu chuyện và nguồn gốc rõ ràng","Thiết kế bao bì, nhãn mác, đăng ký công bố chất lượng","Kể câu chuyện nguồn gốc qua video, livestream tại vườn","Bán trên sàn TMĐT, mạng xã hội, quà tặng doanh nghiệp","Hướng tới chứng nhận OCOP"],
+ pro:["Tạo giá trị gia tăng cho nông sản","Câu chuyện độc đáo","Giúp đỡ quê hương"],con:["Thủ tục an toàn thực phẩm","Bảo quản, vận chuyển","Cần kỹ năng marketing"],
+ tip:"Livestream ngay tại vườn, xưởng chế biến là cách xây niềm tin nhanh nhất cho sản phẩm nông nghiệp."},
+{id:"farmstay",c:"nongnghiep",n:"Du lịch sinh thái / Farmstay",i:"🏕️",d:"Kết hợp nông trại với du lịch trải nghiệm: hái trái cây, câu cá, cắm trại, lưu trú giữa thiên nhiên.",v:3,k:4,r:3,t:"6–18 tháng",inc:"Tùy quy mô",m:"off",p:0,s:["care","creative","sales"],
+ st:["Tận dụng đất vườn có cảnh quan đẹp, gần thành phố","Thiết kế trải nghiệm: hái quả, nấu ăn, workshop","Xây khu lưu trú, cắm trại tối thiểu","Quảng bá trên mạng xã hội, hợp tác trường học, công ty"],
+ pro:["Tăng giá trị đất nông nghiệp","Nhiều nguồn thu","Xu hướng du lịch xanh"],con:["Thủ tục pháp lý đất đai","Theo mùa","Vốn hạ tầng"],
+ tip:"Tour trải nghiệm cho học sinh và team building doanh nghiệp mang lại khách đoàn ổn định."},
+{id:"nam",c:"nongnghiep",n:"Trồng nấm",i:"🍄",d:"Trồng nấm bào ngư, linh chi, đông trùng hạ thảo… trong nhà, tốn ít diện tích, vòng quay nhanh.",v:2,k:3,r:3,t:"1–3 tháng",inc:"5–30 triệu/tháng",m:"off",p:0,s:["hand"],
+ st:["Học kỹ thuật tại cơ sở uy tín","Chuẩn bị nhà trồng đảm bảo nhiệt độ, độ ẩm","Mua phôi giống chất lượng","Bán tươi cho chợ, nhà hàng hoặc sấy khô, chế biến"],
+ pro:["Ít diện tích","Chu kỳ ngắn","Tận dụng phụ phẩm nông nghiệp"],con:["Dễ nhiễm bệnh","Cần kỹ thuật","Đầu ra cần xây dựng"],
+ tip:"Sản phẩm chế biến sâu (nấm sấy, trà linh chi) có giá trị gấp nhiều lần nấm tươi và bảo quản lâu hơn."},
+{id:"yen",c:"nongnghiep",n:"Nuôi yến / Nuôi ong",i:"🐝",d:"Xây nhà yến lấy tổ yến hoặc nuôi ong lấy mật — mô hình có giá trị sản phẩm cao.",v:3,k:4,r:4,t:"1–3 năm",inc:"Giá trị cao khi thành công",m:"off",p:1,s:["hand","finance"],
+ st:["Khảo sát vùng có đàn yến/nguồn hoa phù hợp","Học kỹ thuật từ người có kinh nghiệm","Tuân thủ quy định địa phương về nhà yến","Xây thương hiệu sản phẩm, bán trực tiếp"],
+ pro:["Sản phẩm giá trị cao","Gần như thụ động khi ổn định","Nhu cầu lớn"],con:["Rủi ro yến không về","Vốn lớn","Hàng giả cạnh tranh"],
+ tip:"Đừng nghe quảng cáo “xây nhà yến chắc chắn có lãi”. Khảo sát kỹ và học từ người thật trước khi xuống tiền."}
+);
+
+/* Bản Đồ Kiếm Tiền — dữ liệu (phần 4) — © Tân AI */
+M.push(
+/* ===================== THU NHẬP THỤ ĐỘNG ===================== */
+{id:"thuexe",c:"thudong",n:"Cho thuê xe ô tô / xe máy",i:"🚗",d:"Cho thuê xe tự lái, cho công ty thuê xe, hoặc đưa xe vào hợp tác xã/nền tảng cho thuê.",v:3,k:2,r:3,t:"1–2 tháng",inc:"5–25 triệu/xe/tháng",m:"off",p:1,s:["finance","care"],
+ st:["Chọn xe phổ thông, tiết kiệm nhiên liệu, dễ thuê","Đăng trên nền tảng cho thuê xe hoặc ký hợp đồng với doanh nghiệp","Mua bảo hiểm đầy đủ, hợp đồng chặt chẽ, định vị GPS","Bảo dưỡng định kỳ, giữ xe sạch đẹp"],
+ pro:["Thu nhập đều","Tài sản hữu hình","Có thể mở rộng đội xe"],con:["Xe mất giá theo năm","Rủi ro tai nạn, hư hỏng","Thủ tục giấy tờ"],
+ tip:"Tính kỹ khấu hao: lợi nhuận thật = tiền thuê – (khấu hao + bảo hiểm + bảo dưỡng + lãi vay)."},
+{id:"maytudong",c:"thudong",n:"Máy bán hàng tự động / Giặt sấy tự động",i:"🥤",d:"Đặt máy bán nước, máy gắp thú, tủ đồ thông minh, tiệm giặt sấy tự phục vụ — vận hành gần như không cần người.",v:3,k:2,r:3,t:"1–3 tháng",inc:"3–20 triệu/máy/tháng",m:"off",p:1,s:["finance"],
+ st:["Tìm vị trí đông người: trường học, bệnh viện, khu công nghiệp, ký túc xá","Đàm phán chia sẻ doanh thu hoặc thuê mặt bằng","Lắp máy có thanh toán QR, theo dõi từ xa","Bổ sung hàng, bảo trì định kỳ"],
+ pro:["Vận hành ít công","Hoạt động 24/7","Dễ nhân rộng"],con:["Vị trí quyết định tất cả","Hư hỏng, phá hoại","Vốn đầu tư máy"],
+ tip:"Bắt đầu với 1 máy để học dữ liệu bán hàng, sau đó mới mở rộng sang vị trí có lưu lượng tương tự."},
+{id:"stock",c:"thudong",n:"Bán ảnh / Video / Nhạc stock",i:"🖼️",d:"Đưa ảnh, video, nhạc, icon lên Shutterstock, Adobe Stock, Pond5… nhận tiền mỗi lần có người tải.",v:1,k:2,r:1,t:"6–12 tháng",inc:"Vài chục – vài trăm USD/tháng (tăng dần)",m:"on",p:1,s:["creative"],
+ st:["Nghiên cứu chủ đề người mua cần (kinh doanh, con người Việt Nam, ẩm thực, du lịch)","Chụp/quay chất lượng cao, đầy đủ giấy phép người mẫu","Gắn từ khóa chuẩn, đăng số lượng lớn","Đăng đều mỗi tuần để tích lũy kho"],
+ pro:["Thu nhập thụ động lâu dài","Bán toàn cầu","Tận dụng ảnh có sẵn"],con:["Giá mỗi lượt tải thấp","Cần số lượng lớn","Cạnh tranh với ảnh AI"],
+ tip:"Ảnh về con người, văn hóa, đời sống Việt Nam chân thực đang thiếu và được tìm kiếm nhiều."},
+{id:"banquyen",c:"thudong",n:"Bản quyền: Âm nhạc, Sách, Phát minh",i:"©️",d:"Tạo tài sản trí tuệ một lần và nhận tiền bản quyền (royalty) mỗi khi được sử dụng, phát hành, cấp phép.",v:0,k:4,r:2,t:"1–3 năm",inc:"Có thể kéo dài hàng chục năm",m:"mix",p:1,s:["creative","tech"],
+ st:["Sáng tác nhạc, viết sách, thiết kế, phát minh sản phẩm","Đăng ký bản quyền/sở hữu trí tuệ","Phát hành qua nhà phân phối âm nhạc số, nhà xuất bản","Cấp phép cho doanh nghiệp sử dụng"],
+ pro:["Thu nhập thụ động thật sự","Tài sản để lại cho con cháu","Không giới hạn"],con:["Khó tạo tác phẩm ăn khách","Bị sao chép, vi phạm","Thu nhập khó đoán"],
+ tip:"Nhạc nền không lời (cho video, quán cà phê, quảng cáo) là thị trường cấp phép ổn định ít người để ý."},
+{id:"thuedo",c:"thudong",n:"Cho thuê đồ dùng",i:"🎒",d:"Cho thuê máy ảnh, đồ cắm trại, váy cưới, trang phục, đồ chơi trẻ em, thiết bị sự kiện…",v:2,k:2,r:2,t:"1–2 tháng",inc:"3–30 triệu/tháng",m:"off",p:1,s:["sales","care"],
+ st:["Chọn món đồ đắt tiền nhưng ít khi dùng","Định giá thuê theo ngày, đặt cọc an toàn","Đăng trên mạng xã hội, hội nhóm chuyên ngành","Vệ sinh, bảo trì sau mỗi lần thuê"],
+ pro:["Món đồ tự hoàn vốn nhiều lần","Tận dụng đồ sẵn có","Vốn linh hoạt"],con:["Hư hỏng, mất mát","Cần quản lý lịch","Thị trường ngách"],
+ tip:"Một bộ lều cắm trại cao cấp cho thuê 20 lần đã thu hồi vốn, phần còn lại là lợi nhuận."},
+{id:"tenmien",c:"thudong",n:"Mua bán tên miền & Website",i:"🔤",d:"Mua tên miền đẹp hoặc website đang có thu nhập, phát triển thêm rồi bán lại với giá cao hơn.",v:2,k:4,r:3,t:"6–36 tháng",inc:"Lợi nhuận theo thương vụ",m:"on",p:1,s:["tech","finance"],
+ st:["Học cách định giá tên miền và website (thường 24–40 lần lợi nhuận tháng)","Mua trên các sàn chuyển nhượng website uy tín","Tối ưu nội dung, SEO, chuyển đổi để tăng thu nhập","Bán lại khi giá trị đã tăng"],
+ pro:["Tài sản số có thể sinh lời","Không giới hạn địa lý","Có thể vừa nhận thu nhập vừa chờ bán"],con:["Rủi ro bị lừa khi mua","Thuật toán thay đổi","Cần kiến thức sâu"],
+ tip:"Luôn dùng dịch vụ trung gian (escrow) khi mua bán website, kiểm tra kỹ số liệu traffic và doanh thu thật."},
+{id:"phongtrong",c:"thudong",n:"Cho thuê phòng trống / Chỗ đậu xe / Kho",i:"🔑",d:"Tận dụng tài sản sẵn có: phòng trống, sân, gara, tầng trệt, nóc nhà (đặt biển quảng cáo, điện mặt trời).",v:0,k:1,r:1,t:"Vài tuần",inc:"1–15 triệu/tháng",m:"off",p:1,s:["care"],
+ st:["Liệt kê không gian, tài sản đang bỏ trống","Kiểm tra quy định và thỏa thuận với gia đình/ban quản lý","Đăng cho thuê trên các nền tảng, hội nhóm khu vực","Lập hợp đồng rõ ràng"],
+ pro:["Không cần vốn mới","Gần như thụ động","Tận dụng tài sản"],con:["Giảm không gian riêng tư","Rủi ro người thuê","Thu nhập nhỏ"],
+ tip:"Lắp điện mặt trời áp mái vừa giảm tiền điện vừa có thể bán điện dư — tùy chính sách địa phương."},
+{id:"muadn",c:"thudong",n:"Mua lại doanh nghiệp nhỏ",i:"🏛️",d:"Mua lại một doanh nghiệp đang có lãi (tiệm, công ty nhỏ) từ chủ cũ muốn nghỉ, thuê quản lý vận hành.",v:4,k:5,r:3,t:"Ngay khi tiếp quản",inc:"Lợi nhuận doanh nghiệp",m:"off",p:1,s:["finance","sales"],
+ st:["Tìm doanh nghiệp có lịch sử lợi nhuận ổn định 3+ năm","Thẩm định kỹ: sổ sách, khách hàng, nhân sự, pháp lý","Đàm phán giá (thường 2–5 lần lợi nhuận năm) và thời gian chuyển giao","Giữ đội ngũ cũ, cải tiến dần, thuê quản lý"],
+ pro:["Có dòng tiền ngay","Tránh rủi ro khởi nghiệp từ 0","Có thể tăng giá trị"],con:["Vốn lớn","Rủi ro thông tin bất cân xứng","Cần năng lực quản lý"],
+ tip:"Nhiều chủ doanh nghiệp lớn tuổi không có người kế nghiệp — đây là cơ hội ít người để ý."},
+
+/* ===================== SỰ NGHIỆP ===================== */
+{id:"tangluong",c:"sunghiep",n:"Thăng tiến & Đàm phán tăng lương",i:"📈",d:"Cách nhanh nhất để tăng thu nhập cho đa số người: nâng giá trị bản thân trong công việc hiện tại và đàm phán đúng lúc.",v:0,k:2,r:1,t:"3–12 tháng",inc:"Tăng 10–50% thu nhập",m:"off",p:0,s:["sales","teach"],
+ st:["Hiểu rõ mức lương thị trường cho vị trí của bạn","Ghi lại thành tích đo lường được (doanh thu, tiết kiệm, cải tiến)","Nhận việc khó, giải quyết vấn đề sếp quan tâm nhất","Đàm phán vào thời điểm đánh giá hiệu suất, với dữ liệu cụ thể","Sẵn sàng chuyển việc nếu giá trị không được ghi nhận"],
+ pro:["Không vốn, không rủi ro","Tác động lũy kế cả sự nghiệp","Tăng kỹ năng"],con:["Phụ thuộc tổ chức","Cần thời gian chứng minh","Có giới hạn trần"],
+ tip:"Chuyển việc đúng thời điểm thường giúp tăng lương 20–40%, nhiều hơn so với tăng lương nội bộ hằng năm."},
+{id:"nghekythuat",c:"sunghiep",n:"Nghề kỹ thuật tay nghề cao",i:"⚙️",d:"Thợ hàn, điện công nghiệp, vận hành CNC, cơ khí chính xác, sửa chữa ô tô điện… luôn thiếu người giỏi.",v:1,k:3,r:1,t:"6–24 tháng học nghề",inc:"12–50 triệu/tháng",m:"off",p:0,s:["hand","tech"],
+ st:["Học tại trường nghề, trung tâm đào tạo có chứng chỉ","Thực tập tại nhà máy, doanh nghiệp","Nâng cấp chứng chỉ quốc tế để làm việc ở nước ngoài","Có thể mở xưởng dịch vụ riêng"],
+ pro:["Thiếu nhân lực, dễ có việc","Khó bị AI thay thế","Cơ hội đi nước ngoài"],con:["Môi trường vất vả","Rủi ro an toàn lao động","Cần học bài bản"],
+ tip:"Kỹ thuật viên xe điện, năng lượng mặt trời, tự động hóa là các nghề tay nghề có tương lai sáng nhất."},
+{id:"remote",c:"sunghiep",n:"Làm remote cho công ty nước ngoài",i:"🌏",d:"Làm việc từ xa toàn thời gian cho công ty quốc tế, nhận lương bằng ngoại tệ cao hơn mặt bằng trong nước.",v:0,k:4,r:1,t:"3–12 tháng",inc:"1.000 – 6.000+ USD/tháng",m:"on",p:0,s:["tech","creative","sales"],
+ st:["Nâng tiếng Anh lên mức làm việc thành thạo","Có kỹ năng chuyên môn được cần (lập trình, thiết kế, marketing, hỗ trợ khách hàng)","Tối ưu hồ sơ LinkedIn, portfolio","Ứng tuyển trên các trang việc làm remote quốc tế","Chuẩn bị phỏng vấn trực tuyến và bài test"],
+ pro:["Thu nhập cao","Làm tại nhà","Môi trường quốc tế"],con:["Lệch múi giờ","Cạnh tranh toàn cầu","Thuế, hợp đồng phức tạp"],
+ tip:"Tiếng Anh là đòn bẩy thu nhập lớn nhất với người Việt — cùng một kỹ năng, lương remote có thể gấp 2–4 lần."},
+{id:"xkld",c:"sunghiep",n:"Làm việc ở nước ngoài (chính ngạch)",i:"🛫",d:"Đi làm việc tại Nhật, Hàn, Đài Loan, Đức, Úc… qua chương trình chính thức để tích lũy vốn và kỹ năng.",v:2,k:3,r:3,t:"6–12 tháng chuẩn bị",inc:"25–60 triệu/tháng",m:"off",p:0,s:["hand","care"],
+ st:["Tìm hiểu chương trình chính thức do cơ quan nhà nước quản lý","Chỉ chọn doanh nghiệp được cấp phép, kiểm tra giấy phép công khai","Học ngoại ngữ và tay nghề theo yêu cầu","Lập kế hoạch tài chính: tích lũy, gửi về, đầu tư khi về nước"],
+ pro:["Thu nhập cao","Học kỹ năng, kỷ luật","Tích lũy vốn khởi nghiệp"],con:["Xa gia đình","Rủi ro lừa đảo môi giới","Chi phí ban đầu"],
+ tip:"Cảnh giác các “cò” thu phí cao, hứa hẹn việc nhẹ lương cao — luôn xác minh doanh nghiệp được cấp phép."},
+{id:"salesb2b",c:"sunghiep",n:"Sales B2B / Bán hàng hưởng hoa hồng",i:"💼",d:"Bán sản phẩm, dịch vụ giá trị cao cho doanh nghiệp (phần mềm, thiết bị, logistics, quảng cáo) với hoa hồng hấp dẫn.",v:0,k:3,r:2,t:"3–6 tháng",inc:"15–100+ triệu/tháng",m:"mix",p:0,s:["sales"],
+ st:["Chọn ngành có giá trị hợp đồng lớn và sản phẩm tốt","Học quy trình bán hàng tư vấn: khám phá nhu cầu, demo, đàm phán","Xây mạng lưới trên LinkedIn, hội doanh nghiệp","Theo dõi phễu bán hàng bằng CRM"],
+ pro:["Thu nhập không giới hạn","Kỹ năng quý nhất trong kinh doanh","Mối quan hệ chất lượng"],con:["Áp lực chỉ tiêu","Thu nhập biến động","Chu kỳ bán dài"],
+ tip:"Kỹ năng bán hàng là “siêu năng lực” — mọi founder thành công đều phải bán được ý tưởng, sản phẩm và tầm nhìn."},
+{id:"tuvantc",c:"sunghiep",n:"Tư vấn tài chính / Bảo hiểm",i:"🛡️",d:"Tư vấn kế hoạch tài chính, bảo hiểm, đầu tư cho cá nhân và gia đình, hưởng hoa hồng và phí tư vấn.",v:0,k:3,r:2,t:"3–6 tháng",inc:"10–100 triệu/tháng",m:"off",p:0,s:["sales","finance","care"],
+ st:["Lấy chứng chỉ hành nghề theo quy định","Gia nhập công ty uy tín để được đào tạo","Tư vấn trung thực, đúng nhu cầu khách hàng","Chăm sóc khách lâu dài để có giới thiệu"],
+ pro:["Thu nhập cao, có hoa hồng tái tục","Giúp người khác an toàn tài chính","Không vốn"],con:["Định kiến xã hội","Áp lực doanh số","Cần đạo đức nghề nghiệp cao"],
+ tip:"Tư vấn đúng sản phẩm khách thật sự cần — uy tín sẽ biến một khách hàng thành cả mạng lưới giới thiệu."},
+{id:"parttime",c:"sunghiep",n:"Việc làm thêm / Bán thời gian",i:"⏰",d:"Phục vụ, thu ngân, PG/PB sự kiện, khảo sát thị trường, trực tổng đài, nhập liệu… phù hợp sinh viên và người cần thêm thu nhập.",v:0,k:1,r:1,t:"Ngay lập tức",inc:"20–50k/giờ",m:"off",p:0,s:["care","sales"],
+ st:["Xác định khung giờ rảnh cố định","Tìm việc qua trang tuyển dụng uy tín, hội nhóm trường","Chọn việc giúp bạn học kỹ năng (bán hàng, giao tiếp)","Tiết kiệm và đầu tư một phần thu nhập"],
+ pro:["Bắt đầu ngay","Học kỹ năng xã hội","Linh hoạt"],con:["Thu nhập thấp","Mệt mỏi nếu làm quá sức","Ít cơ hội thăng tiến"],
+ tip:"Tuyệt đối tránh công việc yêu cầu đóng phí, nạp tiền, “nhận nhiệm vụ” — đó là lừa đảo."}
+);
+
+/* ===================== LỊCH SỬ ===================== */
+const HISTORY=[
+ {y:"~10.000 TCN",t:"Trao đổi hàng hóa (Barter)",d:"Con người đổi lúa lấy thịt, rìu đá lấy da thú. Chưa có tiền — giá trị nằm ở thứ người khác cần.",l:"Bài học: giá trị = giải quyết nhu cầu của người khác."},
+ {y:"~3.000 TCN",t:"Nông nghiệp & Tín dụng Lưỡng Hà",d:"Đền thờ Sumer ghi nợ trên bảng đất sét, cho vay lúa mạch có lãi. Đất đai và lương thực trở thành tài sản.",l:"Bài học: ai sở hữu tài sản sinh lợi sẽ giàu lên."},
+ {y:"~600 TCN",t:"Đồng xu đầu tiên ở Lydia",d:"Đồng xu hợp kim vàng – bạc ra đời, thương mại bùng nổ vì việc trao đổi trở nên dễ dàng.",l:"Bài học: công cụ mới mở ra cách kiếm tiền mới."},
+ {y:"~130 TCN",t:"Con đường Tơ lụa",d:"Thương nhân đưa lụa, gia vị, trà từ Đông sang Tây. Mua nơi rẻ – bán nơi khan hiếm.",l:"Bài học: chênh lệch thông tin và địa lý tạo ra lợi nhuận."},
+ {y:"Thế kỷ 11–15",t:"Phường hội & Ngân hàng",d:"Phường thủ công ở châu Âu và phố phường Thăng Long phát triển. Gia tộc Medici xây dựng ngân hàng hiện đại.",l:"Bài học: tay nghề giỏi và chữ tín là tài sản."},
+ {y:"1602",t:"Cổ phiếu đầu tiên",d:"Công ty Đông Ấn Hà Lan phát hành cổ phiếu, sàn Amsterdam ra đời. Người thường có thể sở hữu một phần doanh nghiệp.",l:"Bài học: sở hữu doanh nghiệp là con đường làm giàu bền vững."},
+ {y:"1760–1900",t:"Cách mạng Công nghiệp",d:"Máy hơi nước, nhà máy, đường sắt. Lao động làm công ăn lương trở nên phổ biến; nhà tư bản sở hữu máy móc.",l:"Bài học: đòn bẩy (máy móc, vốn) nhân năng suất lên nhiều lần."},
+ {y:"1955",t:"Nhượng quyền & Bán lẻ đại chúng",d:"Mô hình nhượng quyền thương hiệu bùng nổ, chuỗi cửa hàng phủ khắp thế giới.",l:"Bài học: hệ thống hóa để nhân bản thành công."},
+ {y:"1986",t:"Đổi Mới tại Việt Nam",d:"Kinh tế tư nhân được khuyến khích, hàng triệu hộ kinh doanh và doanh nghiệp ra đời.",l:"Bài học: thời điểm và chính sách mở ra làn sóng cơ hội."},
+ {y:"1995–2000",t:"Kỷ nguyên Internet",d:"Thương mại điện tử, website, email ra đời. Năm 2000, sàn chứng khoán TP.HCM chính thức hoạt động.",l:"Bài học: người đến sớm với công nghệ mới thường thắng lớn."},
+ {y:"2005–2012",t:"Kinh tế sáng tạo & Chia sẻ",d:"YouTube, mạng xã hội, smartphone, xe công nghệ, cho thuê nhà ngắn ngày. Ai cũng có thể là nhà xuất bản.",l:"Bài học: sự chú ý là tài sản mới."},
+ {y:"2009",t:"Tài sản số",d:"Bitcoin ra đời, mở ra lĩnh vực blockchain — đi kèm cả cơ hội lẫn rủi ro và lừa đảo.",l:"Bài học: công nghệ mới luôn kèm rủi ro mới."},
+ {y:"2018–2022",t:"Video ngắn & Livestream bán hàng",d:"TikTok, Reels, livestream thương mại. Một chiếc điện thoại có thể tạo ra doanh nghiệp triệu đô.",l:"Bài học: rào cản gia nhập thấp — cạnh tranh bằng sự khác biệt."},
+ {y:"2023 → nay",t:"Kỷ nguyên AI",d:"AI tạo sinh thay đổi cách làm việc: một người với AI làm được việc của cả đội. Cơ hội cho người biết ứng dụng.",l:"Bài học: AI không thay bạn, người dùng AI giỏi sẽ thay bạn."}
+];
+
+/* ===================== LỪA ĐẢO ===================== */
+const SCAMS=[
+ {i:"🎣",t:"“Việc nhẹ lương cao” / Làm nhiệm vụ",d:"Like video, đánh giá sản phẩm, “chốt đơn ảo” nhận hoa hồng — ban đầu trả tiền nhỏ, sau đó yêu cầu nạp tiền lớn để “rút”.",s:"Dấu hiệu: yêu cầu bạn nạp tiền để được nhận tiền."},
+ {i:"🔺",t:"Đa cấp biến tướng / Ponzi",d:"Lợi nhuận đến chủ yếu từ việc tuyển người mới, không từ sản phẩm thật. Lấy tiền người sau trả người trước.",s:"Dấu hiệu: “kéo càng nhiều người càng giàu”."},
+ {i:"📉",t:"Sàn đầu tư, Forex, Crypto không phép",d:"Sàn ảo do kẻ gian điều khiển giá, cho rút ít lúc đầu, sau đó khóa tài khoản khi bạn nạp nhiều.",s:"Dấu hiệu: cam kết lãi cố định 1–5%/ngày."},
+ {i:"🎓",t:"Khóa học “làm giàu siêu tốc”",d:"Bán khóa học giá cao với lời hứa thu nhập trăm triệu sau vài tuần, khoe xe sang, ảnh chuyển khoản.",s:"Dấu hiệu: bán giấc mơ thay vì kỹ năng."},
+ {i:"📞",t:"Giả danh cơ quan, ngân hàng, người quen",d:"Gọi điện, nhắn tin giả mạo yêu cầu chuyển tiền, cung cấp mã OTP, cài ứng dụng lạ.",s:"Dấu hiệu: tạo áp lực khẩn cấp, yêu cầu bí mật."},
+ {i:"💳",t:"Tuyển CTV đặt cọc / Mua hàng trước",d:"Tuyển cộng tác viên bán hàng hoặc gia công tại nhà nhưng yêu cầu đặt cọc, mua bộ nguyên liệu, phí hồ sơ.",s:"Dấu hiệu: phải trả tiền để được đi làm."}
+];
+const FLAGS=["Cam kết lợi nhuận cao, cố định, “không rủi ro”","Yêu cầu nạp tiền / đặt cọc trước để nhận thu nhập","Thu nhập chủ yếu đến từ việc kéo thêm người mới","Thúc ép quyết định gấp: “chỉ còn hôm nay”, “suất cuối”","Không có pháp nhân rõ ràng, không giấy phép kinh doanh","Khoe tiền, xe, chuyển khoản thay vì giải thích mô hình kinh doanh","Yêu cầu mã OTP, mật khẩu, cài ứng dụng lạ","Rút tiền khó khăn, liên tục phát sinh “phí”"];
+
+const PRINCIPLES=[
+ {n:"01",t:"Trả cho mình trước",d:"Trích ít nhất 10–20% thu nhập để tiết kiệm & đầu tư ngay khi nhận lương, trước khi chi tiêu."},
+ {n:"02",t:"Quỹ dự phòng 3–6 tháng",d:"Một tấm đệm an toàn giúp bạn không phải bán tháo tài sản hay vay nóng khi biến cố."},
+ {n:"03",t:"Lãi kép là kỳ quan",d:"Thời gian quan trọng hơn số tiền. Bắt đầu sớm 10 năm có thể gấp đôi tài sản lúc về hưu."},
+ {n:"04",t:"Đa dạng nguồn thu",d:"Người giàu trung bình có nhiều nguồn thu nhập. Đừng phụ thuộc hoàn toàn vào một nguồn."},
+ {n:"05",t:"Đầu tư vào bản thân",d:"Kỹ năng là tài sản không ai lấy được và có lợi suất cao nhất trong những năm đầu sự nghiệp."},
+ {n:"06",t:"Hiểu rõ trước khi xuống tiền",d:"Không đầu tư vào thứ bạn không thể giải thích cho người khác trong 2 phút."},
+ {n:"07",t:"Tránh nợ tiêu dùng",d:"Lãi thẻ tín dụng, vay tiêu dùng 20–40%/năm là kẻ thù số một của sự giàu có."},
+ {n:"08",t:"Kiên nhẫn & kỷ luật",d:"Giàu nhanh thường nghèo nhanh. Đa số tài sản lớn được xây dựng trong 10–20 năm."}
+];
+
+/* Bản Đồ Kiếm Tiền — ứng dụng — © Tân AI */
+(function(){
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const CAT=Object.fromEntries(CATS.map(c=>[c.id,c]));
+const ORDER=Object.fromEntries(M.map((m,i)=>[m.id,i]));
+const BYID=Object.fromEntries(M.map(m=>[m.id,m]));
+const norm=s=>(s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/đ/g,"d");
+M.forEach(m=>{m._s=norm([m.n,m.d,CAT[m.c].n,m.inc,(m.s||[]).map(k=>SKILL[k]).join(" "),m.st.join(" "),m.tip].join(" "))});
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* ---------- storage (an toàn) ---------- */
+const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let favs=new Set(store.get("bdkt_fav",[]));
+
+/* ---------- theme ---------- */
+const root=document.documentElement;
+function setTheme(t){root.setAttribute("data-theme",t);$("#themeBtn").textContent=t==="dark"?"🌙":"☀️";store.set("bdkt_theme",t);document.querySelector('meta[name="theme-color"]').content=t==="dark"?"#07090f":"#f6f4ee"}
+setTheme(store.get("bdkt_theme",(window.matchMedia&&matchMedia("(prefers-color-scheme: light)").matches)?"light":"dark"));
+$("#themeBtn").onclick=()=>setTheme(root.getAttribute("data-theme")==="dark"?"light":"dark");
+
+/* ---------- toast ---------- */
+let tt;function toast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("show"),2200)}
+
+/* ---------- helpers ---------- */
+const bars=(n,color)=>`<span class="bars" style="--mc:${color}">${[1,2,3,4,5].map(i=>`<i class="${i<=n?"f":""}"></i>`).join("")}</span>`;
+const kCol=k=>k<=2?"var(--em)":k<=3?"var(--gold)":"var(--rose)";
+const KTXT=["","Rất dễ","Dễ","Trung bình","Khó","Rất khó"];
+const RTXT=["","Rất thấp","Thấp","Trung bình","Cao","Rất cao"];
+
+/* ---------- counters ---------- */
+function countUp(el,to){let s=null;const d=1200;function f(t){if(!s)s=t;const p=Math.min((t-s)/d,1);el.textContent=Math.round(to*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(f)}requestAnimationFrame(f)}
+$$("[data-count]").forEach(el=>countUp(el,el.dataset.count==="methods"?M.length:CATS.length));
+
+/* ---------- categories ---------- */
+$("#catGrid").innerHTML=CATS.map(c=>{const n=M.filter(m=>m.c===c.id).length;return `<button class="cat reveal" style="--c:${c.c}" data-cat="${c.id}"><div class="ic">${c.i}</div><h3>${c.n}</h3><p>${c.d}</p><span class="cnt">${n} cách kiếm tiền →</span></button>`}).join("");
+$("#catGrid").onclick=e=>{const b=e.target.closest("[data-cat]");if(!b)return;resetFilters();state.cat=b.dataset.cat;syncUI();render();go("#explore")};
+
+/* ---------- explorer state ---------- */
+const state={cat:"all",q:"",von:9,sort:"pop",mode:"all",passive:false,fav:false,shown:24,maxK:9,maxR:9};
+function resetFilters(){Object.assign(state,{cat:"all",q:"",von:9,sort:"pop",mode:"all",passive:false,fav:false,shown:24,maxK:9,maxR:9})}
+$("#catPills").innerHTML=`<button class="pill" data-c="all">✦ Tất cả</button>`+CATS.map(c=>`<button class="pill" data-c="${c.id}">${c.i} ${c.n}</button>`).join("");
+$("#catPills").onclick=e=>{const b=e.target.closest("[data-c]");if(!b)return;state.cat=b.dataset.c;state.shown=24;syncUI();render()};
+let qT;$("#q").oninput=e=>{clearTimeout(qT);qT=setTimeout(()=>{state.q=e.target.value;state.shown=24;render()},120)};
+$("#fVon").onchange=e=>{state.von=+e.target.value;state.shown=24;render()};
+$("#fSort").onchange=e=>{state.sort=e.target.value;render()};
+$("#fMode").onclick=e=>{const b=e.target.closest("button");if(!b)return;state.mode=b.dataset.v;state.shown=24;syncUI();render()};
+$("#fPassive").onclick=()=>{state.passive=!state.passive;state.shown=24;syncUI();render()};
+$("#fFav").onclick=()=>{state.fav=!state.fav;state.shown=24;syncUI();render()};
+$("#moreBtn").onclick=()=>{state.shown+=24;render()};
+
+function syncUI(){
+ $$("#catPills .pill").forEach(p=>p.classList.toggle("on",p.dataset.c===state.cat));
+ $$("#fMode button").forEach(b=>b.classList.toggle("on",b.dataset.v===state.mode));
+ $("#fPassive").classList.toggle("on",state.passive);
+ $("#fFav").classList.toggle("on",state.fav);
+ $("#q").value=state.q;$("#fVon").value=String(state.von);$("#fSort").value=state.sort;
+ const act=$("#catPills .pill.on"),cp=$("#catPills");if(act)cp.scrollTo({left:act.offsetLeft-cp.clientWidth/2+act.offsetWidth/2,behavior:"smooth"});
+}
+function filtered(){
+ const words=norm(state.q).split(/\s+/).filter(Boolean);
+ let list=M.filter(m=>(state.cat==="all"||m.c===state.cat)&&m.v<=state.von&&m.k<=state.maxK&&m.r<=state.maxR&&(state.mode==="all"||m.m===state.mode||m.m==="mix")&&(!state.passive||m.p)&&(!state.fav||favs.has(m.id))&&words.every(w=>m._s.includes(w)));
+ const by={pop:(a,b)=>ORDER[a.id]-ORDER[b.id],von:(a,b)=>a.v-b.v||a.k-b.k,k:(a,b)=>a.k-b.k||a.v-b.v,r:(a,b)=>a.r-b.r||a.v-b.v,az:(a,b)=>a.n.localeCompare(b.n,"vi")};
+ return list.sort(by[state.sort]);
+}
+function card(m,i){const c=CAT[m.c];return `<article class="card" style="--c:${c.c};animation-delay:${Math.min(i,12)*30}ms" data-id="${m.id}" tabindex="0">
+ <button class="fav ${favs.has(m.id)?"on":""}" data-fav="${m.id}" aria-label="Lưu">${favs.has(m.id)?"❤️":"🤍"}</button>
+ <div class="card-top"><div class="em">${m.i}</div><div><div class="ctag">${c.n}</div><h3>${esc(m.n)}</h3></div></div>
+ <p>${esc(m.d)}</p>
+ <div class="meta"><span class="tag y">💰 ${VON_S[m.v]}</span><span class="tag">${MODE[m.m]}</span><span class="tag ${m.k<=2?"g":m.k>=4?"r":""}">${KTXT[m.k]}</span>${m.p?'<span class="tag g">💤 Thụ động</span>':""}</div>
+</article>`}
+function render(){
+ const list=filtered(),g=$("#grid");
+ const parts=[];if(state.cat!=="all")parts.push(CAT[state.cat].n);if(state.q)parts.push(`“${esc(state.q)}”`);if(state.fav)parts.push("đã lưu");
+ $("#resultInfo").innerHTML=`Tìm thấy <b>${list.length}</b> cách kiếm tiền${parts.length?" · "+parts.join(" · "):""}${(state.maxK<9||state.maxR<9)?' · <a href="#" id="clearPre" style="color:var(--gold)">bỏ lọc nhanh ✕</a>':""}`;
+ const cp=$("#clearPre");if(cp)cp.onclick=e=>{e.preventDefault();state.maxK=9;state.maxR=9;render()};
+ g.innerHTML=list.length?list.slice(0,state.shown).map(card).join(""):`<div class="empty"><div>${state.fav?"🤍":"🧭"}</div>${state.fav?"Bạn chưa lưu cách kiếm tiền nào. Bấm 🤍 trên thẻ để lưu lại.":"Không tìm thấy kết quả phù hợp. Thử bỏ bớt bộ lọc nhé!"}</div>`;
+ $("#moreBtn").hidden=list.length<=state.shown;
+ if(!$("#moreBtn").hidden)$("#moreBtn").textContent=`Xem thêm (${list.length-state.shown})`;
+}
+$("#grid").addEventListener("click",e=>{const f=e.target.closest("[data-fav]");if(f){e.stopPropagation();toggleFav(f.dataset.fav);return}const c=e.target.closest(".card");if(c)openM(c.dataset.id)});
+$("#grid").addEventListener("keydown",e=>{if(e.key==="Enter"){const c=e.target.closest(".card");if(c)openM(c.dataset.id)}});
+
+/* ---------- favorites ---------- */
+function toggleFav(id){favs.has(id)?favs.delete(id):favs.add(id);store.set("bdkt_fav",[...favs]);updFav();toast(favs.has(id)?"Đã lưu vào danh sách ♥":"Đã bỏ lưu");render();if($("#modal").classList.contains("open")&&cur===id)openM(id,true)}
+function updFav(){const n=favs.size,b=$("#favCount");b.hidden=!n;b.textContent=n}
+updFav();
+$("#favBtn").onclick=()=>{resetFilters();state.fav=true;syncUI();render();go("#explore")};
+
+/* ---------- modal ---------- */
+let cur=null,lastFocus=null;
+function openM(id,keep){
+ const m=BYID[id];if(!m)return;cur=id;const c=CAT[m.c];
+ if(!keep)lastFocus=document.activeElement;
+ const rel=M.filter(x=>x.c===m.c&&x.id!==m.id).slice(0,8);
+ $("#sheet").style.setProperty("--c",c.c);
+ $("#sheet").innerHTML=`<div class="sheet-hd">
+  <div class="x"><button class="icon-btn" data-act="share" title="Sao chép liên kết">🔗</button><button class="icon-btn" data-act="fav" title="Lưu">${favs.has(id)?"❤️":"🤍"}</button><button class="icon-btn" data-act="close" title="Đóng">✕</button></div>
+  <div class="em">${m.i}</div><div class="ctag" style="color:${c.c};font-weight:700;font-size:13px">${c.i} ${c.n}</div>
+  <h2>${esc(m.n)}</h2><p>${esc(m.d)}</p></div>
+ <div class="sheet-bd">
+  <div class="kpis">
+   <div class="kpi"><small>Vốn khởi đầu</small><b>${VON[m.v]}</b></div>
+   <div class="kpi"><small>Thu nhập tham khảo</small><b>${esc(m.inc)}</b></div>
+   <div class="kpi"><small>Thời gian có tiền</small><b>${esc(m.t)}</b></div>
+   <div class="kpi"><small>Hình thức</small><b>${MODE[m.m]}${m.p?" · Thụ động":" · Chủ động"}</b></div>
+   <div class="kpi"><small>Độ khó</small><b>${KTXT[m.k]}</b>${bars(m.k,kCol(m.k))}</div>
+   <div class="kpi"><small>Rủi ro</small><b>${RTXT[m.r]}</b>${bars(m.r,kCol(m.r))}</div>
+   <div class="kpi" style="grid-column:span 2"><small>Kỹ năng phù hợp</small><b>${m.s.map(k=>SKILL[k]).join(" · ")}</b></div>
+  </div>
+  <div class="blk"><h4>🚀 Các bước bắt đầu</h4><ol class="steps-list">${m.st.map(s=>`<li>${esc(s)}</li>`).join("")}</ol></div>
+  <div class="blk"><h4>⚖️ Ưu & nhược điểm</h4><div class="pc"><ul class="pro">${m.pro.map(s=>`<li>${esc(s)}</li>`).join("")}</ul><ul class="con">${m.con.map(s=>`<li>${esc(s)}</li>`).join("")}</ul></div></div>
+  <div class="blk"><h4>💡 Lời khuyên từ Tân AI</h4><div class="tip">${esc(m.tip)}</div></div>
+  ${rel.length?`<div class="blk"><h4>🧭 Cùng lĩnh vực</h4><div class="related">${rel.map(r=>`<button data-rel="${r.id}">${r.i} ${esc(r.n)}</button>`).join("")}</div></div>`:""}
+ </div>`;
+ const md=$("#modal");md.classList.add("open");md.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";
+ if(!keep){md.scrollTop=0;try{history.replaceState(null,"","#m-"+id)}catch(e){}}
+ const cb=$('[data-act="close"]');if(cb&&!keep)cb.focus({preventScroll:true});
+}
+function closeM(){const md=$("#modal");md.classList.remove("open");md.setAttribute("aria-hidden","true");document.body.style.overflow="";cur=null;try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}if(lastFocus&&lastFocus.focus)lastFocus.focus({preventScroll:true})}
+$("#modal").addEventListener("click",e=>{
+ if(e.target.id==="modal")return closeM();
+ const a=e.target.closest("[data-act]");
+ if(a){const act=a.dataset.act;if(act==="close")closeM();else if(act==="fav")toggleFav(cur);else if(act==="share"){const url=location.href.split("#")[0]+"#m-"+cur;(navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).then(()=>toast("Đã sao chép liên kết 🔗"),()=>toast(url))}return}
+ const r=e.target.closest("[data-rel]");if(r){openM(r.dataset.rel);$("#modal").scrollTop=0}
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("#modal").classList.contains("open"))closeM()});
+
+/* ---------- navigation ---------- */
+function go(sel){const el=$(sel);if(el)el.scrollIntoView({behavior:"smooth"});$("#links").classList.remove("open")}
+$("#menuBtn").onclick=()=>$("#links").classList.toggle("open");
+$$("#links a").forEach(a=>a.addEventListener("click",()=>$("#links").classList.remove("open")));
+$("#heroSearch").onsubmit=e=>{e.preventDefault();resetFilters();state.q=$("#heroQ").value.trim();syncUI();render();go("#explore")};
+$("#chips").onclick=e=>{const b=e.target.closest("[data-preset]");if(!b)return;resetFilters();
+ const p=b.dataset.preset;
+ if(p==="nocap")state.von=0;else if(p==="online")state.mode="on";else if(p==="passive")state.passive=true;else if(p==="ai")state.q="AI";else if(p==="lowrisk"){state.maxR=2;state.sort="r"}else if(p==="easy"){state.maxK=2;state.sort="k"}
+ syncUI();render();go("#explore")};
+const totop=$("#toTop");totop.onclick=()=>window.scrollTo({top:0,behavior:"smooth"});
+const secs=["cats","explore","quiz","tools","history","scam"];
+window.addEventListener("scroll",()=>{totop.classList.toggle("show",scrollY>900);
+ let on="";for(const s of secs){const el=document.getElementById(s);if(el&&el.getBoundingClientRect().top<140)on=s}
+ $$("#links a").forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+on))},{passive:true});
+
+/* ---------- reveal ---------- */
+const io="IntersectionObserver" in window?new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add("in");io.unobserve(en.target)}}),{threshold:.08,rootMargin:"0px 0px -40px 0px"}):null;
+function observe(){$$(".reveal:not(.in)").forEach(el=>io?io.observe(el):el.classList.add("in"))}
+
+/* ---------- QUIZ ---------- */
+const QS=[
+ {k:"von",t:"Bạn có thể bỏ ra bao nhiêu vốn để bắt đầu?",o:[{v:0,i:"🪙",b:"Gần như 0đ",s:"Chỉ có thời gian và công sức"},{v:1,i:"💵",b:"Dưới 10 triệu",s:"Một khoản nhỏ để thử"},{v:2,i:"💰",b:"10 – 100 triệu",s:"Đủ để khởi sự kinh doanh nhỏ"},{v:4,i:"🏦",b:"Trên 100 triệu",s:"Sẵn sàng đầu tư lớn"}]},
+ {k:"time",t:"Bạn dành được bao nhiêu thời gian?",o:[{v:"side",i:"🌙",b:"Vài giờ mỗi tuần",s:"Làm thêm ngoài giờ"},{v:"part",i:"⏳",b:"10 – 20 giờ/tuần",s:"Nghiêm túc nhưng chưa toàn thời gian"},{v:"full",i:"🔥",b:"Toàn thời gian",s:"Muốn biến nó thành nghề chính"},{v:"min",i:"🧘",b:"Càng ít càng tốt",s:"Muốn tiền tự làm việc"}]},
+ {k:"mode",t:"Bạn thích làm việc theo hình thức nào?",o:[{v:"on",i:"💻",b:"Online tại nhà",s:"Chỉ cần máy tính, điện thoại"},{v:"off",i:"🏪",b:"Offline, gặp gỡ trực tiếp",s:"Thích không khí thực tế"},{v:"all",i:"🔀",b:"Cả hai đều được",s:"Linh hoạt"}]},
+ {k:"risk",t:"Bạn chấp nhận rủi ro đến mức nào?",o:[{v:2,i:"🛡️",b:"An toàn là trên hết",s:"Không muốn mất tiền"},{v:3,i:"⚖️",b:"Vừa phải",s:"Chấp nhận dao động có kiểm soát"},{v:5,i:"🎢",b:"Mạo hiểm",s:"Rủi ro cao để lợi nhuận lớn"}]},
+ {k:"skills",multi:true,t:"Thế mạnh của bạn là gì? (chọn nhiều)",o:Object.entries(SKILL).map(([v,b])=>({v,b,i:{tech:"💻",creative:"🎨",sales:"🗣️",hand:"🛠️",finance:"📊",teach:"🎓",care:"🤝"}[v],s:{tech:"Máy tính, phần mềm, AI",creative:"Thiết kế, viết, quay dựng",sales:"Thuyết phục, kết nối",hand:"Làm ra sản phẩm bằng tay",finance:"Số liệu, đầu tư",teach:"Giải thích, hướng dẫn",care:"Tận tâm, chu đáo"}[v]}))},
+ {k:"goal",t:"Mục tiêu chính của bạn là gì?",o:[{v:"fast",i:"⚡",b:"Có thêm tiền nhanh",s:"Cần thu nhập trong 1–3 tháng"},{v:"career",i:"🧭",b:"Xây nghề nghiệp chính",s:"Thu nhập lớn, ổn định lâu dài"},{v:"passive",i:"💤",b:"Thu nhập thụ động",s:"Tiền đến cả khi ngủ"},{v:"wealth",i:"🏰",b:"Làm giàu dài hạn",s:"Tích lũy tài sản lớn"}]}
+];
+let qi=0,ans={skills:[]};
+function quizRender(){
+ const box=$("#quizBox");
+ if(qi>=QS.length)return quizResult();
+ const q=QS[qi],sel=ans[q.k];
+ box.innerHTML=`<div class="progress"><i style="width:${qi/QS.length*100}%"></i></div>
+ <div class="q-num">Câu ${qi+1} / ${QS.length}</div><div class="q-title">${q.t}</div>
+ <div class="opts">${q.o.map(o=>{const on=q.multi?sel.includes(o.v):sel===o.v;return `<button class="opt ${on?"on":""}" data-v="${o.v}"><span class="oi">${o.i}</span><span><b>${o.b}</b><small>${o.s}</small></span></button>`}).join("")}</div>
+ <div class="q-nav"><button class="btn btn-ghost" id="qBack" ${qi?"":"style=\"visibility:hidden\""}>← Quay lại</button>${q.multi?`<button class="btn btn-pri" id="qNext">${sel.length?"Tiếp tục →":"Bỏ qua →"}</button>`:"<span></span>"}</div>`;
+ box.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+  let v=b.dataset.v;if(!isNaN(v)&&v!=="")v=+v;
+  if(q.multi){const a=ans[q.k];const i=a.indexOf(v);i>=0?a.splice(i,1):a.push(v);quizRender()}
+  else{ans[q.k]=v;b.classList.add("on");setTimeout(()=>{qi++;quizRender()},220)}
+ });
+ const bk=$("#qBack");if(bk)bk.onclick=()=>{qi--;quizRender()};
+ const nx=$("#qNext");if(nx)nx.onclick=()=>{qi++;quizRender()};
+}
+function score(m){
+ let s=0;
+ if(m.v>ans.von)return -999;
+ s+=6-Math.abs(ans.von-m.v)*1.5;
+ if(m.r>ans.risk)s-=(m.r-ans.risk)*14;else s+=4;
+ if(ans.mode==="on"&&m.m==="off")s-=25;if(ans.mode==="off"&&m.m==="on")s-=25;if(ans.mode!=="all"&&m.m===ans.mode)s+=5;
+ const sk=ans.skills||[];s+=m.s.filter(x=>sk.includes(x)).length*14;if(sk.length&&!m.s.some(x=>sk.includes(x)))s-=10;
+ if(ans.time==="side"){if(m.k>=4)s-=10;if(m.p)s+=4;if(["sunghiep"].includes(m.c)&&!m.p)s-=4}
+ if(ans.time==="min"){s+=m.p?18:-14}
+ if(ans.time==="full"&&!m.p)s+=4;
+ if(ans.goal==="fast"){s+=(m.k<=2?10:m.k===3?4:-8);if(/Ngay|tuần/.test(m.t))s+=10;if(/năm/.test(m.t))s-=10}
+ if(ans.goal==="career"&&["freelance","sunghiep","dichvu","giaoduc","congnghe","noidung"].includes(m.c))s+=12;
+ if(ans.goal==="passive")s+=m.p?20:-6;
+ if(ans.goal==="wealth"&&["dautu","bds","thudong","kinhdoanh"].includes(m.c))s+=14;
+ return s;
+}
+function quizResult(){
+ const ranked=M.map(m=>({m,s:score(m)})).filter(x=>x.s>-999).sort((a,b)=>b.s-a.s);
+ const top=ranked.slice(0,8),hi=top.length?top[0].s:1,lo=ranked.length?ranked[ranked.length-1].s:0;
+ const pct=s=>Math.max(55,Math.min(98,Math.round(60+38*(s-lo)/Math.max(1,hi-lo))));
+ const persona=ans.goal==="passive"||ans.time==="min"?["🧘","Nhà tích sản thông thái","Bạn muốn tiền làm việc thay mình. Ưu tiên xây tài sản tạo dòng tiền đều đặn."]:ans.goal==="wealth"?["🏰","Người kiến tạo tài sản","Bạn nhìn xa. Hãy kết hợp tăng thu nhập chủ động với đầu tư kỷ luật dài hạn."]:ans.goal==="fast"?["⚡","Chiến binh hành động","Bạn cần kết quả sớm. Hãy chọn việc bắt đầu được ngay, sau đó dùng thu nhập để học kỹ năng giá trị cao hơn."]:["🧭","Người xây sự nghiệp","Bạn muốn một con đường bền vững. Hãy chọn kỹ năng mũi nhọn và đào sâu trong 2–3 năm."];
+ $("#quizBox").innerHTML=`<div class="progress"><i style="width:100%"></i></div>
+ <div class="result-hd"><div class="emo">${persona[0]}</div><div class="q-num">Kết quả của bạn</div><div class="q-title" style="margin:6px 0">${persona[1]}</div><p style="color:var(--muted)">${persona[2]}</p></div>
+ ${top.length?top.map((x,i)=>`<button class="rec" data-id="${x.m.id}"><span class="rk">${i+1}</span><span class="em">${x.m.i}</span><span class="info"><b>${esc(x.m.n)}</b><small>${CAT[x.m.c].n} · ${VON_S[x.m.v]} · ${KTXT[x.m.k]}</small></span><span class="match">${pct(x.s)}%</span></button>`).join(""):'<p style="text-align:center;color:var(--muted)">Chưa có phương án phù hợp, hãy thử nới điều kiện.</p>'}
+ <div class="q-nav"><button class="btn btn-ghost" id="qRe">↻ Làm lại</button><button class="btn btn-pri" id="qSave">♥ Lưu tất cả gợi ý</button></div>`;
+ $$("#quizBox .rec").forEach(b=>b.onclick=()=>openM(b.dataset.id));
+ $("#qRe").onclick=()=>{qi=0;ans={skills:[]};quizRender()};
+ $("#qSave").onclick=()=>{top.forEach(x=>favs.add(x.m.id));store.set("bdkt_fav",[...favs]);updFav();render();toast(`Đã lưu ${top.length} gợi ý vào danh sách ♥`)};
+}
+quizRender();
+
+/* ---------- TOOLS ---------- */
+const fmt=n=>{const a=Math.abs(n);if(a>=1e9)return (n/1e9).toLocaleString("vi-VN",{maximumFractionDigits:2})+" tỷ";if(a>=1e6)return (n/1e6).toLocaleString("vi-VN",{maximumFractionDigits:1})+" triệu";return Math.round(n).toLocaleString("vi-VN")+"đ"};
+const tr=v=>fmt(v*1e6);
+$("#toolTabs").onclick=e=>{const b=e.target.closest("[data-t]");if(!b)return;$$("#toolTabs .pill").forEach(p=>p.classList.toggle("on",p===b));$$(".tool").forEach(t=>t.classList.toggle("on",t.id==="t-"+b.dataset.t))};
+
+function compound(){
+ const P=+$("#cP").value*1e6,C=+$("#cC").value*1e6,R=+$("#cR").value,N=+$("#cN").value,i=R/100/12;
+ $("#cPv").textContent=fmt(P);$("#cCv").textContent=fmt(C)+"/tháng";$("#cRv").textContent=R+"%";$("#cNv").textContent=N+" năm";
+ const rows=[];let bal=P,inv=P;
+ for(let y=1;y<=N;y++){for(let k=0;k<12;k++){bal=bal*(1+i)+C;inv+=C}rows.push({bal,inv})}
+ $("#cYears").textContent=N+" năm";$("#cFV").textContent=fmt(bal);$("#cIn").textContent=fmt(inv);$("#cInt").textContent=fmt(bal-inv);
+ $("#c72").textContent="≈ "+(72/R).toLocaleString("vi-VN",{maximumFractionDigits:1})+" năm";$("#cPct").textContent=bal>0?Math.round((bal-inv)/bal*100)+"%":"0%";
+ const W=600,H=220,max=Math.max(1,...rows.map(r=>r.bal)),bw=W/rows.length,gap=Math.min(6,bw*.25);
+ $("#cChart").innerHTML=rows.map((r,k)=>{const x=k*bw+gap/2,w=bw-gap,hi=r.inv/max*(H-10),ht=r.bal/max*(H-10);return `<rect x="${x}" y="${H-ht}" width="${w}" height="${Math.max(0,ht-hi)}" rx="3" fill="var(--gold)"><title>Năm ${k+1}: ${fmt(r.bal)}</title></rect><rect x="${x}" y="${H-hi}" width="${w}" height="${hi}" rx="3" fill="var(--sky)" opacity=".85"><title>Năm ${k+1}: gốc ${fmt(r.inv)}</title></rect>`}).join("");
+}
+["cP","cC","cR","cN"].forEach(id=>$("#"+id).addEventListener("input",compound));
+
+function fire(){
+ const E=+$("#fE").value*1e6,S=+$("#fS").value*1e6,C=+$("#fC").value*1e6,R=+$("#fR").value,i=R/100/12;
+ $("#fEv").textContent=fmt(E)+"/tháng";$("#fSv").textContent=fmt(S);$("#fCv").textContent=fmt(C)+"/tháng";$("#fRv").textContent=R+"%";
+ const T=E*12*25;$("#fTarget").textContent=fmt(T);
+ let b=S,mo=0;while(b<T&&mo<1200){b=b*(1+i)+C;mo++}
+ const prog=Math.min(100,S/T*100);
+ $("#fYears").textContent=S>=T?"Bạn đã tự do! 🎉":mo>=1200?"Hơn 100 năm 😅":`${Math.floor(mo/12)} năm ${mo%12} tháng`;
+ $("#fPassiveOut").textContent=fmt(S*0.04/12)+"/tháng";
+ $("#fProg").textContent=prog.toLocaleString("vi-VN",{maximumFractionDigits:1})+"%";
+ $("#fBar").style.width=prog+"%";
+ const need=E+C>0?Math.round(C/(E+C)*100):0;$("#fRate").textContent=need+"% thu nhập";
+ const yrs=mo/12;
+ $("#fTip").innerHTML=yrs>30?"<b>Gợi ý:</b> Thời gian còn dài. Tăng thu nhập chủ động (nghề tay trái, kỹ năng mới) để nâng tiền đầu tư mỗi tháng là đòn bẩy mạnh nhất.":yrs>15?"<b>Gợi ý:</b> Bạn đang đi đúng hướng. Mỗi 1 triệu tăng thêm vào khoản đầu tư hằng tháng có thể rút ngắn nhiều năm.":"<b>Tuyệt vời!</b> Kế hoạch rất khả thi. Hãy giữ kỷ luật, đa dạng hóa và tránh rủi ro không cần thiết.";
+}
+["fE","fS","fC","fR"].forEach(id=>$("#"+id).addEventListener("input",fire));
+
+const JARS=[["NEC","Thiết yếu",55,"#5cc8ff","Ăn uống, nhà ở, đi lại, hóa đơn"],["FFA","Tự do tài chính",10,"#f5c451","Đầu tư tạo thu nhập thụ động — không tiêu gốc"],["LTSS","Tiết kiệm dài hạn",10,"#2ee6a6","Mua nhà, xe, quỹ dự phòng"],["EDU","Giáo dục",10,"#a78bfa","Sách, khóa học, phát triển bản thân"],["PLAY","Hưởng thụ",10,"#ff7ad9","Du lịch, giải trí — phải tiêu hết mỗi tháng"],["GIVE","Cho đi",5,"#ff9f5a","Từ thiện, giúp đỡ người thân"]];
+function jars(){const I=+$("#jI").value*1e6;$("#jIv").textContent=fmt(I)+"/tháng";
+ $("#jars").innerHTML=JARS.map(j=>`<div class="jar" style="--jc:${j[3]}"><div class="fill" style="height:${j[2]/55*100}%"></div><span class="pct">${j[2]}% · ${j[0]}</span><b>${j[1]}</b><div class="amt">${fmt(I*j[2]/100)}</div><small>${j[4]}</small></div>`).join("")}
+$("#jI").addEventListener("input",jars);
+compound();fire();jars();
+
+/* ---------- history / principles / scams ---------- */
+$("#timeline").innerHTML=HISTORY.map(h=>`<div class="tl reveal"><div class="tl-card"><div class="yr">${h.y}</div><h4>${h.t}</h4><p>${h.d}</p><div class="les">${h.l}</div></div></div>`).join("");
+$("#princ").innerHTML=PRINCIPLES.map(p=>`<div class="pr reveal"><div class="n grad-text">${p.n}</div><h4>${p.t}</h4><p>${p.d}</p></div>`).join("");
+$("#scams").innerHTML=SCAMS.map(s=>`<div class="scam reveal"><div class="ic">${s.i}</div><h4>${s.t}</h4><p>${s.d}</p><div class="sign">${s.s}</div></div>`).join("");
+$("#flags").innerHTML=FLAGS.map(f=>`<li>${f}</li>`).join("");
+$("#yr").textContent=new Date().getFullYear();
+
+/* ---------- init ---------- */
+syncUI();render();observe();
+const mh=location.hash.match(/^#m-(.+)$/);if(mh&&BYID[mh[1]])setTimeout(()=>openM(mh[1]),300);
+window.addEventListener("hashchange",()=>{const h=location.hash.match(/^#m-(.+)$/);if(h&&BYID[h[1]])openM(h[1])});
+})();
+
+</script>
+</body>
+</html>
