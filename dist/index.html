@@ -257,6 +257,8 @@ h3.sec::before{content:'';display:inline-block;width:18px;height:3px;background:
 .card.m.sr::after{content:'';position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,#ffffff55 45%,transparent 60%);background-size:250% 100%;animation:foil 3.2s linear infinite;pointer-events:none;mix-blend-mode:screen}
 @keyframes foil{from{background-position:150% 0}to{background-position:-100% 0}}
 @media(prefers-reduced-motion:reduce){.card.m.sr::after{animation:none}}
+#sndHint{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:65;box-shadow:0 6px 24px #000c,0 0 20px #ffc83a88;animation:pulse 1.4s infinite}
+.roomcode{font:400 clamp(44px,14vw,72px)/1 var(--display);letter-spacing:.22em;padding:10px 0 10px .22em;margin:6px 0 10px;color:var(--gold);text-shadow:0 0 22px #ffc83a88,0 4px 0 #6a3a00;background:#04163acc;border:1px dashed #28d7ff;border-radius:12px;user-select:all}
 </style>
 <canvas id="bg" aria-hidden="true"></canvas>
 <canvas id="fxc" aria-hidden="true"></canvas>
@@ -282,7 +284,7 @@ h3.sec::before{content:'';display:inline-block;width:18px;height:3px;background:
         <h3 class="sec">Phòng đấu</h3>
         <p class="hint" id="onlineHint"></p>
         <button class="btn gold" id="createBtn">Tạo phòng mới</button>
-        <div class="join"><input id="codeIn" maxlength="4" placeholder="MÃ" autocomplete="off" autocapitalize="characters" aria-label="Mã phòng"><button class="btn" id="joinBtn">Vào phòng</button></div>
+        <div class="join"><input id="codeIn" maxlength="5" placeholder="MÃ PHÒNG" autocomplete="off" autocapitalize="characters" aria-label="Mã phòng"><button class="btn" id="joinBtn">Vào phòng</button></div>
         <p class="err" id="onlineErr" role="alert" hidden></p>
       </div>
       <div class="mini-row"><button class="btn ghost" id="rulesBtn">Luật chơi</button><button class="btn ghost" id="cardsBtn">Bộ sưu tập</button><button class="btn ghost" id="setBtn2">Cài đặt</button></div>
@@ -306,16 +308,16 @@ h3.sec::before{content:'';display:inline-block;width:18px;height:3px;background:
     <aside class="side"><div class="detail" id="detail"></div><div class="log" id="log"></div></aside>
   </div>
 </section>
+<button class="btn gold" id="sndHint" hidden>Chạm để bật âm thanh</button>
 <div id="modal" hidden></div>
 <div id="banner" hidden></div>
 <div id="intro" hidden></div>
 </div>
 <script src="three.min.js"></script>
-<script>
-(function(){function show(m){try{let b=document.getElementById('errbox');if(!b){b=document.createElement('div');b.id='errbox';b.style.cssText='position:fixed;left:8px;right:8px;bottom:8px;z-index:99;background:#7a0f1a;color:#fff;padding:8px 12px;border-radius:8px;font:12px/1.4 monospace;max-height:30vh;overflow:auto';document.body.appendChild(b)}b.textContent='Lỗi: '+m}catch(e){}}
+<script src="peerjs.min.js"></script>
+<script>(function(){function show(m){try{let b=document.getElementById('errbox');if(!b){b=document.createElement('div');b.id='errbox';b.style.cssText='position:fixed;left:8px;right:8px;bottom:8px;z-index:99;background:#7a0f1a;color:#fff;padding:8px 12px;border-radius:8px;font:12px/1.4 monospace;max-height:30vh;overflow:auto';document.body.appendChild(b)}b.textContent='Lỗi: '+m}catch(e){}}
 addEventListener('error',e=>{if(e.message)show(e.message+' (dòng '+(e.lineno||'?')+')')});
-addEventListener('unhandledrejection',e=>{const m=String(e.reason&&e.reason.message||e.reason);if(!/not_granted|capability/.test(m))show(m)})})();
-</script>
+addEventListener('unhandledrejection',e=>{show(String(e.reason&&e.reason.message||e.reason))})})();</script>
 <script>
 
 'use strict';
@@ -329,18 +331,21 @@ const isAI=s=>G.auto||(s==='ai'&&!G.online);
 const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 
 /* ---------- Audio engine: procedural cinematic music + SFX ---------- */
-const AUD={N:null,vol:{music:store.get('tno_vm',.6),sfx:store.get('tno_vs',.85)},on:{music:store.get('tno_mon',true),sfx:store.get('tno_son',true)},track:null,want:null,timer:0,next:0,step:0,tension:false,lastTick:0};
+const AUD={N:null,vol:{music:store.get('tno_vm2',.85),sfx:store.get('tno_vs2',1)},on:{music:store.get('tno_mon',true),sfx:store.get('tno_son',true)},track:null,want:null,timer:0,next:0,step:0,tension:false,lastTick:0};
 const mtof=m=>440*Math.pow(2,(m-69)/12);
 function impulse(ctx,sec,decay){const n=Math.floor(ctx.sampleRate*sec),b=ctx.createBuffer(2,n,ctx.sampleRate);for(let c=0;c<2;c++){const d=b.getChannelData(c);for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/n,decay)}return b}
 function audBuild(ctx,dest){
-  const comp=ctx.createDynamicsCompressor();comp.threshold.value=-16;comp.knee.value=24;comp.ratio.value=4;comp.attack.value=.004;comp.release.value=.25;
-  const master=ctx.createGain();master.gain.value=.72;master.connect(comp);comp.connect(dest);
+  const comp=ctx.createDynamicsCompressor();comp.threshold.value=-22;comp.knee.value=18;comp.ratio.value=5;comp.attack.value=.003;comp.release.value=.2;
+  const makeup=ctx.createGain();makeup.gain.value=1.5;
+  const lim=ctx.createDynamicsCompressor();lim.threshold.value=-2;lim.knee.value=0;lim.ratio.value=20;lim.attack.value=.001;lim.release.value=.1;
+  const master=ctx.createGain();master.gain.value=.9;master.connect(comp);comp.connect(makeup);makeup.connect(lim);lim.connect(dest);
+  const an=ctx.createAnalyser();an.fftSize=1024;lim.connect(an);
   const mus=ctx.createGain(),sfx=ctx.createGain();mus.connect(master);sfx.connect(master);
   const rev=ctx.createConvolver();rev.buffer=impulse(ctx,2.6,2.4);
   const revIn=ctx.createGain();revIn.gain.value=.5;revIn.connect(rev);
   const revOut=ctx.createGain();revOut.gain.value=.55;rev.connect(revOut);revOut.connect(master);
   const nb=ctx.createBuffer(1,ctx.sampleRate*2,ctx.sampleRate),d=nb.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
-  return {ctx,master,mus,sfx,revIn,noiseBuf:nb};
+  return {ctx,master,mus,sfx,revIn,noiseBuf:nb,an};
 }
 function voice(N,out,t,o){
   const c=N.ctx,g=c.createGain(),dur=o.dur,rel=o.rel||.1,att=o.att||.005,vol=o.vol;
@@ -407,7 +412,7 @@ const TRACKS={
 function audCtx(){
   if(AUD.N)return AUD.N;
   try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;
-    const ctx=new C();AUD.N=audBuild(ctx,ctx.destination);audApply();
+    const ctx=new C();AUD.N=audBuild(ctx,ctx.destination);ctx.onstatechange=()=>updateSndHint();audApply();
     AUD.timer=setInterval(musicTick,90);return AUD.N}catch(e){return null}
 }
 function audApply(){
@@ -435,10 +440,35 @@ function playMusic(name){
   setTimeout(()=>{if(AUD.cur!==name)return;AUD.track=name==='none'?null:TRACKS[name];AUD.step=0;AUD.next=N.ctx.currentTime+.1;audApply()},AUD.track?380:0);
 }
 document.addEventListener('visibilitychange',()=>{const N=AUD.N;if(!N)return;if(document.hidden)N.ctx.suspend();else N.ctx.resume()});
-function unlockAudio(){const N=audCtx();if(N&&N.ctx.state==='suspended')N.ctx.resume();if(AUD.want&&!AUD.track&&AUD.cur!==AUD.want){const w=AUD.want;AUD.cur=null;playMusic(w)}}
-['pointerdown','keydown','touchstart'].forEach(ev=>document.addEventListener(ev,unlockAudio,{passive:true}));
+function sndRunning(){return !!(AUD.N&&AUD.N.ctx.state==='running')}
+function updateSndHint(){const b=document.getElementById('sndHint');if(b)b.hidden=sndRunning()}
+function silentAudio(){
+  try{if(navigator.audioSession)navigator.audioSession.type='playback'}catch(e){}
+  if(AUD.silent){if(AUD.silent.paused)AUD.silent.play().catch(()=>{});return}
+  try{
+    const sr=8000,n=sr/2,buf=new ArrayBuffer(44+n*2),v=new DataView(buf);
+    const w=(o,t)=>{for(let i=0;i<t.length;i++)v.setUint8(o+i,t.charCodeAt(i))};
+    w(0,'RIFF');v.setUint32(4,36+n*2,true);w(8,'WAVEfmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,sr,true);v.setUint32(28,sr*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);w(36,'data');v.setUint32(40,n*2,true);
+    const a=new Audio(URL.createObjectURL(new Blob([buf],{type:'audio/wav'})));a.loop=true;a.volume=.01;AUD.silent=a;a.play().catch(()=>{});
+  }catch(e){}
+}
+function unlockAudio(){
+  const N=audCtx();if(!N)return;const c=N.ctx;
+  silentAudio();
+  if(c.state!=='running'){try{c.resume().then(updateSndHint,()=>{})}catch(e){}}
+  try{const b=c.createBuffer(1,1,22050),s=c.createBufferSource();s.buffer=b;s.connect(c.destination);s.start(0)}catch(e){}
+  setTimeout(updateSndHint,250);
+}
+['pointerup','click','touchend','keydown'].forEach(ev=>document.addEventListener(ev,unlockAudio,true));
+function audioLevel(){const N=AUD.N;if(!N)return 0;const a=new Uint8Array(N.an.fftSize);N.an.getByteTimeDomainData(a);let p=0;for(let i=0;i<a.length;i++)p=Math.max(p,Math.abs(a[i]-128)/128);return p}
+function audioTest(){
+  unlockAudio();const N=audCtx();if(!N)return;
+  const t=N.ctx.currentTime+.05;
+  [57,62,65,69].forEach((m,i)=>voice(N,N.sfx,t+i*.12,{freq:mtof(m+12),dets:[-6,6],att:.01,dur:.25,rel:.4,vol:.12,lp:3000,send:.4}));
+  SF.hit(N,N.sfx,t+.55,1);SF.heal(N,N.sfx,t+1.05);
+}
 function setAudio(k,val){
-  if(k==='music'||k==='sfx'){AUD.vol[k]=val;store.set(k==='music'?'tno_vm':'tno_vs',val)}
+  if(k==='music'||k==='sfx'){AUD.vol[k]=val;store.set(k==='music'?'tno_vm2':'tno_vs2',val)}
   if(k==='musicOn'){AUD.on.music=val;store.set('tno_mon',val)}
   if(k==='sfxOn'){AUD.on.sfx=val;store.set('tno_son',val)}
   audApply();
@@ -617,12 +647,14 @@ function showIntro(){
 }
 function openSettings(){
   const row=(id,label,key)=>`<div class="setrow"><label for="${id}">${label}</label><button class="btn" id="${id}T">${AUD.on[key]?'Bật':'Tắt'}</button><input type="range" id="${id}" min="0" max="100" value="${Math.round(AUD.vol[key]*100)}"></div>`;
-  openModal(`<h3>Cài đặt âm thanh</h3>${row('vm','Nhạc nền','music')}${row('vsf','Hiệu ứng','sfx')}<div class="btns"><button class="btn gold" id="shClose">Xong</button></div>`);
+  openModal(`<h3>Cài đặt âm thanh</h3>${row('vm','Nhạc nền','music')}${row('vsf','Hiệu ứng','sfx')}<p id="audSt" style="color:var(--mute);font-size:13px;line-height:1.5;margin:8px 0"></p><div class="btns"><button class="btn" id="audTest">Thử âm thanh</button><button class="btn gold" id="shClose">Xong</button></div>`);
   const bind=(id,key,onKey)=>{
     $('#'+id).oninput=e=>{setAudio(key,e.target.value/100);if(key==='sfx')sfx('click')};
     $('#'+id+'T').onclick=()=>{setAudio(onKey,!AUD.on[key]);$('#'+id+'T').textContent=AUD.on[key]?'Bật':'Tắt'};
   };
   bind('vm','music','musicOn');bind('vsf','sfx','sfxOn');
+  const st=()=>{$('#audSt').textContent=sndRunning()?'Âm thanh đang hoạt động. Nếu vẫn không nghe thấy: kiểm tra âm lượng thiết bị, tắt chế độ im lặng (iPhone), rồi bấm "Thử âm thanh".':'Âm thanh chưa được kích hoạt. Hãy chạm vào màn hình hoặc bấm "Thử âm thanh".'};
+  st();$('#audTest').onclick=()=>{audioTest();setTimeout(st,500)};
   $('#shClose').onclick=closeModal;
 }
 function openCollection(filter){
@@ -634,12 +666,12 @@ function openCollection(filter){
   document.querySelectorAll('.pk.view').forEach(p=>p.onclick=()=>{const d=D[p.dataset.id];const c={d,eq:[],fd:false,pos:'atk'};openModal(`<div class="sheetcard"><div class="cw">${cardHTML(c,{})}</div><div><h3>${d.n}</h3><div class="ty" style="color:var(--gold);margin-bottom:6px">${typeLine(c)}</div><p style="margin:0;line-height:1.5">${d.fx||''}</p></div></div><div class="btns"><button class="btn" id="shBack">Quay lại</button></div>`);$('#shBack').onclick=()=>openCollection(filter)});
   $('#shClose').onclick=closeModal;
 }
-function showResult(w){
+function showResult(w,note){
   if(w==='me'&&!G.auto)store.set('tno_wins',store.get('tno_wins',0)+1);
   const go=()=>{
     playMusic('none');sfx(w==='me'?'win':'lose');if(w==='me')confetti();
     const t=w==='me'?'CHIẾN THẮNG!':w==='ai'?'THẤT BẠI':'HÒA';
-    const msg=w==='me'?'Đối thủ gục ngã, khán giả vỗ tay. Mập mà vô địch.':w==='ai'?'Tân Nguyễn mập mà vẫn phải luyện thêm. Thử bộ bài khác xem sao.':'Ngang tài ngang sức.';
+    const msg=note||(w==='me'?'Đối thủ gục ngã, khán giả vỗ tay. Mập mà vô địch.':w==='ai'?'Tân Nguyễn mập mà vẫn phải luyện thêm. Thử bộ bài khác xem sao.':'Ngang tài ngang sức.');
     openModal(`<div class="result"><div class="big ${w==='me'?'win':w==='ai'?'lose':''}">${t}</div><p style="color:var(--mute);margin:10px 0 0">${msg}</p><div class="stats"><div><b>${G.turn}</b>Lượt</div><div><b>${G.me.lp}</b>LP của bạn</div><div><b>${G.ai.lp}</b>LP đối thủ</div></div></div><div class="btns">${G.online?'':'<button class="btn gold" id="again">Chơi lại</button>'}<button class="btn" id="home">Về màn hình chính</button></div>`);
     const ag=$('#again');if(ag)ag.onclick=()=>{closeModal();startGame(G.opts)};
     $('#home').onclick=()=>{closeModal();leaveRoom();showTitle()};
@@ -1458,18 +1490,22 @@ document.addEventListener('pointermove',e=>{
 });
 document.addEventListener('pointerleave',tiltReset,true);
 
-/* ---------- Online (2 players, shared db) ---------- */
-let DB=null,USER=null,ME_ID=null;
-const OL={code:null,role:null,unsubs:[],v:0,applied:0,ansWait:{},lastPrompt:0,seenPrompt:0,pendingPrompt:null,starting:false,started:false,writing:false,dirty:false,timer:0};
+/* ---------- Online (2 players, peer-to-peer) ---------- */
+const OL={code:null,role:null,peer:null,conn:null,v:0,applied:0,ansWait:{},lastPrompt:0,seenPrompt:0,pendingPrompt:null,starting:false,started:false,timer:0,hostDeck:null};
 const otherRole=r=>r==='host'?'guest':'host';
-const rdoc=n=>DB.doc(`rooms/${OL.code}/parts/${n}`);
-function randCode(){const a='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let c='';for(let i=0;i<4;i++)c+=a[Math.floor(Math.random()*a.length)];return c}
-async function ensureOnline(){
-  if(DB&&ME_ID)return true;
-  try{const c=window.claude;if(c&&c.use){DB=await c.use('db');USER=await c.use('user');ME_ID=USER?await USER.id():null}}catch(e){DB=null}
-  return !!(DB&&ME_ID);
+const PEER_PREFIX='tnoh-';
+function randCode(){const a='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let c='';for(let i=0;i<5;i++)c+=a[Math.floor(Math.random()*a.length)];return c}
+function peerCfg(){
+  const turn=(u)=>({urls:u,username:'openrelayproject',credential:'openrelayproject'});
+  const base={debug:0,config:{iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'},turn('turn:openrelay.metered.ca:80'),turn('turn:openrelay.metered.ca:443'),turn('turns:openrelay.metered.ca:443?transport=tcp')]}};
+  return Object.assign(base,window.TNO_PEER_CFG||{});
 }
-const ONLINE_NEED='Chơi online cần mở game trong claude.ai, đã đăng nhập và có quyền Cộng tác (Contributor) trên trang này.';
+function withTimeout(p,ms){return new Promise((res,rej)=>{const t=setTimeout(()=>rej(new Error('timeout')),ms);p.then(v=>{clearTimeout(t);res(v)},e=>{clearTimeout(t);rej(e)})})}
+function copyText(txt,btnSel){
+  const done=()=>{const b=$(btnSel);if(b){const o=b.textContent;b.textContent='Đã chép!';setTimeout(()=>{if(b)b.textContent=o},1500)}};
+  try{navigator.clipboard.writeText(txt).then(done,()=>fallback())}catch(e){fallback()}
+  function fallback(){try{const t=document.createElement('textarea');t.value=txt;t.style.cssText='position:fixed;opacity:0';document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();done()}catch(e){}}
+}
 function showErr(t){const e=$('#onlineErr');e.textContent=t;e.hidden=!t}
 /* serialization */
 const cardS=c=>c?{id:c.d.id,u:c.uid,f:c.fd?1:0,p:c.pos,e:c.eq.map(x=>x.uid),h:c.host?c.host.uid:0,a:c.atk?1:0,m:c.mv?1:0,t:c.tp}:null;
@@ -1483,17 +1519,9 @@ function buildState(){
   OL.v++;
   return {v:OL.v,by:mine,turn:G.turn,cur:rs(G.cur||'me'),phase:G.phase,pend:G.pend?rs(G.pend):null,over:G.over?1:0,winner:G.winner?(G.winner==='draw'?'draw':rs(G.winner)):null,log:G.log.slice(-40),p:{[mine]:pS(G.me),[other]:pS(G.ai)}};
 }
-function pushSoon(){if(!G.online||!DB)return;clearTimeout(OL.timer);OL.timer=setTimeout(flushNow,150)}
-async function flushNow(){
-  if(!G.online||!DB)return;
-  clearTimeout(OL.timer);
-  if(OL.writing){OL.dirty=true;return OL.writing}
-  OL.writing=(async()=>{
-    try{do{OL.dirty=false;await rdoc('state').set(buildState())}while(OL.dirty)}catch(e){console.error(e)}
-    OL.writing=false;
-  })();
-  return OL.writing;
-}
+function send(m){try{if(OL.conn&&OL.conn.open)OL.conn.send(m)}catch(e){}}
+function pushSoon(){if(!G.online||!OL.conn)return;clearTimeout(OL.timer);OL.timer=setTimeout(flushNow,120)}
+function flushNow(){if(!G.online||!OL.conn)return Promise.resolve();clearTimeout(OL.timer);send({t:'state',s:buildState()});return Promise.resolve()}
 const swapP=t=>t.replace(/Bạn|Đối thủ/g,m=>m==='Bạn'?'Đối thủ':'Bạn');
 function applyState(st){
   if(st.by===OL.role||st.v<=OL.applied)return;
@@ -1520,14 +1548,14 @@ function applyState(st){
   }
 }
 /* remote prompts (the defender answers traps etc.) */
-async function remotePick(list,count,title,opt){
-  await flushNow();
+function remotePick(list,count,title,opt){
+  flushNow();
   const id=Math.max(Date.now(),OL.lastPrompt+1);OL.lastPrompt=id;
   const idx={};list.forEach(c=>idx[c.uid]=c);
-  return new Promise(async res=>{
+  return new Promise(res=>{
     const t=setTimeout(()=>{delete OL.ansWait[id];res(null)},120000);
     OL.ansWait[id]=u=>{clearTimeout(t);res(u?u.map(x=>idx[x]).filter(Boolean):null)};
-    try{await rdoc('prompt').set({id,by:OL.role,title,uids:list.map(c=>c.uid),count,skip:!!opt.skip,cancel:!!opt.cancel})}catch(e){clearTimeout(t);delete OL.ansWait[id];res(null)}
+    send({t:'prompt',p:{id,title,uids:list.map(c=>c.uid),count,skip:!!opt.skip,cancel:!!opt.cancel}});
   });
 }
 function tryPrompt(){
@@ -1535,64 +1563,95 @@ function tryPrompt(){
   const idx=cardIndex(),list=p.uids.map(u=>idx[u]);
   if(list.some(x=>!x))return;
   OL.seenPrompt=p.id;OL.pendingPrompt=null;
-  pickUI(list,p.count,swapP(p.title),{skip:p.skip,cancel:p.cancel}).then(r=>rdoc('answer').set({id:p.id,by:OL.role,uids:r?r.map(c=>c.uid):null}).catch(()=>{}));
+  pickUI(list,p.count,swapP(p.title),{skip:p.skip,cancel:p.cancel}).then(r=>send({t:'answer',id:p.id,uids:r?r.map(c=>c.uid):null}));
 }
-function subscribeGame(){
-  const err=e=>console.error(e);
-  OL.unsubs.push(rdoc('state').onSnapshot(s=>{if(s.exists)applyState(s.data())},err));
-  OL.unsubs.push(rdoc('prompt').onSnapshot(s=>{const p=s.exists&&s.data();if(p&&p.by!==OL.role){OL.pendingPrompt=p;tryPrompt()}},err));
-  OL.unsubs.push(rdoc('answer').onSnapshot(s=>{const a=s.exists&&s.data();if(a&&a.by!==OL.role){const w=OL.ansWait[a.id];if(w){delete OL.ansWait[a.id];w(a.uids)}}},err));
+function onData(m){
+  if(!m||typeof m!=='object')return;
+  if(m.t==='hello'&&OL.role==='host'&&!OL.started){OL.started=true;startOnlineHost({hostDeck:OL.hostDeck,guestDeck:DECKS[m.deck]?m.deck:'trainer'})}
+  else if(m.t==='state'&&m.s)applyState(m.s);
+  else if(m.t==='prompt'&&m.p){OL.pendingPrompt=m.p;tryPrompt()}
+  else if(m.t==='answer'){const w=OL.ansWait[m.id];if(w){delete OL.ansWait[m.id];w(m.uids)}}
+  else if(m.t==='bye')oppLeft();
+}
+function oppLeft(){
+  if(!OL.code)return;
+  Object.keys(OL.ansWait).forEach(k=>{const w=OL.ansWait[k];delete OL.ansWait[k];w(null)});
+  if(G&&G.online&&G.me&&!G.over){G.over=true;G.winner='me';G.noPush=true;render();G.noPush=false;showResult('me','Đối thủ đã thoát trận hoặc mất kết nối. Bạn thắng!')}
+}
+function hookConn(c){
+  OL.conn=c;
+  c.on('data',onData);
+  c.on('close',()=>{if(OL.conn===c)oppLeft()});
+  c.on('error',()=>{if(OL.conn===c)oppLeft()});
 }
 function leaveRoom(){
-  OL.unsubs.forEach(f=>{try{f()}catch(e){}});OL.unsubs=[];
-  OL.code=null;OL.role=null;OL.v=0;OL.applied=0;OL.started=false;OL.starting=false;OL.pendingPrompt=null;OL.seenPrompt=0;OL.ansWait={};
+  clearTimeout(OL.timer);
+  try{send({t:'bye'})}catch(e){}
+  const c=OL.conn,p=OL.peer;
+  OL.conn=null;OL.peer=null;
+  setTimeout(()=>{try{c&&c.close()}catch(e){}try{p&&p.destroy()}catch(e){}},200);
+  Object.keys(OL.ansWait).forEach(k=>{const w=OL.ansWait[k];delete OL.ansWait[k];w(null)});
+  Object.assign(OL,{code:null,role:null,v:0,applied:0,started:false,starting:false,pendingPrompt:null,seenPrompt:0,lastPrompt:0});
   if(G)G.online=false;
   resumeHero();
 }
 async function createRoom(deck){
-  showErr('');
-  if(!await ensureOnline()){showErr(ONLINE_NEED);return}
+  showErr('');leaveRoom();
+  if(typeof Peer==='undefined'){showErr('Không tải được module online. Hãy tải lại trang.');return}
+  OL.role='host';OL.hostDeck=deck;
+  const open=n=>new Promise((res,rej)=>{
+    const code=randCode();let p;
+    try{p=new Peer(PEER_PREFIX+code,peerCfg())}catch(e){rej(e);return}
+    p.on('open',()=>res({p,code}));
+    p.on('error',e=>{try{p.destroy()}catch(x){}if(e&&e.type==='unavailable-id'&&n<4)res(open(n+1));else rej(e)});
+  });
+  openModal(`<h3>Đang tạo phòng...</h3><div class="result"><p style="color:var(--mute)">Đang kết nối máy chủ ghép trận...</p></div>`);
   try{
-    leaveRoom();
-    OL.code=randCode();OL.role='host';
-    const meta=rdoc('meta');
-    await meta.set({host:ME_ID,hostDeck:deck,guest:null,guestDeck:null,status:'waiting',t:Date.now()});
-    openModal(`<h3>Phòng của bạn</h3><div class="result"><p>Gửi mã này cho bạn bè:</p><div class="big win" id="roomCode" style="letter-spacing:.3em">${OL.code}</div><p style="color:var(--mute)">Đang chờ người chơi thứ hai vào phòng...</p></div><div class="btns"><button class="btn" id="cancelRoom">Hủy phòng</button></div>`);
-    $('#cancelRoom').onclick=async()=>{const c=OL.code;closeModal();leaveRoom();try{await DB.doc(`rooms/${c}/parts/meta`).delete()}catch(e){}};
-    OL.unsubs.push(meta.onSnapshot(s=>{const m=s.exists&&s.data();if(m&&m.guest&&!OL.started){OL.started=true;startOnlineHost(m)}},e=>console.error(e)));
-  }catch(e){leaveRoom();closeModal();showErr('Không tạo được phòng. Bạn cần quyền Cộng tác (Contributor) trên trang này.')}
+    const r=await withTimeout(open(0),15000);
+    OL.peer=r.p;OL.code=r.code;
+    r.p.on('connection',c=>{if(OL.conn){try{c.close()}catch(e){}return}hookConn(c)});
+    r.p.on('disconnected',()=>{try{r.p.reconnect()}catch(e){}});
+    const link=location.href.split('#')[0]+'#'+r.code;
+    openModal(`<h3>Phòng của bạn</h3><div class="result"><p style="color:var(--mute);margin:0 0 6px">Gửi mã này cho bạn bè. Bạn bè nhập mã hoặc mở link là vào được.</p><div class="roomcode" id="roomCode">${r.code}</div><div class="btns"><button class="btn gold" id="cpCode">Sao chép mã</button><button class="btn" id="cpLink">Sao chép link</button></div><p style="color:var(--mute);margin:10px 0 0">Đang chờ bạn bè vào phòng...</p></div><div class="btns"><button class="btn" id="cancelRoom">Hủy phòng</button></div>`);
+    $('#cpCode').onclick=()=>copyText(r.code,'#cpCode');$('#cpLink').onclick=()=>copyText(link,'#cpLink');
+    $('#cancelRoom').onclick=()=>{closeModal();leaveRoom()};
+  }catch(e){leaveRoom();closeModal();showErr('Không kết nối được máy chủ ghép trận. Kiểm tra Internet rồi thử lại.')}
 }
 async function joinRoom(code,deck){
-  showErr('');code=(code||'').trim().toUpperCase();
-  if(code.length!==4){showErr('Mã phòng gồm 4 ký tự.');return}
-  if(!await ensureOnline()){showErr(ONLINE_NEED);return}
+  showErr('');code=(code||'').trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
+  if(code.length!==5){showErr('Mã phòng gồm 5 ký tự.');return}
+  leaveRoom();
+  if(typeof Peer==='undefined'){showErr('Không tải được module online. Hãy tải lại trang.');return}
+  OL.role='guest';OL.code=code;
+  openModal(`<h3>Đang vào phòng ${code}...</h3><div class="result"><p style="color:var(--mute)">Đang kết nối...</p></div><div class="btns"><button class="btn" id="cancelRoom">Hủy</button></div>`);
+  $('#cancelRoom').onclick=()=>{closeModal();leaveRoom()};
   try{
-    leaveRoom();OL.code=code;
-    const meta=rdoc('meta'),s=await meta.get();
-    if(!s.exists){OL.code=null;showErr(`Không tìm thấy phòng ${code}.`);return}
-    const m=s.data();
-    if(m.host===ME_ID){OL.code=null;showErr('Đây là phòng do chính bạn tạo. Hãy gửi mã cho bạn bè.');return}
-    if(m.guest&&m.guest!==ME_ID){OL.code=null;showErr('Phòng này đã đủ 2 người.');return}
-    OL.role='guest';
-    await meta.update({guest:ME_ID,guestDeck:deck,status:'ready'});
-    subscribeGame();
-    openModal(`<h3>Đã vào phòng ${code}</h3><div class="result"><p>Đang chờ chủ phòng bắt đầu trận...</p></div><div class="btns"><button class="btn" id="cancelRoom">Rời phòng</button></div>`);
+    const p=await withTimeout(new Promise((res,rej)=>{const q=new Peer(peerCfg());q.on('open',()=>res(q));q.on('error',rej)}),15000);
+    OL.peer=p;
+    await withTimeout(new Promise((res,rej)=>{
+      const c=p.connect(PEER_PREFIX+code,{reliable:true,serialization:'json'});
+      p.on('error',rej);c.on('error',rej);
+      hookConn(c);
+      c.on('open',()=>res());
+    }),15000);
+    send({t:'hello',deck});
+    openModal(`<h3>Đã vào phòng ${code}</h3><div class="result"><p style="color:var(--mute)">Đang chờ chủ phòng bắt đầu trận...</p></div><div class="btns"><button class="btn" id="cancelRoom">Rời phòng</button></div>`);
     $('#cancelRoom').onclick=()=>{closeModal();leaveRoom()};
-  }catch(e){leaveRoom();showErr('Không vào được phòng. Bạn cần quyền Cộng tác (Contributor) trên trang này.')}
+  }catch(e){
+    const t=e&&e.type==='peer-unavailable'?`Không tìm thấy phòng ${code}. Kiểm tra lại mã.`:'Không vào được phòng. Kiểm tra mã và kết nối Internet rồi thử lại.';
+    leaveRoom();closeModal();showErr(t);
+  }
 }
 async function startOnlineHost(m){
   closeModal();
-  OL.role='host';
-  initG({online:true},[m.hostDeck,m.guestDeck]);
+  initG({online:true},[DECKS[m.hostDeck]?m.hostDeck:'trainer',m.guestDeck]);
   G.code=OL.code;
   showGameScreen();
-  subscribeGame();
   const first=Math.random()<.5?'me':'ai';
   log(first==='me'?'Bạn đi trước!':'Đối thủ đi trước!',1);
   G.cur=first;G.pend=first;G.phase='draw';
   G.noPush=true;render();G.noPush=false;
-  await flushNow();
-  try{await rdoc('meta').update({status:'playing'})}catch(e){}
+  flushNow();
   await G.introP;
   if(first==='me'){G.pend=null;G.busy=true;startTurn('me').then(()=>{G.busy=false;render()})}
 }
@@ -1604,7 +1663,7 @@ function showTitle(){
   window.scrollTo(0,0);
 }
 function rulesHTML(){
-  return `<h3>Luật chơi</h3><ol class="rules"><li>Mỗi bên có 8000 LP. Về 0 LP hoặc hết bài để rút là thua.</li><li>Mỗi lượt: Rút bài, Main Phase, Battle Phase, kết thúc. Người đi trước không rút bài và không được tấn công ở lượt đầu.</li><li>Mỗi lượt Triệu hồi hoặc Úp 1 quái thú. Cấp 5-6 cần hiến tế 1 quái thú, cấp 7 trở lên cần 2.</li><li>Quái thú thế tấn công đánh nhau theo ATK: bên yếu hơn bị phá hủy, chênh lệch trừ vào LP. Đánh vào quái thú thế thủ: ATK lớn hơn DEF thì phá hủy, nhỏ hơn thì bạn mất LP chênh lệch.</li><li>Đối thủ không có quái thú thì đánh thẳng vào LP.</li><li>Bài Phép dùng trong Main Phase. Bẫy phải úp từ lượt trước, game sẽ hỏi bạn khi đối thủ tấn công hoặc triệu hồi.</li><li>Cuối lượt tối đa 6 lá trên tay.</li><li>Chơi online: một người tạo phòng và gửi mã 4 ký tự, người kia nhập mã để vào. Hai bên thay phiên nhau, Bẫy của bạn sẽ hiện hộp hỏi khi đối thủ tấn công.</li></ol><div class="btns"><button class="btn" id="shClose">Đóng</button></div>`;
+  return `<h3>Luật chơi</h3><ol class="rules"><li>Mỗi bên có 8000 LP. Về 0 LP hoặc hết bài để rút là thua.</li><li>Mỗi lượt: Rút bài, Main Phase, Battle Phase, kết thúc. Người đi trước không rút bài và không được tấn công ở lượt đầu.</li><li>Mỗi lượt Triệu hồi hoặc Úp 1 quái thú. Cấp 5-6 cần hiến tế 1 quái thú, cấp 7 trở lên cần 2.</li><li>Quái thú thế tấn công đánh nhau theo ATK: bên yếu hơn bị phá hủy, chênh lệch trừ vào LP. Đánh vào quái thú thế thủ: ATK lớn hơn DEF thì phá hủy, nhỏ hơn thì bạn mất LP chênh lệch.</li><li>Đối thủ không có quái thú thì đánh thẳng vào LP.</li><li>Bài Phép dùng trong Main Phase. Bẫy phải úp từ lượt trước, game sẽ hỏi bạn khi đối thủ tấn công hoặc triệu hồi.</li><li>Cuối lượt tối đa 6 lá trên tay.</li><li>Chơi online: một người bấm Tạo phòng và gửi mã 5 ký tự (hoặc link), người kia nhập mã để vào. Hai bên thay phiên nhau, Bẫy của bạn sẽ hiện hộp hỏi khi đối thủ tấn công.</li></ol><div class="btns"><button class="btn" id="shClose">Đóng</button></div>`;
 }
 function allCardsHTML(){
   const ids=Object.keys(D);
@@ -1630,10 +1689,12 @@ function allCardsHTML(){
   $('#codeIn').addEventListener('keydown',e=>{if(e.key==='Enter')$('#joinBtn').click()});
   const tab=on=>{$('#tabAI').classList.toggle('on',!on);$('#tabOL').classList.toggle('on',on);$('#tabAI').setAttribute('aria-selected',String(!on));$('#tabOL').setAttribute('aria-selected',String(on));$('#panAI').hidden=on;$('#panOL').hidden=!on};
   $('#tabAI').onclick=()=>tab(false);$('#tabOL').onclick=()=>tab(true);
+  step(()=>{const h=(location.hash||'').replace('#','').toUpperCase();if(/^[A-Z0-9]{5}$/.test(h)){tab(true);$('#codeIn').value=h;$('#onlineHint').textContent='Đã có mã phòng '+h+'. Chọn bộ bài rồi bấm "Vào phòng".'}});
+  setTimeout(updateSndHint,700);
   $('#rulesBtn').onclick=()=>{openModal(rulesHTML());$('#shClose').onclick=closeModal};
   $('#cardsBtn').onclick=()=>openCollection('all');
   $('#setBtn').onclick=openSettings;$('#setBtn2').onclick=openSettings;
-  $('#onlineHint').textContent='Chọn bộ bài ở trên, bấm "Tạo phòng mới" rồi gửi mã 4 ký tự cho bạn bè. Bạn bè mở cùng link này (trong claude.ai) và nhập mã để vào.';
+  $('#onlineHint').textContent='Chọn bộ bài ở trên, bấm "Tạo phòng mới" rồi gửi mã 5 ký tự (hoặc link) cho bạn bè. Bạn bè nhập mã là vào chơi ngay. Cả hai máy cần có Internet.';
   step(fxResize);step(initBG);step(initHero);step(showTitle);
 })();
 

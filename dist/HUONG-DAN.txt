@@ -1,0 +1,6 @@
+TANNGUYEN-OH - dua len Cloudflare Pages
+1. Vao dash.cloudflare.com > Workers & Pages > Create > Pages > Upload assets.
+2. Dat ten du an, keo tha file ZIP nay (hoac giai nen roi keo tha ca 3 file index.html, three.min.js, peerjs.min.js).
+3. Bam Deploy. Mo link *.pages.dev la choi duoc.
+Choi online 2 nguoi: mot nguoi bam "Tao phong" va gui ma 5 ky tu (hoac link) cho ban be. Ban be mo cung trang, nhap ma la vao.
+Can mo bang HTTPS (Cloudflare Pages co san) va ca hai may deu co Internet.
