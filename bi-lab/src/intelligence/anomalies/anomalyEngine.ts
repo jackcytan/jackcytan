@@ -117,7 +117,7 @@ export function detectSegmentAnomalies(b: Breakdown, sens: Sensitivity, format: 
       metricLabel: { vi: `${b.measureLabel.vi} — ${b.dimColumn}`, en: `${b.measureLabel.en} — ${b.dimColumn}` },
       label: it.label,
       expected,
-      expectedLow: (it.previous as number) * (1 + med - spread * s.segZ),
+      expectedLow: Math.max(0, (it.previous as number) * (1 + med - spread * s.segZ)),
       expectedHigh: (it.previous as number) * (1 + med + spread * s.segZ),
       actual: it.current as number,
       deviation: it.change as number,

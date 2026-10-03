@@ -237,7 +237,9 @@ body {
     --subtle: #6f7c92;
     --accent: #1d4ed8;
     --shadow-card: none;
+    color-scheme: light;
   }
+  html,
   body {
     background: #fff !important;
     -webkit-print-color-adjust: exact;
@@ -254,15 +256,20 @@ body {
     margin: 0 !important;
     max-width: none !important;
   }
-  .report-section {
+  .avoid-break,
+  .report-section h2 {
     break-inside: avoid;
     page-break-inside: avoid;
+    break-after: avoid;
   }
   .page-break {
     break-before: page;
   }
   .card {
     box-shadow: none !important;
+  }
+  article.card {
+    border: 0 !important;
   }
 }
 .print-only {

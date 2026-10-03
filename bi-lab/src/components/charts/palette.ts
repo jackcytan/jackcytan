@@ -21,10 +21,12 @@ export interface ChartTheme {
   heat: [string, string]
 }
 
-export function readTheme(): ChartTheme {
+const LIGHT_VARS: Record<string, string> = { '--fg': '#0d1526', '--muted': '#4b5a72', '--subtle': '#8391a7', '--surface': '#ffffff', '--positive': '#059669', '--negative': '#dc2645', '--warning': '#c27a06' }
+
+export function readTheme(force?: 'light'): ChartTheme {
   const cs = getComputedStyle(document.documentElement)
-  const v = (n: string) => cs.getPropertyValue(n).trim()
-  const mode = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark'
+  const v = (n: string) => (force === 'light' ? LIGHT_VARS[n] : cs.getPropertyValue(n).trim())
+  const mode = force ?? (document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark')
   return {
     mode,
     text: v('--fg'),

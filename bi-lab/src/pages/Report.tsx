@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { Download, FileSpreadsheet, FileText, Printer } from 'lucide-react'
 import { useStore } from '@/app/store'
 import { useT } from '@/i18n/useT'
@@ -30,6 +30,22 @@ export default function Report() {
   const { tr, lang, l } = useT()
   const a = useStore((s) => s.analysis)!
   const ds = useStore((s) => s.dataset)!
+  const theme = useStore((s) => s.theme)
+  const [printing, setPrinting] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia?.('print')
+    const on = () => setPrinting(true)
+    const off = () => setPrinting(false)
+    window.addEventListener('beforeprint', on)
+    window.addEventListener('afterprint', off)
+    const h = (e: MediaQueryListEvent) => setPrinting(e.matches)
+    mq?.addEventListener?.('change', h)
+    return () => {
+      window.removeEventListener('beforeprint', on)
+      window.removeEventListener('afterprint', off)
+      mq?.removeEventListener?.('change', h)
+    }
+  }, [])
   const crit = a.insights.filter((i) => i.severity === 'critical')
   const warn = a.insights.filter((i) => i.severity === 'warning' || i.severity === 'watch')
   const pos = a.insights.filter((i) => i.severity === 'positive')
@@ -48,15 +64,15 @@ export default function Report() {
   const second = a.charts.find((c) => c.id !== 'trend_main' && c.kind !== 'heatmap' && c.kind !== 'scatter')
   const range = a.time ? `${fmtDate(a.time.min, lang)} – ${fmtDate(a.time.max, lang)}` : tr('không có cột thời gian', 'no time column')
   const summary = lang === 'vi'
-    ? `Bộ dữ liệu "${ds.name}" gồm ${fmtNumber(ds.rowCount, 0, 'vi')} dòng và ${ds.columns.length} cột (${range}), được nhận diện thuộc bối cảnh ${DOMAIN_LABELS[a.domain.domain].vi.toLowerCase()} (độ tin cậy ${Math.round(a.domain.confidence * 100)}%). Điểm sức khỏe kinh doanh đạt ${a.health.score}/100 (${healthStatus}); chất lượng dữ liệu ${a.quality.score}/100.${mainKpi ? ` ${mainKpi.name.vi} đạt ${formatValue(mainKpi.value, mainKpi.format, { lang: 'vi' })}${mainKpi.change !== null && a.time?.currentLabel ? `, kỳ ${periodLabel(a.time.currentLabel, 'vi')} thay đổi ${formatValue(mainKpi.change, mainKpi.changeKind === 'pp' ? 'pp' : 'percent', { lang: 'vi', signed: true })} so với kỳ trước` : ''}.` : ''} Hệ thống đánh giá ${a.stats.rulesEvaluated} quy tắc nghiệp vụ, ghi nhận ${crit.length} vấn đề nghiêm trọng, ${warn.length} điểm cần cảnh báo/theo dõi, ${pos.length + opp.length} tín hiệu tích cực/cơ hội và ${a.anomalies.anomalies.length} điểm bất thường.${risks[0] ? ` Vấn đề nổi bật nhất: ${insightTitle(risks[0], 'vi').toLowerCase()}.` : ''}${(pos[0] ?? opp[0]) ? ` Điểm sáng: ${insightTitle((pos[0] ?? opp[0])!, 'vi').toLowerCase()}.` : ''}`
-    : `The dataset "${ds.name}" contains ${fmtNumber(ds.rowCount, 0, 'en')} rows and ${ds.columns.length} columns (${range}) and was identified as ${DOMAIN_LABELS[a.domain.domain].en} (confidence ${Math.round(a.domain.confidence * 100)}%). Business health scores ${a.health.score}/100 (${healthStatus}); data quality ${a.quality.score}/100.${mainKpi ? ` ${mainKpi.name.en} is ${formatValue(mainKpi.value, mainKpi.format, { lang: 'en' })}${mainKpi.change !== null && a.time?.currentLabel ? `, with ${periodLabel(a.time.currentLabel, 'en')} changing ${formatValue(mainKpi.change, mainKpi.changeKind === 'pp' ? 'pp' : 'percent', { lang: 'en', signed: true })} versus the previous period` : ''}.` : ''} ${a.stats.rulesEvaluated} business rules were evaluated: ${crit.length} critical issues, ${warn.length} warnings/watch items, ${pos.length + opp.length} positive signals/opportunities and ${a.anomalies.anomalies.length} anomalies.${risks[0] ? ` Most important issue: ${insightTitle(risks[0], 'en').toLowerCase()}.` : ''}${(pos[0] ?? opp[0]) ? ` Bright spot: ${insightTitle((pos[0] ?? opp[0])!, 'en').toLowerCase()}.` : ''}`
+    ? `Bộ dữ liệu "${ds.name}" gồm ${fmtNumber(ds.rowCount, 0, 'vi')} dòng và ${ds.columns.length} cột (${range}), được nhận diện thuộc bối cảnh ${DOMAIN_LABELS[a.domain.domain].vi.toLowerCase()} (độ tin cậy ${Math.round(a.domain.confidence * 100)}%). Điểm sức khỏe kinh doanh đạt ${a.health.score}/100 (${healthStatus}); chất lượng dữ liệu ${a.quality.score}/100.${mainKpi ? ` ${mainKpi.name.vi} đạt ${formatValue(mainKpi.value, mainKpi.format, { lang: 'vi' })}${mainKpi.change !== null && a.time?.currentLabel ? `, kỳ ${periodLabel(a.time.currentLabel, 'vi')} thay đổi ${formatValue(mainKpi.change, mainKpi.changeKind === 'pp' ? 'pp' : 'percent', { lang: 'vi', signed: true })} so với kỳ trước` : ''}.` : ''} Hệ thống đánh giá ${a.stats.rulesEvaluated} quy tắc nghiệp vụ, ghi nhận ${crit.length} vấn đề nghiêm trọng, ${warn.length} điểm cần cảnh báo/theo dõi, ${pos.length + opp.length} tín hiệu tích cực/cơ hội và ${a.anomalies.anomalies.length} điểm bất thường.${risks[0] ? ` Vấn đề nổi bật nhất: “${insightTitle(risks[0], 'vi')}”.` : ''}${(pos[0] ?? opp[0]) ? ` Điểm sáng: “${insightTitle((pos[0] ?? opp[0])!, 'vi')}”.` : ''}`
+    : `The dataset "${ds.name}" contains ${fmtNumber(ds.rowCount, 0, 'en')} rows and ${ds.columns.length} columns (${range}) and was identified as ${DOMAIN_LABELS[a.domain.domain].en} (confidence ${Math.round(a.domain.confidence * 100)}%). Business health scores ${a.health.score}/100 (${healthStatus}); data quality ${a.quality.score}/100.${mainKpi ? ` ${mainKpi.name.en} is ${formatValue(mainKpi.value, mainKpi.format, { lang: 'en' })}${mainKpi.change !== null && a.time?.currentLabel ? `, with ${periodLabel(a.time.currentLabel, 'en')} changing ${formatValue(mainKpi.change, mainKpi.changeKind === 'pp' ? 'pp' : 'percent', { lang: 'en', signed: true })} versus the previous period` : ''}.` : ''} ${a.stats.rulesEvaluated} business rules were evaluated: ${crit.length} critical issue(s), ${warn.length} warning/watch item(s), ${pos.length + opp.length} positive signals/opportunities and ${a.anomalies.anomalies.length} anomalies.${risks[0] ? ` Most important issue: “${insightTitle(risks[0], 'en')}”.` : ''}${(pos[0] ?? opp[0]) ? ` Bright spot: “${insightTitle((pos[0] ?? opp[0])!, 'en')}”.` : ''}`
   const List = ({ items, empty }: { items: typeof a.insights; empty: string }) =>
     items.length ? (
       <ul className="space-y-3">
         {items.slice(0, 8).map((i) => {
           const m = SEVERITY_META[i.severity]
           return (
-            <li key={i.id} className="flex gap-3">
+            <li key={i.id} className="avoid-break flex gap-3">
               <m.icon size={16} className="mt-0.5 shrink-0" style={{ color: toneColor(m.tone) }} aria-hidden />
               <div>
                 <div className="text-[14px] font-semibold">{insightTitle(i, lang)} <span className="text-[11.5px] font-medium text-subtle">· {m[lang]}</span></div>
@@ -82,7 +98,7 @@ export default function Report() {
             <>
               <Button icon={Download} onClick={() => exportSummaryCsv(a, lang, safeFileName(ds.name))}>CSV</Button>
               <Button icon={FileSpreadsheet} onClick={() => exportSummaryXlsx(a, lang, safeFileName(ds.name))}>XLSX</Button>
-              <Button variant="primary" icon={Printer} onClick={() => window.print()}>PRINT REPORT</Button>
+              <Button variant="primary" icon={Printer} onClick={() => { setPrinting(true); setTimeout(() => window.print(), 250) }}>PRINT REPORT</Button>
             </>
           }
         />
@@ -158,8 +174,8 @@ export default function Report() {
 
         {(trend || second) && (
           <Section n={++n} title={tr('Diễn biến hiệu quả', 'Performance Trends')}>
-            {trend && (<><div className="mb-1 text-[13.5px] font-semibold">{l(trend.title)}</div><Chart spec={trend} height={260} animate={false} /></>)}
-            {second && (<><div className="mb-1 mt-6 text-[13.5px] font-semibold">{l(second.title)}</div><Chart spec={second} height={240} animate={false} /></>)}
+            {trend && (<><div className="avoid-break" style={{ width: printing ? 690 : '100%' }}><div className="mb-1 text-[13.5px] font-semibold">{l(trend.title)}</div><Chart spec={trend} height={260} animate={false} forceLight={theme === 'light' || printing} /></div></>)}
+            {second && (<><div className="avoid-break mt-6" style={{ width: printing ? 690 : '100%' }}><div className="mb-1 text-[13.5px] font-semibold">{l(second.title)}</div><Chart spec={second} height={240} animate={false} forceLight={theme === 'light' || printing} /></div></>)}
           </Section>
         )}
 
@@ -194,7 +210,7 @@ export default function Report() {
                 <li key={p.dimRole}>
                   {lang === 'vi'
                     ? `${formatValue(p.entityShareFor80, 'percent', { lang })} số ${ROLE_META[p.dimRole].label.vi.toLowerCase()} (trên ${p.distinct}) tạo ra 80% giá trị; 20% hàng đầu đóng góp ${formatValue(p.top20Share, 'percent', { lang })}.`
-                    : `${formatValue(p.entityShareFor80, 'percent', { lang })} of ${ROLE_META[p.dimRole].label.en.toLowerCase()} (of ${p.distinct}) generate 80% of value; the top 20% contribute ${formatValue(p.top20Share, 'percent', { lang })}.`}
+                    : `${formatValue(p.entityShareFor80, 'percent', { lang })} of the ${p.distinct} ${ROLE_META[p.dimRole].label.en.toLowerCase()} values generate 80% of value; the top 20% contribute ${formatValue(p.top20Share, 'percent', { lang })}.`}
                 </li>
               ))}
             </ul>
