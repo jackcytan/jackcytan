@@ -1,0 +1,11 @@
+{
+  "name": "Anh Tân AI — Business Intelligence Lab",
+  "short_name": "BI Lab",
+  "description": "Local Business Data Intelligence & Decision Support — 100% local processing.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0a0f1c",
+  "theme_color": "#0a0f1c",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}
