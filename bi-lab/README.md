@@ -87,7 +87,7 @@ The production output is the **`dist/`** folder. No server is needed.
 
 ### Cloudflare Pages
 * **Git integration:** Framework preset *None* (or *Vite*) · **Root directory:** `bi-lab` · **Build command:** `npm run build` · **Build output directory:** `dist`.
-* **Direct upload:** run `npm run build` and drag the **`bi-lab/dist`** folder into *Workers & Pages → Create → Pages → Upload assets*.
+* **Direct upload:** run `npm run build` and drag the **`bi-lab/dist`** folder into *Workers & Pages → Create → Pages → Upload assets*. A ready-made build is also committed as **`bi-lab/anh-tan-bi-lab-cloudflare.zip`** (unzip it and upload the extracted files, or upload the zip directly).
 
 ### Vercel / Netlify
 Root directory `bi-lab`, build command `npm run build`, output directory `dist`. Routing is hash-based (`#/dashboard`), so no rewrite rules are required.
