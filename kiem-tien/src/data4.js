@@ -55,7 +55,7 @@ M.push(
  st:["Chọn ngành có giá trị hợp đồng lớn và sản phẩm tốt","Học quy trình bán hàng tư vấn: khám phá nhu cầu, demo, đàm phán","Xây mạng lưới trên LinkedIn, hội doanh nghiệp","Theo dõi phễu bán hàng bằng CRM"],
  pro:["Thu nhập không giới hạn","Kỹ năng quý nhất trong kinh doanh","Mối quan hệ chất lượng"],con:["Áp lực chỉ tiêu","Thu nhập biến động","Chu kỳ bán dài"],
  tip:"Kỹ năng bán hàng là “siêu năng lực” — mọi founder thành công đều phải bán được ý tưởng, sản phẩm và tầm nhìn."},
-{id:"tuvantc",c:"sunghiep",n:"Tư vấn tài chính / Bảo hiểm",i:"🛡️",d:"Tư vấn kế hoạch tài chính, bảo hiểm, đầu tư cho cá nhân và gia đình, hưởng hoa hồng và phí tư vấn.",v:0,k:3,r:2,t:"3–6 tháng",inc:"10–100 triệu/tháng",m:"off",p:0,s:["sales","finance","care"],
+{id:"tuvantc",c:"sunghiep",n:"Tư vấn tài chính / Bảo hiểm",i:"☂️",d:"Tư vấn kế hoạch tài chính, bảo hiểm, đầu tư cho cá nhân và gia đình, hưởng hoa hồng và phí tư vấn.",v:0,k:3,r:2,t:"3–6 tháng",inc:"10–100 triệu/tháng",m:"off",p:0,s:["sales","finance","care"],
  st:["Lấy chứng chỉ hành nghề theo quy định","Gia nhập công ty uy tín để được đào tạo","Tư vấn trung thực, đúng nhu cầu khách hàng","Chăm sóc khách lâu dài để có giới thiệu"],
  pro:["Thu nhập cao, có hoa hồng tái tục","Giúp người khác an toàn tài chính","Không vốn"],con:["Định kiến xã hội","Áp lực doanh số","Cần đạo đức nghề nghiệp cao"],
  tip:"Tư vấn đúng sản phẩm khách thật sự cần — uy tín sẽ biến một khách hàng thành cả mạng lưới giới thiệu."},

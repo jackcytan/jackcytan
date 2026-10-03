@@ -144,6 +144,7 @@ window.addEventListener("scroll",()=>{totop.classList.toggle("show",scrollY>900)
 /* ---------- reveal ---------- */
 const io="IntersectionObserver" in window?new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add("in");io.unobserve(en.target)}}),{threshold:.08,rootMargin:"0px 0px -40px 0px"}):null;
 function observe(){$$(".reveal:not(.in)").forEach(el=>io?io.observe(el):el.classList.add("in"))}
+let rvT;window.addEventListener("scroll",()=>{clearTimeout(rvT);rvT=setTimeout(()=>{$$(".reveal:not(.in)").forEach(el=>{if(el.getBoundingClientRect().top<innerHeight)el.classList.add("in")})},120)},{passive:true});
 
 /* ---------- QUIZ ---------- */
 const QS=[

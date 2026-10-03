@@ -156,7 +156,7 @@ section{padding:84px 0}
 .sheet-bd{padding:0 34px 34px}
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:26px}
 .kpi{padding:14px;border-radius:14px;background:var(--card);border:1px solid var(--line)}
-.kpi small{font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);font-weight:600}
+.kpi small{display:block;line-height:1.4;font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);font-weight:600}
 .kpi b{display:block;font-size:14.5px;margin-top:4px;line-height:1.35}
 .blk{margin-bottom:24px}
 .blk h4{font-size:15px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin-bottom:12px;display:flex;align-items:center;gap:8px}
@@ -272,7 +272,8 @@ footer{border-top:1px solid var(--line);padding:50px 0 36px;margin-top:40px}
 
 /* ---------- toast & top ---------- */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(120px);padding:13px 22px;border-radius:14px;background:var(--text);color:var(--bg);font-weight:600;font-size:14.5px;z-index:200;transition:.35s cubic-bezier(.2,.9,.3,1.2);box-shadow:var(--shadow)}
-.toast.show{transform:translateX(-50%) translateY(0)}
+.toast{opacity:0;visibility:hidden}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;visibility:visible}
 .totop{position:fixed;right:20px;bottom:20px;z-index:40;opacity:0;pointer-events:none;transition:.3s}
 .totop.show{opacity:1;pointer-events:auto}
 .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s,transform .7s}
