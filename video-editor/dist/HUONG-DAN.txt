@@ -1,0 +1,8 @@
+TAN AI VIDEO LAB - dua len Cloudflare Pages
+1. Vao dash.cloudflare.com > Workers & Pages > Create > Pages > Upload assets.
+2. Dat ten du an (vd: tan-ai-video), keo tha file ZIP nay (hoac giai nen roi keo tha file index.html).
+3. Bam Deploy. Mo link *.pages.dev la dung duoc ngay.
+Gioi han: video duoi 1 phut va duoi 10 MB.
+Khach tai video len, cat doan, chinh mau, doi toc do/am thanh, roi xuat ra MP4 / WEBM / GIF / WAV.
+Video duoc xu ly ngay tren trinh duyet cua khach, khong gui len may chu. Nen dung Chrome hoac Edge tren may tinh de xuat MP4 nhanh nhat.
+Duoc phat trien boi Tan AI.
