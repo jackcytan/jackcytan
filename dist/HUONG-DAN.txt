@@ -4,3 +4,12 @@ TANNGUYEN-OH - dua len Cloudflare Pages
 3. Bam Deploy. Mo link *.pages.dev la choi duoc.
 Choi online 2 nguoi: mot nguoi bam "Tao phong" va gui ma 5 ky tu (hoac link) cho ban be. Ban be mo cung trang, nhap ma la vao.
 Can mo bang HTTPS (Cloudflare Pages co san) va ca hai may deu co Internet.
+
+TRANG TIN TUC CONG NGHE & AI (tin-tuc.html)
+- Mo https://<ten-du-an>.pages.dev/tin-tuc.html. Trang tu lay tin RSS tu cac bao (VnExpress, Tuoi Tre, Thanh Nien,
+  Dan Tri, VietNamNet, Znews, VTC News, NLD, Lao Dong, Nhan Dan, VnEconomy, CafeBiz, GenK, 24h, Tinh te),
+  tu lam moi moi 5 phut. Nho upload ca thu muc "assets" (logo).
+- On dinh nhat: tao Cloudflare Worker tu file cloudflare-worker/rss-proxy.js trong repo, roi dan URL worker vao
+  bien CUSTOM_PROXY o dau phan <script> cua tin-tuc.html. Neu khong, trang dung proxy CORS cong khai (co the cham/gioi han).
+- Neu deploy bang Git hoac "npx wrangler pages deploy dist" (chay o thu muc goc repo), file functions/api/rss.js
+  tu hoat dong tai /api/rss, khong can Worker rieng.
