@@ -1,0 +1,91 @@
+DRABUFF PROMPT HUB – HƯỚNG DẪN ĐƯA LÊN CLOUDFLARE PAGES
+Phát triển bởi Tân AI · Biên soạn bởi Chuyên gia AI Nguyễn Văn Tân
+=====================================================================
+
+Gói này gồm: web app (kho 1.985 prompt + từ điển 230 thuật ngữ AI) và
+máy chủ nhỏ (_worker.js) để lưu tài khoản (họ tên + số Zalo) vào Cloudflare KV.
+Làm đủ 5 bước dưới đây (khoảng 10 phút). Tất cả đều nằm trong gói miễn phí của Cloudflare.
+
+---------------------------------------------------------------------
+BƯỚC 1 – ĐƯA WEB LÊN
+---------------------------------------------------------------------
+1. Vào https://dash.cloudflare.com → Workers & Pages → Create → Pages
+   → "Upload assets" (Tải lên trực tiếp).
+2. Đặt tên dự án, ví dụ: drabuff-prompt   (link sẽ là https://drabuff-prompt.pages.dev)
+3. Kéo thả file ZIP này vào → bấm "Deploy site".
+
+---------------------------------------------------------------------
+BƯỚC 2 – TẠO KHO LƯU TÀI KHOẢN (KV)
+---------------------------------------------------------------------
+1. Trong dashboard Cloudflare → Storage & Databases → KV (Workers KV)
+   → "Create" / "Create namespace".
+2. Đặt tên: drabuff-users → Create.
+
+---------------------------------------------------------------------
+BƯỚC 3 – GẮN KHO VÀ ĐẶT MẬT KHẨU QUẢN TRỊ CHO DỰ ÁN
+---------------------------------------------------------------------
+Vào Workers & Pages → chọn dự án drabuff-prompt → Settings:
+1. Mục "Bindings" → Add → "KV namespace":
+     Variable name:  USERS          (viết HOA, đúng chính tả)
+     KV namespace:   drabuff-users
+   → Save.
+2. Mục "Variables and Secrets" → Add:
+     Type: Secret (mã hóa)
+     Variable name:  ADMIN_KEY
+     Value:          (mật khẩu quản trị do bạn tự đặt, ví dụ: Drabuff@2026!xyz)
+   → Save.
+   (Nếu có lựa chọn Production/Preview, hãy đặt cho Production.)
+
+---------------------------------------------------------------------
+BƯỚC 4 – TRIỂN KHAI LẠI (BẮT BUỘC)
+---------------------------------------------------------------------
+Cài đặt KV và mật khẩu chỉ có hiệu lực từ lần triển khai SAU khi lưu:
+→ Vào tab Deployments → "Create deployment" (hoặc "Upload") → kéo thả lại file ZIP này.
+
+---------------------------------------------------------------------
+BƯỚC 5 – KIỂM TRA MÁY CHỦ ĐÃ CHẠY
+---------------------------------------------------------------------
+Mở:  https://drabuff-prompt.pages.dev/api/ping
+  ✔ Thấy dòng:  {"ok":true,"may_chu":"đang hoạt động","kv_USERS":true,"ADMIN_KEY":true}
+    → Hoàn tất! Tài khoản đăng ký sẽ được lưu trên Cloudflare.
+  ✘ "kv_USERS":false hoặc "ADMIN_KEY":false → xem lại Bước 3 rồi làm lại Bước 4.
+  ✘ Hiện ra trang web/trang chủ thay vì dòng chữ trên → bảng điều khiển chưa nhận
+    máy chủ khi kéo thả. Dùng cách dự phòng ở cuối file.
+
+Thử đăng ký 1 tài khoản trong app. Vào Tài khoản: thấy nhãn xanh "Đã đồng bộ" là đúng.
+(Nhãn vàng "Chờ đồng bộ máy chủ" nghĩa là máy chủ chưa hoạt động.)
+
+---------------------------------------------------------------------
+XEM & TẢI DANH SÁCH TÀI KHOẢN (FILE TEXT)
+---------------------------------------------------------------------
+• Tải file .txt:   https://drabuff-prompt.pages.dev/api/users?key=MẬT_KHẨU_QUẢN_TRỊ
+• Tải file Excel:  https://drabuff-prompt.pages.dev/api/users?key=MẬT_KHẨU_QUẢN_TRỊ&format=csv
+• Hoặc trong app:  mở https://drabuff-prompt.pages.dev/#admin → nhập mật khẩu → xem bảng & bấm tải.
+Nội dung file: STT | Họ tên | Số Zalo | Ngày đăng ký | Lần truy cập cuối | Số lượt.
+Người dùng đăng ký lại bằng cùng số Zalo sẽ không bị trùng, chỉ cập nhật lần truy cập.
+Tuyệt đối không chia sẻ mật khẩu quản trị cho người khác.
+
+---------------------------------------------------------------------
+GỬI CHO NGƯỜI DÙNG
+---------------------------------------------------------------------
+Gửi link https://drabuff-prompt.pages.dev (hoặc tên miền riêng). Trang web tự hiện
+hướng dẫn cài app cho Android / iPhone / máy tính. Nếu người dùng mở link trong
+Zalo/Facebook, trang sẽ nhắc mở bằng Chrome/Safari để cài.
+Gắn tên miền riêng: dự án → Custom domains → Set up a custom domain.
+
+---------------------------------------------------------------------
+CÁCH DỰ PHÒNG (nếu /api/ping không trả về dòng chữ JSON)
+---------------------------------------------------------------------
+Triển khai bằng công cụ dòng lệnh Wrangler (máy tính cần cài Node.js):
+  1. Giải nén ZIP vào một thư mục, mở Terminal/Command Prompt tại thư mục đó.
+  2. Chạy:  npx wrangler login
+  3. Chạy:  npx wrangler pages deploy . --project-name=drabuff-prompt
+Các thiết lập KV và ADMIN_KEY ở Bước 3 vẫn giữ nguyên. Sau đó kiểm tra lại Bước 5.
+
+---------------------------------------------------------------------
+CẬP NHẬT NỘI DUNG
+---------------------------------------------------------------------
+• Prompt theo ngành:     data/industries.js
+• Prompt phòng ban/nhu cầu: data/library.js
+• Từ điển AI:            data/glossary.js
+Sau khi sửa, đóng gói ZIP mới và tạo deployment mới. Người dùng tự nhận bản mới khi mở lại app.
