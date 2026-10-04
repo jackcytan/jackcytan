@@ -1,4 +1,4 @@
-/* Tân AI Academy – ứng dụng học AI & Marketing. Phát triển bởi Tân AI. */
+/* Drabuff AI Academy – ứng dụng học AI & Marketing. Phát triển bởi Tân AI. */
 (function () {
   'use strict';
   const C = window.COURSE, MODS = C.modules, Snd = window.Sound;
@@ -119,8 +119,8 @@
   const btn = (label, cls, attrs, icon) => '<button class="b3d ' + (cls || '') + '" ' + (attrs || '') + '>' + (/shine/.test(cls || '') ? '<span class="sh"></span>' : '') + (icon ? ic(icon) : '') + '<span>' + label + '</span></button>';
   const link = (label, cls, href, icon) => '<a class="b3d ' + (cls || '') + '" href="' + href + '">' + (/shine/.test(cls || '') ? '<span class="sh"></span>' : '') + (icon ? ic(icon) : '') + '<span>' + label + '</span></a>';
   const tile = (m, lg) => '<div class="tile3d ' + (lg ? 'lg' : '') + '" style="--c1:' + m.c1 + ';--c2:' + m.c2 + '">' + ic(m.icon) + '</div>';
-  const brand = () => '<a class="brand" href="#home" aria-label="Tân AI Academy"><img src="icons/icon-192.png" alt=""><span><b>Tân AI Academy</b><small>PHÁT TRIỂN BỞI TÂN AI</small></span></a>';
-  const credit = () => '<div class="foot-note">Tân AI Academy · Phát triển bởi <b>Tân AI</b><br>Chứng chỉ cấp bởi Chuyên gia AI Nguyễn Văn Tân</div>';
+  const brand = () => '<a class="brand" href="#home" aria-label="Drabuff AI Academy"><img src="icons/icon-192.png" alt=""><span><b>Drabuff AI<span class="bw"> Academy</span></b><small>PHÁT TRIỂN BỞI TÂN AI</small></span></a>';
+  const credit = () => '<div class="foot-note">Drabuff AI Academy · Phát triển bởi <b>Tân AI</b><br>Chứng chỉ cấp bởi Chuyên gia AI Nguyễn Văn Tân (Tân AI)</div>';
 
   function toast(msg, kind, icon) {
     const box = $('#toast'), el = document.createElement('div');
@@ -226,7 +226,7 @@
   /* ------------------------------------------------------------ cài đặt PWA */
   let deferredPrompt = null;
   addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredPrompt = e; refreshInstall(); });
-  addEventListener('appinstalled', () => { deferredPrompt = null; toast('Đã cài đặt! Mở app <b>Tân AI</b> trên màn hình chính nhé.', 'gold', 'check'); refreshInstall(); });
+  addEventListener('appinstalled', () => { deferredPrompt = null; toast('Đã cài đặt! Mở app <b>Drabuff AI</b> trên màn hình chính nhé.', 'gold', 'check'); refreshInstall(); });
   function refreshInstall() { const b = $('#inst-body'); if (b) b.innerHTML = installBody(INST_TAB); }
   async function doInstall() {
     if (deferredPrompt) {
@@ -253,7 +253,7 @@
         step(1, 'Mở bằng Chrome', 'Mở trang này bằng trình duyệt <b>Chrome</b> trên điện thoại Android.', '<div class="chrome">' + ic('dotsV') + '</div>' + ic('compass', 'hl') ) +
         step(2, 'Bấm nút menu', 'Bấm <span class="kbd">' + ic('dotsV') + '</span> ở góc trên bên phải trình duyệt.', '<div class="chrome"><span class="hl">' + ic('dotsV') + '</span></div>') +
         step(3, 'Chọn “Cài đặt ứng dụng”', 'Chọn <b>Cài đặt ứng dụng</b> (hoặc <b>Thêm vào màn hình chính</b>) rồi bấm <b>Cài đặt</b>.', '<div class="menu3"><div>Thẻ mới</div><div>Dấu trang</div><div class="hl2">Cài đặt ứng dụng</div><div>Chia sẻ…</div></div>') +
-        step(4, 'Mở app Tân AI', 'Biểu tượng <b>Tân AI</b> xuất hiện trên màn hình chính. Bấm vào để học!', '<div class="home"><i></i><i></i>' + appIcon + '<i></i><i></i><i></i><i></i><i></i></div>') +
+        step(4, 'Mở app Drabuff AI', 'Biểu tượng <b>Drabuff AI</b> xuất hiện trên màn hình chính. Bấm vào để học!', '<div class="home"><i></i><i></i>' + appIcon + '<i></i><i></i><i></i><i></i><i></i></div>') +
         '</div><p class="muted center" style="font-size:13px;margin:16px 0 0">Dùng Samsung Internet: bấm ' + ic('dots') + ' / ≡ → <b>Thêm trang vào</b> → <b>Màn hình chính</b>.</p>';
       return h;
     }
@@ -264,8 +264,8 @@
       h += '<div class="steps">' +
         step(1, 'Bấm nút Chia sẻ', 'Trong <b>Safari</b>, bấm <span class="kbd">' + ic('share') + '</span> ở thanh dưới. (iOS mới: bấm <span class="kbd">' + ic('dots') + '</span> rồi chọn <b>Chia sẻ</b>.)', '<div class="sbar">' + ic('left') + ic('right') + '<span class="hl">' + ic('share') + '</span>' + ic('book') + ic('cards') + '</div>') +
         step(2, 'Thêm vào MH chính', 'Kéo xuống và chọn <b>Thêm vào MH chính</b> <span class="kbd">' + ic('plusSq') + '</span>.', '<div class="sheet"><div>Sao chép ' + ic('copy') + '</div><div class="hl2">Thêm vào MH chính ' + ic('plusSq') + '</div><div>Đánh dấu ' + ic('book') + '</div></div>') +
-        step(3, 'Bấm “Thêm”', 'Giữ tên <b>Tân AI</b> và bấm <b>Thêm</b> ở góc trên bên phải.', '<div class="dlg"><div class="dt"><span>Hủy</span><span class="add">Thêm</span></div><div class="da">' + appIcon + 'Tân AI</div></div>') +
-        step(4, 'Mở app Tân AI', 'Biểu tượng <b>Tân AI</b> có trên màn hình chính. Mở ra là học được ngay, cả khi không có mạng.', '<div class="home"><i></i><i></i>' + appIcon + '<i></i><i></i><i></i><i></i><i></i></div>') +
+        step(3, 'Bấm “Thêm”', 'Giữ tên <b>Drabuff AI</b> và bấm <b>Thêm</b> ở góc trên bên phải.', '<div class="dlg"><div class="dt"><span>Hủy</span><span class="add">Thêm</span></div><div class="da">' + appIcon + 'Drabuff AI</div></div>') +
+        step(4, 'Mở app Drabuff AI', 'Biểu tượng <b>Drabuff AI</b> có trên màn hình chính. Mở ra là học được ngay, cả khi không có mạng.', '<div class="home"><i></i><i></i>' + appIcon + '<i></i><i></i><i></i><i></i><i></i></div>') +
         '</div><p class="muted center" style="font-size:13px;margin:16px 0 0">' + ic('info') + ' Trên iPhone, tiến độ học trong Safari và trong app được lưu riêng, vì vậy hãy <b>cài app trước khi bắt đầu học</b>.</p>';
       return h;
     }
@@ -276,7 +276,7 @@
   const step = (n, t, p, ill) => '<div class="step"><span class="sn">' + n + '</span><div class="ill">' + ill + '</div><b>' + t + '</b><p>' + p + '</p></div>';
   function drawQR() {
     const el = $('#qr'); if (!el || !window.qrcode) return;
-    try { const q = window.qrcode(0, 'M'); q.addData(location.origin + location.pathname); q.make(); el.innerHTML = '<img alt="Mã QR mở Tân AI Academy" src="' + q.createDataURL(8, 0) + '">'; } catch (e) {}
+    try { const q = window.qrcode(0, 'M'); q.addData(location.origin + location.pathname); q.make(); el.innerHTML = '<img alt="Mã QR mở Drabuff AI Academy" src="' + q.createDataURL(8, 0) + '">'; } catch (e) {}
   }
 
   /* ------------------------------------------------------------ landing */
@@ -314,13 +314,13 @@
       '<section class="lsec"><div class="wrap"><h2>Chứng chỉ <span class="gold-text">đẳng cấp</span>, mang tên bạn</h2><p class="sub">Mỗi học phần một chứng chỉ, hoàn thành toàn khóa nhận Bằng công nhận – tất cả do <b>Chuyên gia AI Nguyễn Văn Tân</b> cấp.</p>' +
         '<div class="cert-show"><div class="cert-frame"><div class="loading" id="pv1">Đang tạo mẫu…</div><div class="glare"></div></div><div class="cert-frame"><div class="loading" id="pv2">Đang tạo mẫu…</div><div class="glare"></div></div></div></div></section>' +
       '<section class="lsec"><div class="wrap"><h2>Câu hỏi thường gặp</h2><div class="faq" style="margin-top:22px">' + [
-        ['Vì sao không có trên App Store hay CH Play?', 'Tân AI Academy là ứng dụng web cài đặt được (PWA). Bạn cài trực tiếp từ trang này, không cần qua cửa hàng ứng dụng và luôn dùng phiên bản mới nhất.'],
+        ['Vì sao không có trên App Store hay CH Play?', 'Drabuff AI Academy là ứng dụng web cài đặt được (PWA). Bạn cài trực tiếp từ trang này, không cần qua cửa hàng ứng dụng và luôn dùng phiên bản mới nhất.'],
         ['App có chạy khi không có mạng không?', 'Có. Sau lần mở đầu tiên, toàn bộ bài học, flashcard, bài thi và chứng chỉ đều hoạt động offline.'],
         ['Tiến độ học và chứng chỉ được lưu ở đâu?', 'Lưu ngay trên thiết bị của bạn, không gửi lên máy chủ. Hãy học trên cùng một thiết bị và tải chứng chỉ về máy sau khi nhận. Nếu xóa app hoặc xóa dữ liệu trình duyệt, tiến độ sẽ mất.'],
         ['Làm sao để nhận chứng chỉ?', 'Học bài giảng, ôn flashcard rồi làm bài thi của mỗi học phần. Đạt từ 80% trở lên là nhận ngay chứng chỉ mang tên bạn. Hoàn thành cả 10 học phần sẽ nhận Bằng công nhận và được vinh danh.'],
         ['Dùng iPhone cần lưu ý gì?', 'Hãy cài bằng Safari và cài app trước khi bắt đầu học, vì trên iPhone tiến độ trong Safari và trong app được lưu riêng.']
       ].map(q => '<details class="panel"><summary>' + q[0] + ic('right') + '</summary><p>' + q[1] + '</p></details>').join('') + '</div></div></section>' +
-      '<footer class="lfoot">' + brand() + '<div>© ' + new Date().getFullYear() + ' Tân AI Academy · Phát triển bởi <b>Tân AI</b></div><div style="margin-top:4px">Chứng chỉ và bằng công nhận được cấp bởi Chuyên gia AI Nguyễn Văn Tân</div></footer></div>';
+      '<footer class="lfoot"><img src="icons/drabuff-logo-white.png" alt="Drabuff Agency & Academy" style="width:170px;margin:0 auto 14px;opacity:.9"><div>© ' + new Date().getFullYear() + ' Drabuff AI Academy · Phát triển bởi <b>Tân AI</b></div><div style="margin-top:4px">Chứng chỉ và bằng công nhận được cấp bởi Chuyên gia AI Nguyễn Văn Tân (Tân AI)</div></footer></div>';
   }
   function landingAfter() {
     drawQR();
@@ -348,11 +348,11 @@
   /* ------------------------------------------------------------ chào mừng */
   function welcome() {
     return '<div class="orb o1"></div><div class="orb o2"></div><main class="app noshell"><div class="screen welcome">' +
-      '<img class="logo3d" src="icons/icon-512.png" alt="Tân AI Academy">' +
-      '<h1>Chào mừng đến<br><span class="gold-text">Tân AI Academy</span></h1>' +
+      '<img class="logo3d" src="icons/icon-512.png" alt="Drabuff AI Academy">' +
+      '<h1>Chào mừng đến<br><span class="gold-text">Drabuff AI Academy</span></h1>' +
       '<div class="by">Học AI &amp; Marketing thực chiến · Phát triển bởi <b>Tân AI</b></div>' +
       '<div class="panel hud"><div class="field"><label for="nm">Họ và tên của bạn</label><input id="nm" class="input3d" maxlength="40" autocomplete="name" autocapitalize="words" placeholder="Ví dụ: Nguyễn Thị Lan" value="' + esc(S.name) + '"></div>' +
-      '<div class="mini-cert"><small>CHỨNG CHỈ · TÂN AI ACADEMY</small><div class="mc-t">Trân trọng chứng nhận</div><div class="mc-n" id="mcn">' + esc(S.name || 'Tên của bạn') + '</div><div class="mc-s">Họ tên này sẽ được in trên chứng chỉ và bằng công nhận<br>do Chuyên gia AI Nguyễn Văn Tân cấp</div></div>' +
+      '<div class="mini-cert"><small>CHỨNG CHỈ · DRABUFF AI ACADEMY</small><div class="mc-t">Trân trọng chứng nhận</div><div class="mc-n" id="mcn">' + esc(S.name || 'Tên của bạn') + '</div><div class="mc-s">Họ tên này sẽ được in trên chứng chỉ và bằng công nhận<br>do Chuyên gia AI Nguyễn Văn Tân cấp</div></div>' +
       '<label class="check"><input type="checkbox" id="cf"><span class="box">' + ic('check') + '</span><span>Tôi xác nhận họ tên trên là chính xác để in lên chứng chỉ.</span></label>' +
       btn('Bắt đầu hành trình', 'xl block shine', 'data-act="welcomeGo"', 'rocket') + '</div>' + credit() + '</div></main>';
   }
@@ -696,7 +696,7 @@
     frame.addEventListener('pointerleave', () => { frame.style.transform = ''; });
   }
   function certFile(c, id) {
-    const name = id === 'final' ? 'BangCongNhan-TanAI-' + slug(S.name) + '.jpg' : 'ChungChi-' + c.d.code + '-' + slug(S.name) + '.jpg';
+    const name = id === 'final' ? 'BangCongNhan-DrabuffAI-' + slug(S.name) + '.jpg' : 'ChungChi-' + c.d.code + '-' + slug(S.name) + '.jpg';
     try { return new File([c.blob], name, { type: 'image/jpeg' }); } catch (e) { return null; }
   }
   async function certDownload(id) {
@@ -705,16 +705,16 @@
       try { await navigator.share({ files: [f], title: f.name }); return; } catch (e) { if (e && e.name === 'AbortError') return; }
     }
     if (ENV.ios) { viewer(c.url); return; }
-    const a = document.createElement('a'); a.href = c.url; a.download = f ? f.name : 'ChungChi-TanAI.jpg'; document.body.appendChild(a); a.click(); a.remove();
+    const a = document.createElement('a'); a.href = c.url; a.download = f ? f.name : 'ChungChi-DrabuffAI.jpg'; document.body.appendChild(a); a.click(); a.remove();
     toast('Đã tải chứng chỉ về máy', 'gold', 'download');
   }
   async function certShare(id) {
     const c = await getCert(id), f = certFile(c, id), fin = id === 'final';
-    const text = fin ? 'Tôi vừa hoàn thành toàn bộ ' + C.title + ' và nhận Bằng công nhận tại Tân AI Academy – phát triển bởi Tân AI!' : 'Tôi vừa nhận chứng chỉ “' + c.d.title + '” tại Tân AI Academy – phát triển bởi Tân AI!';
+    const text = fin ? 'Tôi vừa hoàn thành toàn bộ ' + C.title + ' và nhận Bằng công nhận tại Drabuff AI Academy – phát triển bởi Tân AI!' : 'Tôi vừa nhận chứng chỉ “' + c.d.title + '” tại Drabuff AI Academy – phát triển bởi Tân AI!';
     const url = location.origin + location.pathname;
     try {
-      if (f && navigator.canShare && navigator.canShare({ files: [f] })) { await navigator.share({ files: [f], title: 'Tân AI Academy', text: text + ' ' + url }); return; }
-      if (navigator.share) { await navigator.share({ title: 'Tân AI Academy', text, url }); return; }
+      if (f && navigator.canShare && navigator.canShare({ files: [f] })) { await navigator.share({ files: [f], title: 'Drabuff AI Academy', text: text + ' ' + url }); return; }
+      if (navigator.share) { await navigator.share({ title: 'Drabuff AI Academy', text, url }); return; }
     } catch (e) { if (e && e.name === 'AbortError') return; }
     const ok = await copyText(text + ' ' + url); toast(ok ? 'Đã sao chép lời chia sẻ – dán vào Facebook/Zalo nhé!' : 'Không thể chia sẻ trên thiết bị này', '', ok ? 'copy' : 'info');
   }
@@ -761,7 +761,7 @@
       '<div class="row"><div class="ri">' + ic('music') + '</div><div class="rt"><b>Nhạc nền</b><small>Nhạc khi thi và lễ vinh danh</small></div><button class="switch ' + (S.settings.music ? 'on' : '') + '" data-act="tgl" data-k="music" aria-label="Nhạc nền"></button></div>' +
       '<div class="row"><div class="ri">' + ic('volume') + '</div><div class="rt"><b>Hiệu ứng âm thanh</b><small>Tiếng bấm nút, đúng/sai, fanfare</small></div><button class="switch ' + (S.settings.sfx ? 'on' : '') + '" data-act="tgl" data-k="sfx" aria-label="Hiệu ứng âm thanh"></button></div></div>';
     if (!standalone()) h += '<div class="sec-title">Ứng dụng</div><div class="panel"><div class="row"><div class="ri">' + ic('download') + '</div><div class="rt"><b>Cài app lên điện thoại</b><small>Mở toàn màn hình, học offline</small></div>' + btn('Cài đặt', 'sm', 'data-act="install"') + '</div></div>';
-    h += '<div class="sec-title">Giới thiệu</div><div class="panel"><div class="row"><div class="ri">' + ic('info') + '</div><div class="rt"><b>Tân AI Academy</b><small>Phiên bản 1.0 · Phát triển bởi <b style="color:var(--gold)">Tân AI</b></small></div></div>' +
+    h += '<div class="sec-title">Giới thiệu</div><div class="panel"><div class="row"><div class="ri">' + ic('info') + '</div><div class="rt"><b>Drabuff AI Academy</b><small>Phiên bản 1.0 · Phát triển bởi <b style="color:var(--gold)">Tân AI</b></small></div></div>' +
       '<div class="row"><div class="ri">' + ic('award') + '</div><div class="rt"><b>Đơn vị cấp chứng chỉ</b><small>Chuyên gia AI Nguyễn Văn Tân</small></div></div>' +
       '<div class="row"><div class="ri">' + ic('wifi') + '</div><div class="rt"><b>Dữ liệu &amp; quyền riêng tư</b><small>Tiến độ và họ tên chỉ lưu trên thiết bị này</small></div></div></div>';
     h += '<div style="margin-top:22px">' + btn('Xóa toàn bộ tiến độ', 'red block', 'data-act="reset"', 'trash') + '</div>' + credit();
@@ -772,10 +772,10 @@
   function honor() {
     ensureFinal();
     return '<div class="honor"><div class="rays"></div><div class="in"><div class="trophy-big">' + TROPHY + '</div><div class="kicker">★ VINH DANH ★</div><h1 class="gold-text">Xin chúc mừng!</h1><div class="hname">' + esc(S.name) + '</div>' +
-      '<p class="sub">Bạn đã hoàn thành xuất sắc toàn bộ <b>' + MODS.length + ' học phần</b> của ' + esc(C.title) + ' tại Tân AI Academy.</p>' +
+      '<p class="sub">Bạn đã hoàn thành xuất sắc toàn bộ <b>' + MODS.length + ' học phần</b> của ' + esc(C.title) + ' tại Drabuff AI Academy.</p>' +
       '<div class="hstats"><div><b>' + MODS.length + '/' + MODS.length + '</b><span>Chứng chỉ</span></div><div><b>' + avgScore() + '</b><span>Điểm trung bình</span></div><div><b>' + S.xp + '</b><span>Tổng XP</span></div></div>' +
       '<div class="btns">' + link('Nhận Bằng công nhận', 'xl block shine', '#cert/final', 'award') + btn('Chia sẻ thành tích', 'cyan block', 'data-act="certShare" data-id="final"', 'share') + link('Về trang chủ', 'steel block', '#home', 'home') + '</div>' +
-      '<div class="credit">Bằng công nhận do Chuyên gia AI Nguyễn Văn Tân cấp · Phát triển bởi Tân AI</div></div></div>';
+      '<div class="credit">Bằng công nhận cấp bởi Chuyên gia AI Nguyễn Văn Tân (Tân AI)</div></div></div>';
   }
   function honorAfter() {
     Snd.Music.play('honor'); FX.start();
@@ -804,11 +804,11 @@
     window.scrollTo(0, 0);
 
     if (!p.length) {
-      if (!standalone()) { document.title = 'Tân AI Academy – Học AI & Marketing, nhận chứng chỉ'; return paint({ html: landing(), after: landingAfter }); }
+      if (!standalone()) { document.title = 'Drabuff AI Academy – Học AI & Marketing, nhận chứng chỉ'; return paint({ html: landing(), after: landingAfter }); }
       p.push('home');
     }
     if (!S.name || p[0] === 'welcome') return paint({ html: welcome(), after: welcomeAfter });
-    document.title = 'Tân AI Academy';
+    document.title = 'Drabuff AI Academy';
     const m = p[0] === 'm' ? modById(p[1]) : null;
     switch (p[0]) {
       case 'home': return paint({ html: shell(home(), 'home') });
@@ -852,7 +852,7 @@
       S.name = v; save(); Snd.SFX.success();
       try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch (e) {}
       const p = parse(); go(p.length && p[0] !== 'welcome' ? '#' + p.join('/') : '#home');
-      setTimeout(() => toast('Chào mừng ' + esc(firstName()) + ' đến Tân AI Academy!', 'gold', 'sparkle'), 400);
+      setTimeout(() => toast('Chào mừng ' + esc(firstName()) + ' đến Drabuff AI Academy!', 'gold', 'sparkle'), 400);
     },
     lessonDone(el) {
       const m = modById(el.dataset.m), i = +el.dataset.i, arr = S.lessons[m.id] || (S.lessons[m.id] = []);

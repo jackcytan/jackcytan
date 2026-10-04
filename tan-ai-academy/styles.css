@@ -501,7 +501,7 @@ details.panel > summary::-webkit-details-marker { display: none; }
   .cert-show { grid-template-columns: 1fr; }
   .lnav .hide-sm { display: none; }
 }
-@media (max-width: 400px) { .brand small { display: none; } .brand b { font-size: 15px; } }
+@media (max-width: 430px) { .brand small { font-size: 9.5px; } .brand .bw { display: none; } }
 @media (max-width: 380px) { .h-display { font-size: 28px; } .acts { gap: 10px; } .act { padding: 14px 12px 12px; } .qtext { font-size: 17.5px; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
 @media print { body * { visibility: hidden; } .cert-frame, .cert-frame * { visibility: visible; } .cert-frame { position: fixed; inset: 0; box-shadow: none; padding: 0; background: none; } }

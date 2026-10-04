@@ -1,11 +1,11 @@
 /* Vẽ chứng chỉ & bằng công nhận lên canvas (thiết kế ở hệ toạ độ 2000×1414 – tỉ lệ A4 ngang). */
 (function () {
-  const W = 2000, H = 1414, NAVY = '#0e1d45', INK = '#1a3a8f';
+  const W = 2000, H = 1414, NAVY = '#0e1d45';
   const ISSUER = 'CHUYÊN GIA AI NGUYỄN VĂN TÂN';
 
   function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
   function hash(s) { let h = 2166136261; for (const c of s) { h ^= c.codePointAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
-  function certId(name, code, date) { return 'TAI-' + code + '-' + hash(name + '|' + code + '|' + date).toString(36).toUpperCase().padStart(7, '0').slice(0, 7); }
+  function certId(name, code, date) { return 'DBA-' + code + '-' + hash(name + '|' + code + '|' + date).toString(36).toUpperCase().padStart(7, '0').slice(0, 7); }
 
   function gold(ctx, x0, y0, x1, y1) {
     const g = ctx.createLinearGradient(x0, y0, x1, y1);
@@ -90,6 +90,23 @@
     ch.forEach((c, i) => { const aa = a + ws[i] / r / 2; ctx.save(); ctx.translate(cx + Math.cos(aa) * r, cy + Math.sin(aa) * r); ctx.rotate(aa + Math.PI / 2); ctx.fillText(c, 0, 0); ctx.restore(); a += ws[i] / r; });
     ctx.restore();
   }
+  function crisp(ctx, text, x, y, fill, stroke, lw) { // chữ vàng sắc nét: bóng đổ gọn + viền
+    ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.55)'; ctx.shadowBlur = 3; ctx.shadowOffsetY = 3;
+    ctx.fillStyle = fill; ctx.fillText(text, x, y); ctx.restore();
+    ctx.save(); ctx.strokeStyle = stroke; ctx.lineWidth = lw; ctx.lineJoin = 'round'; ctx.strokeText(text, x, y); ctx.fillStyle = fill; ctx.fillText(text, x, y); ctx.restore();
+  }
+  function bright(ctx, x0, y0, x1, y1) {
+    const g = ctx.createLinearGradient(x0, y0, x1, y1);
+    g.addColorStop(0, '#f6d27a'); g.addColorStop(0.35, '#fff6cf'); g.addColorStop(0.55, '#ffd766'); g.addColorStop(0.8, '#fff0b8'); g.addColorStop(1, '#f0c25a');
+    return g;
+  }
+  function issuer(ctx, x, by, main, sub, accent) {
+    ctx.textAlign = 'center';
+    ctx.fillStyle = sub; ctx.font = F('italic 700', 27, PF); ctx.fillText('Cấp bởi', x, by - 64);
+    ctx.fillStyle = main; ctx.font = F(800, 26, BV); ctx.fillText(ISSUER, x, by - 18);
+    ctx.strokeStyle = accent; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x - 210, by); ctx.lineTo(x + 210, by); ctx.stroke();
+    ctx.fillStyle = sub; ctx.font = F('italic 700', 28, PF); ctx.fillText('(Tân AI)', x, by + 40);
+  }
   function emblem(ctx, cx, cy, R, dark) {
     ctx.save();
     ctx.shadowColor = 'rgba(0,0,0,.35)'; ctx.shadowBlur = 18; ctx.shadowOffsetY = 6;
@@ -98,11 +115,15 @@
     const g = ctx.createRadialGradient(cx, cy - R * 0.4, 4, cx, cy, R); g.addColorStop(0, '#2a4aa0'); g.addColorStop(1, '#0a1533');
     ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, R * 0.86, 0, Math.PI * 2); ctx.fill();
     ctx.strokeStyle = 'rgba(255,220,140,.6)'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(cx, cy, R * 0.78, 0, Math.PI * 2); ctx.stroke();
-    // mũ tốt nghiệp + mạng nơ-ron
-    ctx.fillStyle = gold(ctx, cx - R, cy - R, cx + R, cy); ctx.beginPath();
-    ctx.moveTo(cx, cy - R * 0.55); ctx.lineTo(cx + R * 0.5, cy - R * 0.33); ctx.lineTo(cx, cy - R * 0.11); ctx.lineTo(cx - R * 0.5, cy - R * 0.33); ctx.closePath(); ctx.fill();
-    ctx.font = F(900, R * 0.62, PF); ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
-    ctx.fillText('AI', cx, cy + R * 0.48);
+    if (LOGO) { // logo Drabuff
+      const w = R * 1.2, h = w * LOGO.height / LOGO.width;
+      ctx.drawImage(LOGO, cx - w / 2, cy - h / 2 - R * 0.06, w, h);
+      ctx.fillStyle = gold(ctx, cx - R, cy, cx + R, cy + R); ctx.font = F(800, R * 0.2, CZ); ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+      spaced(ctx, 'AI', cx, cy + h / 2 + R * 0.18, 4);
+    } else {
+      ctx.fillStyle = gold(ctx, cx - R, cy - R, cx + R, cy); ctx.font = F(900, R * 0.62, PF); ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+      ctx.fillText('AI', cx, cy + R * 0.22);
+    }
     ctx.restore();
   }
   function seal(ctx, cx, cy, R, label, sub, ribbon) {
@@ -156,14 +177,6 @@
     ctx.fillStyle = bandFill; ctx.fillRect(W / 2 - w / 2 - 26, 30, w + 52, 32);
     ctx.fillStyle = color; spaced(ctx, text, W / 2, 47, 4); ctx.restore();
   }
-  function signature(ctx, x, y, col) {
-    ctx.save(); ctx.translate(x, y); ctx.rotate(-0.06);
-    ctx.fillStyle = col; ctx.font = F(400, 92, GV); ctx.textAlign = 'center';
-    ctx.fillText('Nguyễn Văn Tân', 0, 0);
-    ctx.strokeStyle = col; ctx.lineWidth = 2.6; ctx.lineCap = 'round'; ctx.beginPath();
-    ctx.moveTo(-200, 22); ctx.bezierCurveTo(-60, 40, 90, 6, 230, 14); ctx.bezierCurveTo(260, 16, 250, 34, 214, 34); ctx.stroke();
-    ctx.restore();
-  }
   function paper(ctx, base, edge, speck) {
     const g = ctx.createRadialGradient(W / 2, H / 2, 100, W / 2, H / 2, W * 0.75);
     g.addColorStop(0, base); g.addColorStop(1, edge); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
@@ -197,8 +210,8 @@
     corner(ctx, 112, 112, 1, 1, cg); corner(ctx, W - 112, 112, -1, 1, cg); corner(ctx, 112, H - 112, 1, -1, cg); corner(ctx, W - 112, H - 112, -1, -1, cg);
 
     ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
-    emblem(ctx, W / 2, 205, 66);
-    ctx.fillStyle = NAVY; ctx.font = F(800, 28, CZ); spaced(ctx, 'TÂN AI ACADEMY', W / 2, 318, 11);
+    emblem(ctx, W / 2, 200, 76);
+    ctx.fillStyle = NAVY; ctx.font = F(800, 28, CZ); spaced(ctx, 'DRABUFF AI ACADEMY', W / 2, 318, 11);
     ctx.save(); ctx.shadowColor = 'rgba(80,50,0,.35)'; ctx.shadowOffsetY = 4; ctx.shadowBlur = 6;
     ctx.fillStyle = gold(ctx, 600, 330, 1400, 450); ctx.font = F(900, 132, PF); ctx.fillText('CHỨNG CHỈ', W / 2, 455); ctx.restore();
     ctx.fillStyle = '#26386b'; ctx.font = F(600, 28, CZ); const cw = spaced(ctx, 'CERTIFICATE OF ACHIEVEMENT', W / 2, 510, 10);
@@ -228,14 +241,11 @@
     ctx.font = F(700, 21, BV); ctx.fillStyle = '#6b5a3a'; spaced(ctx, 'NGÀY CẤP', 475, by + 34, 5);
     ctx.font = F(400, 19, BV); ctx.fillText('Số hiệu: ' + d.id, 475, by + 66);
 
-    seal(ctx, W / 2, 1208, 94, 'TÂN AI ACADEMY  ★  CERTIFIED  ★  ', 'CERTIFIED', true);
+    seal(ctx, W / 2, 1208, 94, 'DRABUFF AI ACADEMY  ★  CERTIFIED  ★  ', 'CERTIFIED', true);
 
-    signature(ctx, 1525, by - 30, INK);
-    ctx.strokeStyle = '#8b6b2c'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(1345, by); ctx.lineTo(1705, by); ctx.stroke();
-    ctx.fillStyle = NAVY; ctx.font = F(800, 23, BV); ctx.fillText(ISSUER, 1525, by + 36);
-    ctx.fillStyle = '#6b5a3a'; ctx.font = F('italic 700', 22, PF); ctx.fillText('Người cấp chứng chỉ', 1525, by + 68);
+    issuer(ctx, 1525, by, NAVY, '#6b5a3a', '#8b6b2c');
 
-    bandLabel(ctx, 'TÂN AI ACADEMY  ·  PHÁT TRIỂN BỞI TÂN AI', NAVY, '#f1d48a');
+    bandLabel(ctx, 'DRABUFF AI ACADEMY  ·  PHÁT TRIỂN BỞI TÂN AI', NAVY, '#f1d48a');
   }
 
   // ---------------------------------------------------------------- final
@@ -258,17 +268,15 @@
     corner(ctx, 114, 114, 1, 1, cg); corner(ctx, W - 114, 114, -1, 1, cg); corner(ctx, 114, H - 114, 1, -1, cg); corner(ctx, W - 114, H - 114, -1, -1, cg);
 
     ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
-    emblem(ctx, W / 2, 200, 62);
-    ctx.fillStyle = '#e9cf8a'; ctx.font = F(800, 27, CZ); spaced(ctx, 'TÂN AI ACADEMY', W / 2, 308, 11);
-    ctx.save(); ctx.shadowColor = 'rgba(255,200,90,.55)'; ctx.shadowBlur = 30;
-    ctx.fillStyle = gold(ctx, 560, 320, 1440, 440); ctx.font = F(900, 118, PF); ctx.fillText('BẰNG CÔNG NHẬN', W / 2, 438); ctx.restore();
+    emblem(ctx, W / 2, 194, 72);
+    ctx.fillStyle = '#e9cf8a'; ctx.font = F(800, 27, CZ); spaced(ctx, 'DRABUFF AI ACADEMY', W / 2, 308, 11);
+    ctx.font = F(900, 118, PF); crisp(ctx, 'BẰNG CÔNG NHẬN', W / 2, 438, bright(ctx, 560, 330, 1440, 440), 'rgba(110,62,0,.95)', 2.5);
     ctx.fillStyle = '#f3dc9c'; ctx.font = F(700, 40, PF); spaced(ctx, 'HOÀN THÀNH KHÓA HỌC', W / 2, 500, 8);
     ctx.fillStyle = '#b9a676'; ctx.font = F(600, 23, CZ); const cw = spaced(ctx, 'DIPLOMA OF COMPLETION', W / 2, 545, 9);
     divider(ctx, W / 2 - cw / 2 - 80, 537, 46, gl); divider(ctx, W / 2 + cw / 2 + 80, 537, 46, gl);
     ctx.fillStyle = '#e8dcc0'; ctx.font = F('italic 700', 36, PF); ctx.fillText('Trân trọng vinh danh học viên', W / 2, 620);
     const ns = fit(ctx, d.name, 1320, 400, 158, GV, 70);
-    ctx.save(); ctx.shadowColor = 'rgba(255,200,90,.6)'; ctx.shadowBlur = 24; ctx.fillStyle = gold(ctx, 500, 620, 1500, 760);
-    ctx.font = F(400, ns, GV); ctx.fillText(d.name, W / 2, 762); ctx.restore();
+    ctx.font = F(400, ns, GV); crisp(ctx, d.name, W / 2, 762, bright(ctx, 500, 640, 1500, 770), 'rgba(110,62,0,.9)', 1.6);
     divider(ctx, W / 2, 805, 500, gl);
     ctx.fillStyle = '#d9d2c2'; ctx.font = F(400, 30, BV);
     ctx.fillText('đã hoàn thành xuất sắc toàn bộ ' + d.count + ' học phần của', W / 2, 862);
@@ -286,16 +294,17 @@
     ctx.font = F(400, 19, BV); ctx.fillText('Số hiệu: ' + d.id, 475, by + 66);
 
     laurel(ctx, W / 2, 1202, 128, gold(ctx, W / 2 - 160, 1040, W / 2 + 160, 1340));
-    seal(ctx, W / 2, 1202, 100, 'VINH DANH  ★  TÂN AI ACADEMY  ★  ', 'HONORS', false);
+    seal(ctx, W / 2, 1202, 100, 'VINH DANH  ★  DRABUFF AI ACADEMY  ★  ', 'HONORS', false);
 
-    signature(ctx, 1525, by - 30, '#f3dc9c');
-    ctx.strokeStyle = 'rgba(230,190,100,.8)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(1345, by); ctx.lineTo(1705, by); ctx.stroke();
-    ctx.fillStyle = '#ffffff'; ctx.font = F(800, 23, BV); ctx.fillText(ISSUER, 1525, by + 36);
-    ctx.fillStyle = '#b9a676'; ctx.font = F('italic 700', 22, PF); ctx.fillText('Người cấp bằng', 1525, by + 68);
-    bandLabel(ctx, 'TÂN AI ACADEMY  ·  PHÁT TRIỂN BỞI TÂN AI', '#c99a3e', '#2a1800');
+    issuer(ctx, 1525, by, '#ffffff', '#e9cf8a', 'rgba(230,190,100,.8)');
+    bandLabel(ctx, 'DRABUFF AI ACADEMY  ·  PHÁT TRIỂN BỞI TÂN AI', '#c99a3e', '#2a1800');
   }
 
-  let fontsReady = null;
+  let LOGO = null, logoP = null;
+  function loadLogo() {
+    if (!logoP) logoP = new Promise(res => { const i = new Image(); i.onload = () => { LOGO = i; res(); }; i.onerror = () => res(); i.src = 'icons/drabuff-mark-gold.png'; });
+    return logoP;
+  }
   function ensureFonts(name) {
     const sample = 'ẮẰẲẴẶẤẦẨẪẬĐÊỀẾỂỄỆÔỒỐỔỖỘƠỜỚỞỠỢƯỪỨỬỮỰ ' + (name || '') + ' Nguyễn Văn Tân Chứng chỉ ạ';
     const list = ['900 80px "Playfair Display"', '700 40px "Playfair Display"', 'italic 700 40px "Playfair Display"', '400 80px "Great Vibes"', '800 30px Cinzel', '600 30px Cinzel', '400 30px "Be Vietnam Pro"', '600 30px "Be Vietnam Pro"', '700 30px "Be Vietnam Pro"', '800 30px "Be Vietnam Pro"'];
@@ -307,7 +316,7 @@
   window.Cert = {
     W, H, certId, rankOf,
     async draw(canvas, d, scale) {
-      await ensureFonts(d.name);
+      await Promise.all([ensureFonts(d.name), loadLogo()]);
       const s = scale || 1.2;
       canvas.width = W * s; canvas.height = H * s;
       const ctx = canvas.getContext('2d');
