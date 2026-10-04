@@ -1,0 +1,1097 @@
+<title>Drabuff AI Course Designer</title>
+<meta name="description" content="Thiết kế khóa học AI Inhouse cho doanh nghiệp — Drabuff AI">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Chakra+Petch:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: fixed WebGL voxel field behind a single centered column — hero (copy + floating 3D sample card) → wizard (block rail + glass panel of keycap options) → engine log → blueprint result + CTA.
+   Deliberately single dark theme ("control room"), accent set per page. */
+:root{
+  --bg:#05070D;
+  --bg2:#0A0F1C;
+  --panel:rgba(11,16,30,.74);
+  --panel2:rgba(17,24,44,.82);
+  --line:rgba(150,175,255,.13);
+  --line2:rgba(150,175,255,.26);
+  --fg:#E9EEFF;
+  --muted:#93A0C2;
+  --dim:#5E6A8C;
+  --ok:#3DDC97;
+  --cap:#070B15;
+  --f-display:'Chakra Petch','Be Vietnam Pro',system-ui,sans-serif;
+  --f-body:'Be Vietnam Pro',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --f-mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{background:var(--bg);color:var(--fg);font:15px/1.6 var(--f-body);-webkit-font-smoothing:antialiased;margin:0;overflow-x:hidden}
+img{max-width:100%}
+[hidden]{display:none!important}
+button{font:inherit}
+::selection{background:var(--acc);color:var(--acc-ink)}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+h1,h2,h3,h4{font-family:var(--f-display);text-wrap:balance;letter-spacing:-.005em;line-height:1.12;margin:0;font-weight:700}
+p{margin:0}
+.mono{font-family:var(--f-mono)}
+
+#bg3d{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}
+.fx{position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:
+   radial-gradient(90% 70% at 25% 30%, rgba(5,7,13,.78) 0%, rgba(5,7,13,.35) 55%, rgba(5,7,13,0) 80%),
+   linear-gradient(180deg, rgba(5,7,13,.45) 0%, rgba(5,7,13,0) 30%, rgba(5,7,13,.25) 75%, rgba(5,7,13,.8) 100%)}
+.fx::after{content:"";position:absolute;inset:0;opacity:.35;
+  background-image:linear-gradient(rgba(150,175,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(150,175,255,.05) 1px,transparent 1px);
+  background-size:48px 48px;mask-image:radial-gradient(70% 60% at 50% 40%,#000 0%,transparent 80%);-webkit-mask-image:radial-gradient(70% 60% at 50% 40%,#000 0%,transparent 80%)}
+.no3d .fx{background:radial-gradient(60% 50% at 75% 25%, var(--acc-soft) 0%, transparent 70%),radial-gradient(50% 50% at 10% 90%, var(--acc2-soft) 0%, transparent 70%)}
+
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;
+  background:rgba(5,7,13,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+@media(min-width:720px){.top{padding:12px 28px}}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--fg);min-width:0}
+.brand img{height:30px;width:auto;display:block}
+.brand .bn{display:flex;flex-direction:column;line-height:1.1}
+.brand b{font-family:var(--f-display);font-size:16px;letter-spacing:.04em}
+.brand small{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
+.top-r{display:flex;align-items:center;gap:10px}
+.status{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;color:var(--muted);display:flex;align-items:center;gap:8px;padding:7px 12px;border:1px solid var(--line);border-radius:999px;background:rgba(10,15,28,.6);white-space:nowrap}
+.status i{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 10px var(--ok)}
+@media(max-width:520px){.status .st-l{display:none}}
+
+.wrap{position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:0 16px 72px}
+@media(min-width:720px){.wrap{padding:0 28px 96px}}
+
+/* shared atoms */
+.eyebrow{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--acc);display:flex;align-items:center;gap:10px}
+.eyebrow .dot{width:8px;height:8px;border-radius:2px;background:var(--acc);box-shadow:0 0 12px var(--acc);animation:blink 1.8s steps(2) infinite}
+@keyframes blink{50%{opacity:.25}}
+.btn{--d:5px;position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;font:600 15px/1.1 var(--f-body);padding:15px 22px;border-radius:11px;
+  border:1px solid var(--line2);background:linear-gradient(180deg,#1A2440,#121a30);color:var(--fg);cursor:pointer;text-decoration:none;
+  transform:translateY(0);box-shadow:0 var(--d) 0 0 var(--cap),0 calc(var(--d) + 12px) 26px -10px rgba(0,0,0,.75);
+  transition:transform .14s cubic-bezier(.3,.7,.3,1),box-shadow .14s,filter .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 calc(var(--d) + 2px) 0 0 var(--cap),0 calc(var(--d) + 16px) 30px -10px rgba(0,0,0,.8)}
+.btn:active{transform:translateY(var(--d));box-shadow:0 0 0 0 var(--cap),0 4px 10px -4px rgba(0,0,0,.6)}
+.btn.primary{background:linear-gradient(180deg,var(--acc),var(--acc-d));color:var(--acc-ink);border-color:rgba(255,255,255,.25);
+  box-shadow:0 var(--d) 0 0 var(--acc-dd),0 16px 44px -12px var(--acc-glow)}
+.btn.primary:hover{box-shadow:0 calc(var(--d) + 2px) 0 0 var(--acc-dd),0 20px 54px -10px var(--acc-glow)}
+.btn.primary:active{box-shadow:0 0 0 0 var(--acc-dd),0 6px 20px -8px var(--acc-glow)}
+.btn.ghost{background:rgba(14,20,36,.7)}
+.btn.link{background:none;border-color:transparent;box-shadow:none;color:var(--muted);padding:10px 6px;text-decoration:underline;text-underline-offset:4px}
+.btn.link:hover,.btn.link:active{transform:none;box-shadow:none;color:var(--fg)}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.arr{transition:transform .2s}
+.btn:hover .arr{transform:translateX(4px)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1fr);gap:48px;padding-block:52px 36px;align-items:center}
+@media(min-width:980px){.hero{grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);padding-block:84px 64px}}
+.hero h1{font-size:clamp(34px,5.2vw,62px);margin-top:20px}
+.hero h1 em{font-style:normal;color:var(--acc);text-shadow:0 0 34px var(--acc-glow)}
+.lead{font-size:clamp(15.5px,1.4vw,17.5px);color:var(--muted);max-width:58ch;margin-top:20px}
+.lead b{color:var(--fg);font-weight:600}
+.hero-cta{display:flex;flex-wrap:wrap;align-items:center;gap:14px 22px;margin-top:32px}
+.hint{font-size:12px;color:var(--dim);letter-spacing:.04em}
+.facts{list-style:none;padding:0;margin:40px 0 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:560px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:rgba(8,12,22,.7);backdrop-filter:blur(8px)}
+.facts li{padding:14px 16px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.facts li+li{border-left:1px solid var(--line)}
+.facts b{font-family:var(--f-display);font-size:clamp(18px,2.2vw,24px);font-variant-numeric:tabular-nums}
+.facts span{font-size:12px;color:var(--muted);line-height:1.35}
+
+.hero-vis{perspective:1400px;display:flex;justify-content:center;padding-block:10px 30px}
+.sample{position:relative;width:min(100%,430px);transform-style:preserve-3d;transform:rotateX(var(--rx,10deg)) rotateY(var(--ry,-16deg));transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.sm-card{position:relative;transform-style:preserve-3d;border-radius:18px;padding:22px;background:linear-gradient(160deg,rgba(24,33,58,.92),rgba(10,15,28,.95));border:1px solid var(--line2);
+  box-shadow:0 1px 0 rgba(255,255,255,.08) inset,0 50px 90px -30px rgba(0,0,0,.9),0 0 0 1px rgba(0,0,0,.4)}
+.sm-tag{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase;display:flex;justify-content:space-between;gap:8px}
+.sm-title{font-family:var(--f-display);font-size:22px;margin-top:10px;line-height:1.15}
+.sm-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.sm-meta span{font-size:11.5px;padding:4px 9px;border-radius:6px;background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--muted)}
+.sm-rows{display:grid;gap:8px;margin-top:16px}
+.sm-row{display:grid;grid-template-columns:54px minmax(0,1fr);gap:10px;align-items:center;font-size:12.5px;color:var(--muted)}
+.sm-row b{font-family:var(--f-mono);font-size:10.5px;color:var(--acc);letter-spacing:.08em}
+.sm-bar{height:26px;border-radius:7px;background:linear-gradient(90deg,var(--acc-soft2),rgba(255,255,255,.03));border:1px solid var(--line);display:flex;align-items:center;padding:0 10px;color:var(--fg);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sm-float{position:absolute;border-radius:12px;padding:10px 14px;background:rgba(10,15,28,.92);border:1px solid var(--line2);backdrop-filter:blur(8px);box-shadow:0 24px 40px -16px rgba(0,0,0,.9);font-size:12px}
+.sm-float.f1{right:-18px;top:-26px;transform:translateZ(80px)}
+.sm-float.f2{left:-22px;bottom:-30px;transform:translateZ(110px)}
+.sm-float b{display:block;font-family:var(--f-display);font-size:22px;color:var(--acc);line-height:1.1}
+.sm-float small{color:var(--muted);font-size:11px}
+.sm-chip{display:inline-flex;align-items:center;gap:8px}
+.sm-chip i{width:9px;height:9px;border-radius:2px;background:var(--acc2);box-shadow:0 0 10px var(--acc2)}
+@media(max-width:560px){.sm-float.f1{right:-4px}.sm-float.f2{left:-4px}}
+
+/* wizard */
+.wiz{display:grid;grid-template-columns:minmax(0,1fr);gap:20px;padding-top:28px;scroll-margin-top:80px}
+@media(min-width:960px){.wiz{grid-template-columns:230px minmax(0,1fr);gap:32px;padding-top:40px}}
+.rail{position:relative}
+@media(min-width:960px){.rail{position:sticky;top:96px;align-self:start}}
+.rail-h{font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;color:var(--dim);margin-bottom:14px}
+.stack{list-style:none;margin:0;padding:0;display:flex;gap:8px}
+@media(min-width:960px){.stack{flex-direction:column;gap:8px}}
+.stack li{display:flex;align-items:center;gap:14px;min-width:0;flex:1}
+@media(min-width:960px){.stack li{flex:none}}
+.blk{position:relative;flex:none;width:100%;height:12px;border-radius:3px;background:#141c32;border:1px solid var(--line);box-shadow:0 4px 0 0 var(--cap);transition:background .3s,box-shadow .3s,transform .3s}
+@media(min-width:960px){.blk{width:46px;height:30px;border-radius:6px;transform:perspective(300px) rotateX(38deg)}}
+.stack li.done .blk{background:linear-gradient(180deg,var(--acc),var(--acc-d));border-color:transparent;box-shadow:0 4px 0 0 var(--acc-dd),0 0 22px -4px var(--acc-glow)}
+.stack li.cur .blk{background:var(--acc-soft2);border-color:var(--acc);animation:breathe 1.6s ease-in-out infinite}
+@keyframes breathe{50%{box-shadow:0 4px 0 0 var(--cap),0 0 26px -2px var(--acc-glow)}}
+.stack .t{display:none;font-size:13.5px;color:var(--muted)}
+@media(min-width:960px){.stack .t{display:block}}
+.stack li.cur .t{color:var(--fg);font-weight:600}
+.stack li.done .t{color:var(--fg)}
+
+.panel{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:20px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  box-shadow:0 1px 0 rgba(255,255,255,.06) inset,0 50px 100px -40px rgba(0,0,0,.9);padding:clamp(20px,3.4vw,40px)}
+.panel-h{display:grid;gap:8px;padding-bottom:22px;margin-bottom:26px;border-bottom:1px dashed var(--line2)}
+.step-no{font-size:11.5px;letter-spacing:.16em;color:var(--acc)}
+.step-title{font-size:clamp(24px,3vw,34px)}
+.step-sub{color:var(--muted);max-width:62ch}
+.qs{display:grid;grid-template-columns:minmax(0,1fr);gap:28px;align-items:start}
+@media(min-width:720px){.qs{grid-template-columns:repeat(2,minmax(0,1fr))}.q{grid-column:1/-1}.q.half{grid-column:auto}}
+.q{min-width:0;display:grid;gap:12px;align-content:start}
+.q-h{display:grid;gap:4px}
+.q-l{font-weight:600;font-size:15.5px;color:var(--fg)}
+.q-l i{font-style:normal;color:var(--acc);margin-left:4px}
+.q-help{font-size:13px;color:var(--muted)}
+.q-tag{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;color:var(--dim);text-transform:uppercase}
+.inp,.ta{width:100%;background:rgba(4,7,14,.72);border:1px solid var(--line2);border-radius:11px;padding:14px 16px;color:var(--fg);font:500 15px/1.5 var(--f-body);box-shadow:inset 0 2px 0 rgba(0,0,0,.45);transition:border-color .2s,box-shadow .2s}
+.inp::placeholder,.ta::placeholder{color:var(--dim)}
+.inp:focus,.ta:focus{outline:none;border-color:var(--acc);box-shadow:inset 0 2px 0 rgba(0,0,0,.45),0 0 0 4px var(--acc-soft)}
+.ta{min-height:96px;resize:vertical}
+.q.bad .inp,.q.bad .ta{border-color:#FF6B7A}
+.q.bad .opts{outline:1px dashed #FF6B7A;outline-offset:6px;border-radius:12px}
+.opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px 12px;padding-bottom:6px}
+.opts.wide{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+.opt{--d:6px;position:relative;text-align:left;display:flex;flex-direction:column;gap:4px;padding:13px 40px 13px 15px;border-radius:12px;border:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(32,43,72,.78),rgba(15,21,38,.9));color:var(--fg);font:500 14.5px/1.35 var(--f-body);cursor:pointer;min-width:0;
+  box-shadow:0 var(--d) 0 0 var(--cap),0 var(--d) 0 1px rgba(150,175,255,.08),0 18px 26px -16px rgba(0,0,0,.85);transform:translateY(0);
+  transition:transform .16s cubic-bezier(.3,.7,.3,1),box-shadow .16s,border-color .2s,background .2s}
+.opt:hover{transform:translateY(-2px);border-color:var(--line2)}
+.opt[aria-pressed="true"]{transform:translateY(4px);border-color:var(--acc);background:linear-gradient(180deg,var(--acc-soft2),var(--acc-soft));
+  box-shadow:0 2px 0 0 var(--acc-dd),0 0 30px -8px var(--acc-glow)}
+.o-d{font-size:12.5px;color:var(--muted);font-weight:400}
+.o-k{position:absolute;top:12px;right:12px;width:20px;height:20px;border-radius:6px;border:1px solid var(--line2);display:grid;place-items:center;font-size:12px;line-height:1;color:transparent;transition:background .2s}
+.opt[aria-pressed="true"] .o-k{background:var(--acc);border-color:var(--acc);color:var(--acc-ink)}
+.opt.shake{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.rng{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center}
+.rng output{font-family:var(--f-display);font-size:26px;color:var(--acc);min-width:6ch;text-align:right;font-variant-numeric:tabular-nums}
+.rng output small{font-family:var(--f-body);font-size:12px;color:var(--muted);margin-left:4px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:10px;border-radius:6px;background:linear-gradient(90deg,var(--acc) var(--p,30%),#141c32 var(--p,30%));border:1px solid var(--line);box-shadow:inset 0 2px 0 rgba(0,0,0,.4)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:7px;background:linear-gradient(180deg,#fff,#cfd8f0);border:0;box-shadow:0 4px 0 #6b7696,0 0 0 4px var(--acc-soft),0 8px 16px rgba(0,0,0,.6);cursor:grab}
+input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:7px;background:#e9eeff;border:0;box-shadow:0 4px 0 #6b7696,0 0 0 4px var(--acc-soft);cursor:grab}
+.rng-l{display:flex;justify-content:space-between;font-size:11.5px;color:var(--dim);font-family:var(--f-mono);grid-column:1/-1;margin-top:-8px}
+.sugs{display:flex;flex-wrap:wrap;gap:8px}
+.sug{font-size:12.5px;padding:7px 11px;border-radius:8px;border:1px dashed var(--line2);background:transparent;color:var(--muted);cursor:pointer;transition:color .2s,border-color .2s}
+.sug:hover{color:var(--fg);border-color:var(--acc)}
+.sug::before{content:"+ ";color:var(--acc)}
+.err{margin-top:20px;font-size:13.5px;color:#FF8A96;padding:10px 14px;border-radius:10px;background:rgba(255,107,122,.08);border:1px solid rgba(255,107,122,.3)}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:24px;border-top:1px dashed var(--line2);flex-wrap:wrap}
+.nav .cnt{font-family:var(--f-mono);font-size:12px;color:var(--dim)}
+
+/* engine */
+.think{display:grid;place-items:center;padding-block:60px;scroll-margin-top:80px}
+.think-box{width:min(100%,640px);text-align:left}
+.think-box h2{font-size:clamp(24px,3.4vw,36px);margin-top:12px}
+.log{list-style:none;margin:24px 0 0;padding:18px;border-radius:14px;background:rgba(3,5,10,.85);border:1px solid var(--line);font-size:12.5px;line-height:1.9;min-height:220px;color:var(--muted);overflow:hidden}
+.log li{display:flex;gap:10px;animation:in .3s ease-out}
+.log li b{color:var(--acc);font-weight:400}
+.log li.ok b{color:var(--ok)}
+@keyframes in{from{opacity:0;transform:translateY(4px)}}
+.bar{height:6px;border-radius:4px;background:#121a2e;margin-top:16px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--acc2),var(--acc));box-shadow:0 0 16px var(--acc-glow);transition:width .4s}
+
+/* result */
+.result{padding-top:36px;display:grid;gap:22px;scroll-margin-top:72px}
+.r-head{position:relative;overflow:hidden}
+.r-head .eyebrow{justify-content:space-between;flex-wrap:wrap}
+.r-for{color:var(--muted);margin-top:18px;font-size:14px}
+.r-for b{color:var(--fg)}
+.r-title{font-size:clamp(28px,4vw,46px);margin-top:8px}
+.r-title em{font-style:normal;color:var(--acc)}
+.r-sum{color:var(--muted);max-width:70ch;margin-top:14px;font-size:16px}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:26px}
+@media(min-width:760px){.tiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.tile{padding:16px;border-radius:14px;background:rgba(4,7,14,.6);border:1px solid var(--line);box-shadow:0 5px 0 0 var(--cap);min-width:0}
+.tile span{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase}
+.tile b{display:block;font-family:var(--f-display);font-size:clamp(20px,2.4vw,28px);margin-top:6px;line-height:1.1;font-variant-numeric:tabular-nums}
+.tile small{display:block;color:var(--muted);font-size:12px;margin-top:4px}
+.sec-h{display:grid;gap:6px;margin-bottom:20px}
+.sec-h h3{font-size:clamp(20px,2.4vw,27px)}
+.sec-h p:not(.eyebrow){color:var(--muted);font-size:14px;max-width:70ch}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr);gap:22px}
+@media(min-width:900px){.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.why{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.why li{display:grid;grid-template-columns:86px minmax(0,1fr);gap:12px;align-items:start;color:var(--muted);font-size:14.5px}
+.why li b{color:var(--fg);font-weight:600}
+.why .k{height:26px;padding:0 8px;border-radius:7px;display:grid;place-items:center;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;background:var(--acc-soft);color:var(--acc);font-family:var(--f-mono);font-size:12px;border:1px solid var(--line2)}
+.checks{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.checks li{position:relative;padding-left:30px;font-size:14.5px;color:var(--fg)}
+.checks li::before{content:"";position:absolute;left:0;top:3px;width:18px;height:18px;border-radius:5px;background:var(--acc-soft2);border:1px solid var(--acc)}
+.checks li::after{content:"";position:absolute;left:6px;top:7px;width:6px;height:9px;border:solid var(--acc);border-width:0 2px 2px 0;transform:rotate(45deg)}
+.checks li small{display:block;color:var(--muted);font-size:13px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:13px;padding:7px 12px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid var(--line2);color:var(--fg);box-shadow:0 3px 0 0 var(--cap)}
+.chip.acc{border-color:var(--acc);color:var(--acc)}
+.note{font-size:12.5px;color:var(--dim);margin-top:14px}
+
+/* timeline (course) */
+.days{display:grid;gap:18px}
+.day{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+@media(min-width:820px){.day{grid-template-columns:150px minmax(0,1fr);gap:22px}}
+.day-l{display:flex;flex-direction:column;gap:2px}
+@media(min-width:820px){.day-l{position:sticky;top:90px;align-self:start}}
+.day-l b{font-family:var(--f-display);font-size:24px;color:var(--acc)}
+.day-l span{font-size:12.5px;color:var(--muted)}
+.sess{display:grid;gap:12px}
+.ses{border-radius:14px;border:1px solid var(--line);background:rgba(4,7,14,.55);overflow:hidden}
+.ses-h{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 16px;background:rgba(255,255,255,.03);border-bottom:1px solid var(--line);font-family:var(--f-mono);font-size:11.5px;letter-spacing:.08em;color:var(--muted)}
+.mod{padding:16px;display:grid;gap:8px}
+.mod+.mod{border-top:1px dashed var(--line)}
+.mod h4{font-size:17px}
+.mod ul{margin:0;padding-left:18px;color:var(--muted);font-size:14px;display:grid;gap:3px}
+.lab{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;padding:10px 12px;border-radius:10px;background:var(--acc-soft);border:1px solid var(--line2);color:var(--fg)}
+.lab .mono{font-size:10.5px;letter-spacing:.12em;color:var(--acc);padding-top:2px;flex:none}
+
+/* services (automation) */
+.svcs{display:grid;gap:18px}
+.svc{display:grid;gap:16px;border-radius:16px;border:1px solid var(--line);background:rgba(4,7,14,.55);padding:clamp(16px,2.6vw,26px);box-shadow:0 6px 0 0 var(--cap)}
+.svc-h{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start}
+.svc-h h4{font-size:clamp(19px,2.2vw,24px)}
+.svc-h p{color:var(--muted);font-size:14px;margin-top:6px;max-width:68ch}
+.prio{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;padding:6px 10px;border-radius:7px;border:1px solid var(--acc);color:var(--acc);white-space:nowrap}
+.prio.p2{border-color:var(--acc2);color:var(--acc2)}
+.prio.p3{border-color:var(--line2);color:var(--muted)}
+.flow{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+@media(min-width:820px){.flow{grid-template-columns:repeat(4,minmax(0,1fr));gap:0}}
+.fs{position:relative;padding:12px 14px;border-radius:10px;background:linear-gradient(180deg,rgba(32,43,72,.7),rgba(15,21,38,.85));border:1px solid var(--line2);font-size:13px;box-shadow:0 4px 0 0 var(--cap);min-width:0}
+.fs span{display:block;font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;color:var(--acc);margin-bottom:4px}
+@media(min-width:820px){.fs{margin-right:22px}.fs:last-child{margin-right:0}.fs:not(:last-child)::after{content:"";position:absolute;right:-17px;top:50%;width:12px;height:12px;border:solid var(--acc);border-width:2px 2px 0 0;transform:translateY(-50%) rotate(45deg)}}
+.svc-b{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+@media(min-width:820px){.svc-b{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.svc-b h5{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;color:var(--dim);margin:0 0 8px;font-weight:400;text-transform:uppercase}
+.svc-b ul{margin:0;padding-left:18px;font-size:13.5px;color:var(--muted);display:grid;gap:3px}
+.svc-b p{font-size:13.5px;color:var(--fg)}
+.fit{font-size:13.5px;color:var(--muted);padding:10px 12px;border-left:2px solid var(--acc);background:var(--acc-soft);border-radius:0 8px 8px 0}
+.fit b{color:var(--fg)}
+
+.arch{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;perspective:1600px}
+@media(min-width:900px){.arch{grid-template-columns:1fr 1.4fr 1fr 1fr;align-items:stretch}}
+.lane{border-radius:14px;padding:14px;border:1px solid var(--line);background:rgba(4,7,14,.55);display:flex;flex-direction:column;gap:8px;min-width:0}
+.lane.core{border-color:var(--acc);background:linear-gradient(180deg,var(--acc-soft2),rgba(4,7,14,.6));box-shadow:0 0 50px -20px var(--acc-glow)}
+.lane h5{margin:0 0 4px;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;color:var(--dim);font-weight:400}
+.lane.core h5{color:var(--acc)}
+.node{font-size:13px;padding:9px 11px;border-radius:9px;background:rgba(255,255,255,.04);border:1px solid var(--line2);box-shadow:0 3px 0 0 var(--cap)}
+.lane.core .node{background:rgba(5,8,16,.7)}
+
+.phases{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+@media(min-width:860px){.phases{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.ph{border-radius:14px;padding:18px;border:1px solid var(--line);background:rgba(4,7,14,.55);display:grid;gap:10px;align-content:start;position:relative}
+.ph .mono{font-size:10.5px;letter-spacing:.14em;color:var(--acc)}
+.ph h4{font-size:18px}
+.ph ul{margin:0;padding-left:18px;font-size:13.5px;color:var(--muted);display:grid;gap:3px}
+.ph .tl{font-size:12px;color:var(--dim)}
+
+.howto{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:12px;counter-reset:s}
+@media(min-width:760px){.howto{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.howto li{counter-increment:s;padding:16px;border-radius:12px;border:1px solid var(--line);background:rgba(4,7,14,.5);font-size:13.5px;color:var(--muted);display:grid;gap:6px;align-content:start}
+.howto li::before{content:counter(s,decimal-leading-zero);font-family:var(--f-mono);font-size:12px;color:var(--acc)}
+.howto b{color:var(--fg);font-size:15px}
+.quote{font-size:14.5px;color:var(--fg);padding:14px 16px;border-radius:12px;background:rgba(255,255,255,.03);border:1px dashed var(--line2)}
+.quote span{display:block;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;color:var(--dim);margin-bottom:6px}
+
+/* cta */
+.cta{display:grid;grid-template-columns:minmax(0,1fr);gap:28px;border-color:var(--acc);
+  background:radial-gradient(80% 120% at 100% 0%,var(--acc-soft2),transparent 60%),var(--panel)}
+@media(min-width:900px){.cta{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);align-items:center}}
+.cta h2{font-size:clamp(26px,3.6vw,40px);margin-top:12px}
+.cta-l>p{color:var(--muted);margin-top:12px;max-width:58ch}
+.cta-steps{margin:18px 0 0;padding-left:20px;color:var(--muted);font-size:14px;display:grid;gap:4px}
+.cta-steps b{color:var(--fg)}
+.cta-r{display:grid;gap:12px}
+.idbox{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.idbox div{padding:12px 14px;border-radius:12px;background:rgba(4,7,14,.7);border:1px solid var(--line2);min-width:0}
+.idbox span{display:block;font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;color:var(--dim)}
+.idbox b{display:block;font-family:var(--f-display);font-size:20px;color:var(--fg);margin-top:2px;user-select:all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.idbox .z b{color:var(--acc)}
+.copied{font-size:12.5px;color:var(--ok);min-height:1.2em}
+#sumtxt{width:100%;min-height:140px;font:12.5px/1.5 var(--f-mono);background:rgba(4,7,14,.8);color:var(--fg);border:1px solid var(--line2);border-radius:10px;padding:12px}
+
+.foot{position:relative;z-index:2;border-top:1px solid var(--line);padding:22px 16px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;max-width:1200px;margin:0 auto;color:var(--dim);font-size:12.5px}
+.foot b{color:var(--muted)}
+@media(min-width:720px){.foot{padding:22px 28px}}
+
+.reveal{animation:rise .6s cubic-bezier(.2,.7,.2,1) both}
+@keyframes rise{from{transform:translateY(14px);opacity:.001}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+
+:root{--acc:#45E3FF;--acc-d:#1FB5D8;--acc-dd:#0A6377;--acc-ink:#021419;--acc-glow:rgba(69,227,255,.5);--acc-soft:rgba(69,227,255,.08);--acc-soft2:rgba(69,227,255,.18);--acc2:#9B8CFF;--acc2-soft:rgba(155,140,255,.18);}
+</style>
+<canvas id="bg3d" aria-hidden="true"></canvas><div class="fx" aria-hidden="true"></div>
+<header class="top"><a class="brand" href="#hero" aria-label="Drabuff AI"><img src="data:image/png;base64,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" alt="Drabuff" width="44" height="30"><span class="bn"><b>DRABUFF AI</b><small>Agency &amp; Academy</small></span></a><div class="top-r"><span class="status"><i></i><span class="st-l">AI COURSE DESIGNER · </span>ONLINE</span></div></header>
+<main id="app" class="wrap"></main>
+<footer class="foot"><span><b>Drabuff AI</b> · Đào tạo &amp; triển khai AI cho doanh nghiệp</span><span>Zalo: <b>093.404.1114</b></span></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+window.DRABUFF={brand:'Drabuff AI',zalo:'0934041114',display:'093.404.1114',webhook:''};
+/* Drabuff AI — shared data for both designers */
+window.COMMON = (function () {
+  var industries = [
+    { v: 'retail', label: 'Bán lẻ / TMĐT' },
+    { v: 'realestate', label: 'Bất động sản' },
+    { v: 'manufacturing', label: 'Sản xuất' },
+    { v: 'finance', label: 'Tài chính / Bảo hiểm' },
+    { v: 'education', label: 'Giáo dục / Đào tạo' },
+    { v: 'fnb', label: 'F&B / Dịch vụ' },
+    { v: 'health', label: 'Y tế / Thẩm mỹ' },
+    { v: 'tech', label: 'Công nghệ / Agency' },
+    { v: 'logistics', label: 'Logistics / XNK' },
+    { v: 'other', label: 'Lĩnh vực khác' }
+  ];
+  var sizes = [
+    { v: 's1', label: 'Dưới 20 người' },
+    { v: 's2', label: '20 – 50 người' },
+    { v: 's3', label: '50 – 200 người' },
+    { v: 's4', label: '200 – 500 người' },
+    { v: 's5', label: 'Trên 500 người' }
+  ];
+  // industry vocabulary used to make labs / use-cases concrete
+  var ctx = {
+    retail: { n: 'bán lẻ & thương mại điện tử', cust: 'khách mua hàng', item: 'sản phẩm', ex: ['viết mô tả 50 sản phẩm chuẩn SEO trong 15 phút', 'kịch bản trả lời inbox & chốt đơn', 'phân tích 500 đánh giá khách hàng để tìm điểm cần cải thiện'] },
+    realestate: { n: 'bất động sản', cust: 'khách mua/thuê', item: 'dự án', ex: ['viết tin đăng dự án cho 5 kênh khác nhau', 'kịch bản tư vấn & xử lý từ chối "giá cao"', 'tóm tắt pháp lý và so sánh 3 dự án cho khách'] },
+    manufacturing: { n: 'sản xuất', cust: 'đại lý & khách B2B', item: 'đơn hàng', ex: ['chuẩn hóa SOP sản xuất & hướng dẫn an toàn', 'phân tích dữ liệu lỗi sản phẩm theo ca', 'soạn báo giá & hồ sơ thầu B2B'] },
+    finance: { n: 'tài chính – bảo hiểm', cust: 'khách hàng', item: 'hợp đồng', ex: ['tóm tắt hợp đồng/điều khoản cho khách dễ hiểu', 'kịch bản tư vấn sản phẩm theo chân dung khách', 'rà soát hồ sơ và đánh dấu điểm thiếu'] },
+    education: { n: 'giáo dục – đào tạo', cust: 'phụ huynh & học viên', item: 'khóa học', ex: ['soạn giáo án, bài tập và đề kiểm tra', 'tư vấn tuyển sinh qua Zalo/Fanpage', 'cá nhân hóa nhận xét học viên'] },
+    fnb: { n: 'F&B – dịch vụ', cust: 'thực khách', item: 'món & combo', ex: ['lên lịch content món mới & khuyến mãi', 'phản hồi đánh giá Google Maps', 'phân tích doanh thu theo khung giờ'] },
+    health: { n: 'y tế – thẩm mỹ', cust: 'khách hàng/bệnh nhân', item: 'liệu trình', ex: ['tư vấn liệu trình & đặt lịch qua inbox', 'content chuyên môn đúng quy định quảng cáo', 'chăm sóc sau dịch vụ & nhắc lịch tái khám'] },
+    tech: { n: 'công nghệ – agency', cust: 'khách hàng dự án', item: 'dự án', ex: ['viết proposal & báo giá dự án', 'tự động tạo báo cáo hiệu quả cho khách', 'tài liệu hóa quy trình & kỹ thuật'] },
+    logistics: { n: 'logistics – xuất nhập khẩu', cust: 'chủ hàng', item: 'lô hàng', ex: ['trích xuất dữ liệu từ chứng từ, invoice, packing list', 'trả lời tra cứu trạng thái đơn hàng', 'soạn email giao dịch tiếng Anh với đối tác'] },
+    other: { n: 'doanh nghiệp của bạn', cust: 'khách hàng', item: 'sản phẩm/dịch vụ', ex: ['soạn văn bản, email & báo cáo', 'trả lời câu hỏi lặp lại của khách', 'tổng hợp số liệu định kỳ'] }
+  };
+  function infoStep(sub) {
+    return {
+      title: 'Hồ sơ doanh nghiệp', sub: sub,
+      qs: [
+        { id: 'company', type: 'text', label: 'Tên doanh nghiệp', req: true, half: true, ph: 'VD: Công ty TNHH Minh Phát', ac: 'organization' },
+        { id: 'contact', type: 'text', label: 'Người liên hệ', half: true, ph: 'VD: Anh Hoàng – Giám đốc', ac: 'name' },
+        { id: 'zalo', type: 'tel', label: 'Số Zalo', req: true, half: true, ph: '09xx xxx xxx', help: 'Drabuff AI chỉ dùng số này để gửi đề xuất chi tiết.' },
+        { id: 'size', type: 'single', label: 'Quy mô nhân sự', req: true, half: true, options: sizes },
+        { id: 'industry', type: 'single', label: 'Lĩnh vực hoạt động', req: true, options: industries }
+      ]
+    };
+  }
+  function label(list, v) { for (var i = 0; i < list.length; i++) if (list[i].v === v) return list[i].label; return v || ''; }
+  function labels(list, arr) { return (arr || []).map(function (v) { return label(list, v); }); }
+  return { industries: industries, sizes: sizes, ctx: ctx, infoStep: infoStep, label: label, labels: labels };
+})();
+
+/* Drabuff AI — Inhouse AI Course Designer */
+(function () {
+  var CM = window.COMMON, esc = function (s) { return window.UI.esc(s); };
+
+  var audiences = [
+    { v: 'leaders', label: 'Ban lãnh đạo', desc: 'CEO, Giám đốc, chủ doanh nghiệp' },
+    { v: 'managers', label: 'Quản lý cấp trung', desc: 'Trưởng phòng, trưởng nhóm' },
+    { v: 'sales', label: 'Sales & CSKH', desc: 'Kinh doanh, tư vấn, chăm sóc khách' },
+    { v: 'marketing', label: 'Marketing & Truyền thông', desc: 'Content, ads, thương hiệu' },
+    { v: 'hr', label: 'HR & Hành chính', desc: 'Tuyển dụng, đào tạo, văn phòng' },
+    { v: 'finance', label: 'Kế toán & Tài chính', desc: 'Số liệu, báo cáo, chứng từ' },
+    { v: 'ops', label: 'Vận hành & Kỹ thuật', desc: 'Sản xuất, kho, dự án, IT' },
+    { v: 'all', label: 'Toàn bộ nhân sự', desc: 'Phổ cập AI cho cả công ty' }
+  ];
+  var levels = [
+    { v: 'l0', label: 'Chưa dùng AI', desc: 'Đội ngũ gần như chưa tiếp xúc' },
+    { v: 'l1', label: 'Dùng tự phát', desc: 'Vài người tự dùng ChatGPT, chưa có chuẩn chung' },
+    { v: 'l2', label: 'Đã dùng ở vài phòng ban', desc: 'Có kết quả nhưng rời rạc, chưa đo được' },
+    { v: 'l3', label: 'Đã có quy trình AI', desc: 'Muốn nâng lên tự động hóa & AI Agent' }
+  ];
+  var goals = [
+    { v: 'productivity', label: 'Tăng năng suất văn phòng', desc: 'Email, văn bản, họp, tài liệu' },
+    { v: 'content', label: 'Content & Marketing', desc: 'Bài viết, hình ảnh, video, quảng cáo' },
+    { v: 'sales', label: 'Bán hàng & CSKH', desc: 'Kịch bản, chốt đơn, chăm sóc' },
+    { v: 'data', label: 'Dữ liệu & báo cáo', desc: 'Excel, dashboard, ra quyết định' },
+    { v: 'automation', label: 'Tự động hóa quy trình', desc: 'Workflow, AI Agent, không cần code' },
+    { v: 'strategy', label: 'Chiến lược AI cho lãnh đạo', desc: 'Lộ trình, ROI, quản trị rủi ro' },
+    { v: 'knowledge', label: 'Quản trị tri thức nội bộ', desc: 'Tài liệu, SOP, onboarding' }
+  ];
+  var pains = [
+    { v: 'repetitive', label: 'Mất nhiều giờ cho việc lặp lại' },
+    { v: 'generic', label: 'Dùng AI nhưng kết quả chung chung' },
+    { v: 'security', label: 'Lo ngại lộ dữ liệu khi dùng AI' },
+    { v: 'start', label: 'Không biết bắt đầu từ đâu' },
+    { v: 'nostandard', label: 'Mỗi người dùng một kiểu, không có chuẩn' },
+    { v: 'roi', label: 'Lãnh đạo chưa thấy rõ hiệu quả' }
+  ];
+  var ecos = [
+    { v: 'google', label: 'Google Workspace' },
+    { v: 'ms365', label: 'Microsoft 365' },
+    { v: 'zalo', label: 'Zalo / Facebook' },
+    { v: 'crm', label: 'CRM' },
+    { v: 'erp', label: 'ERP / MISA' },
+    { v: 'canva', label: 'Canva / Adobe' }
+  ];
+  var formats = [
+    { v: 'offline', label: 'Offline tại doanh nghiệp', desc: 'Tương tác cao, thực hành tại chỗ' },
+    { v: 'online', label: 'Online trực tuyến', desc: 'Linh hoạt cho nhiều chi nhánh' },
+    { v: 'hybrid', label: 'Kết hợp', desc: 'Offline khai giảng + online thực hành' }
+  ];
+  var durations = [
+    { v: 'd1', label: '1 ngày', desc: 'Intensive · 7 giờ' },
+    { v: 'd2', label: '2 ngày', desc: '14 giờ · cân bằng lý thuyết & thực hành' },
+    { v: 'd3', label: '3 ngày', desc: '21 giờ · chuyên sâu + dự án' },
+    { v: 'e6', label: '6 buổi tối', desc: '3 tuần · 3 giờ/buổi, không ảnh hưởng công việc' }
+  ];
+
+  /* ---- module library ---- */
+  var MOD = {
+    F1: { t: 'Nền tảng AI tạo sinh cho doanh nghiệp', tr: ['all'], it: ['AI tạo sinh hoạt động thế nào và giới hạn của nó', 'So sánh ChatGPT, Claude, Gemini, Copilot: dùng công cụ nào cho việc gì', 'Nguyên tắc dùng AI an toàn với dữ liệu công ty'], lab: 'Mỗi học viên giải 3 việc thật của mình bằng 3 công cụ AI khác nhau rồi so sánh.' },
+    F2: { t: 'Prompt Engineering thực chiến', tr: ['all'], it: ['Khung prompt 6 thành phần: Vai trò · Bối cảnh · Nhiệm vụ · Định dạng · Ví dụ · Ràng buộc', 'Kỹ thuật chia nhỏ, phản biện và tự kiểm tra kết quả', 'Biến prompt tốt thành mẫu dùng chung cho cả phòng'], lab: 'Viết lại 5 prompt "chung chung" thành prompt cho ra kết quả dùng được ngay.' },
+    F3: { t: 'Quy chế dùng AI an toàn & có trách nhiệm', tr: ['leadership', 'security'], it: ['Phân loại dữ liệu: được đưa vào AI / cần ẩn danh / cấm', 'Kiểm chứng thông tin, tránh "AI bịa"', 'Dự thảo quy chế sử dụng AI nội bộ'], lab: 'Dự thảo quy chế dùng AI 1 trang cho doanh nghiệp.' },
+    P1: { t: 'AI cho email, văn bản & cuộc họp', tr: ['productivity'], it: ['Soạn email, công văn, đề xuất theo giọng văn công ty', 'Tóm tắt tài liệu dài, biên bản họp tự động', 'NotebookLM: hỏi đáp trên bộ tài liệu nội bộ'], lab: 'Biến 1 file ghi âm cuộc họp thành biên bản + danh sách việc cần làm.' },
+    P2: { t: 'Trợ lý AI riêng cho từng vị trí', tr: ['productivity', 'automation'], it: ['Tạo Custom GPT / Claude Project / Gemini Gem theo vai trò', 'Nạp tài liệu, quy trình, giọng văn công ty', 'Chia sẻ & quản lý trợ lý trong đội'], lab: 'Mỗi nhóm build 1 trợ lý AI cho đúng vị trí của mình và dùng thử.' },
+    M1: { t: 'AI Content Engine', tr: ['marketing'], it: ['Insight khách hàng & chân dung persona bằng AI', 'Lịch nội dung 30 ngày đa kênh trong 1 buổi', 'Huấn luyện AI viết đúng giọng thương hiệu'], lab: 'Ra lịch content 30 ngày + 10 bài hoàn chỉnh cho {item} thật của công ty.' },
+    M2: { t: 'Hình ảnh & video ngắn bằng AI', tr: ['marketing'], it: ['Canva AI, tạo ảnh sản phẩm & banner', 'Kịch bản video ngắn TikTok/Reels có hook', 'Quy trình sản xuất hình ảnh hàng loạt'], lab: 'Sản xuất bộ 5 visual + 2 kịch bản video cho chiến dịch sắp tới.' },
+    M3: { t: 'AI cho quảng cáo & phân tích đối thủ', tr: ['marketing', 'sales'], it: ['Phân tích đối thủ & định vị khác biệt', 'Tạo nhiều mẫu quảng cáo để test A/B', 'Đọc số liệu quảng cáo và đề xuất tối ưu'], lab: 'Phân tích 3 đối thủ và ra 6 mẫu quảng cáo để test.' },
+    S1: { t: 'Kịch bản bán hàng & xử lý từ chối với AI', tr: ['sales'], it: ['Kịch bản tư vấn theo từng chân dung khách', 'Thư viện câu trả lời từ chối phổ biến', 'Luyện tập đóng vai với AI làm "khách khó tính"'], lab: 'Roleplay với AI: xử lý 5 tình huống từ chối thường gặp của {cust}.' },
+    S2: { t: 'AI chăm sóc khách hàng đa kênh', tr: ['sales'], it: ['Bộ mẫu trả lời Zalo/Fanpage chuẩn giọng thương hiệu', 'Phân loại & tóm tắt phản hồi khách tự động', 'Xây bộ FAQ làm nền cho chatbot'], lab: 'Xây bộ 30 câu hỏi–trả lời mẫu cho {cust}.' },
+    S3: { t: 'Chăm sóc pipeline & chấm điểm khách tiềm năng', tr: ['sales', 'data'], it: ['Phân tích dữ liệu khách từ CRM/Excel', 'Chấm điểm lead nóng – ấm – lạnh', 'Lịch chăm sóc tự động theo hành vi'], lab: 'Chấm điểm danh sách khách mẫu và lên kịch bản chăm sóc 7 ngày.' },
+    D1: { t: 'Phân tích dữ liệu Excel/Sheets bằng AI', tr: ['data'], it: ['Làm sạch dữ liệu, viết công thức, pivot bằng tiếng Việt', 'Hỏi đáp trực tiếp với bảng số liệu', 'Tìm bất thường và xu hướng'], lab: 'Phân tích file dữ liệu thật (đã ẩn danh) và rút ra 5 insight.' },
+    D2: { t: 'Báo cáo & dashboard tự động', tr: ['data', 'leadership'], it: ['Thiết kế báo cáo tuần/tháng chuẩn', 'Looker Studio / Power BI + AI viết nhận xét', 'Tự động gửi báo cáo cho lãnh đạo'], lab: 'Dựng dashboard 1 trang cho chỉ số quan trọng nhất của phòng.' },
+    A1: { t: 'Bản đồ quy trình & điểm chèn AI', tr: ['automation', 'leadership'], it: ['Vẽ lại quy trình hiện tại, tìm điểm lãng phí', 'Chọn bước nào giao cho AI, bước nào giữ người', 'Ma trận tác động – độ khó để chọn quick win'], lab: 'Vẽ bản đồ 1 quy trình thật và đánh dấu 3 điểm chèn AI.' },
+    A2: { t: 'Xây workflow tự động không cần code', tr: ['automation'], it: ['Make / n8n / Zapier: trigger – xử lý – đầu ra', 'Kết nối Form → Sheets → AI → Email/Zalo', 'Xử lý lỗi và giám sát workflow'], lab: 'Build 1 workflow chạy thật: nhận yêu cầu → AI xử lý → gửi kết quả.' },
+    A3: { t: 'AI Agent nhập môn', tr: ['automation'], it: ['Agent khác chatbot ở đâu', 'Agent đọc email, phân loại, soạn phản hồi nháp', 'Giới hạn & kiểm soát con người (human-in-the-loop)'], lab: 'Cấu hình 1 agent xử lý hộp thư chung của phòng.' },
+    H1: { t: 'AI trong tuyển dụng & nhân sự', tr: ['hr'], it: ['Viết JD hấp dẫn, sàng lọc CV theo tiêu chí', 'Bộ câu hỏi phỏng vấn theo năng lực', 'Chính sách, quy chế, thông báo nội bộ'], lab: 'Sàng lọc 20 CV mẫu và ra shortlist có giải thích.' },
+    H2: { t: 'Đào tạo nội bộ & onboarding bằng AI', tr: ['hr', 'knowledge'], it: ['Biến SOP thành tài liệu đào tạo, quiz', 'Sổ tay nhân viên mới hỏi–đáp được', 'Đo lường hiệu quả đào tạo'], lab: 'Biến 1 SOP thành bài học + bài kiểm tra 10 câu.' },
+    K1: { t: 'Kho tri thức nội bộ với AI', tr: ['knowledge'], it: ['Tổ chức tài liệu để AI hiểu được', 'Trợ lý hỏi–đáp trên tài liệu công ty', 'Phân quyền & cập nhật tri thức'], lab: 'Dựng trợ lý hỏi–đáp trên bộ tài liệu nội bộ mẫu.' },
+    L1: { t: 'Chiến lược AI & bản đồ use-case', tr: ['leadership'], it: ['AI đang thay đổi ngành {n} thế nào', 'Xác định 10 use-case và chọn 3 ưu tiên', 'Mô hình tổ chức: ai chịu trách nhiệm AI'], lab: 'Ban lãnh đạo chốt 3 use-case ưu tiên trên ma trận tác động – độ khó.' },
+    L2: { t: 'ROI & lộ trình chuyển đổi AI 90 ngày', tr: ['leadership'], it: ['Cách đo hiệu quả AI: giờ tiết kiệm, doanh thu, chất lượng', 'Ngân sách, rủi ro và cách kiểm soát', 'Lộ trình 30–60–90 ngày'], lab: 'Lập lộ trình AI 90 ngày có KPI cho từng mốc.' },
+    L3: { t: 'Lãnh đạo đội ngũ trong thời đại AI', tr: ['leadership'], it: ['Thay đổi vai trò & KPI khi có AI', 'Xây văn hóa thử nghiệm, chia sẻ prompt', 'Xử lý tâm lý "sợ AI thay thế"'], lab: 'Thiết kế chương trình "AI Champion" cho từng phòng ban.' },
+    CAP: { t: 'Capstone: dự án AI trên bài toán thật', tr: ['all'], it: ['Mỗi nhóm giải 1 bài toán thật của doanh nghiệp', 'Demo trước ban lãnh đạo, nhận phản biện', 'Cam kết hành động 30 ngày'], lab: '' }
+  };
+
+  var TRACKS = {
+    leadership: { name: 'AI Leadership', full: 'AI Leadership: Lãnh đạo & chiến lược chuyển đổi AI', mods: ['L1', 'L2', 'F3', 'L3', 'A1', 'D2'] },
+    marketing: { name: 'AI Marketing Thực Chiến', full: 'AI Marketing Thực Chiến: Content, hình ảnh & quảng cáo', mods: ['M1', 'M2', 'M3', 'P2'] },
+    sales: { name: 'AI Sales & CSKH', full: 'AI Sales & CSKH: Bán nhanh hơn, chăm sóc sâu hơn', mods: ['S1', 'S2', 'S3', 'M3', 'P2'] },
+    data: { name: 'AI Data & Báo cáo', full: 'AI Data & Báo cáo: Ra quyết định từ dữ liệu', mods: ['D1', 'D2', 'S3', 'P1'] },
+    automation: { name: 'AI Workflow', full: 'AI Workflow: Tự động hóa quy trình không cần code', mods: ['A1', 'A2', 'P2', 'A3'] },
+    hr: { name: 'AI cho HR & Back-office', full: 'AI cho HR & Back-office: Tuyển dụng, đào tạo, vận hành', mods: ['H1', 'H2', 'P1', 'K1'] },
+    productivity: { name: 'AI Productivity', full: 'AI Productivity: Nâng cấp năng suất toàn đội ngũ', mods: ['P1', 'P2', 'D1', 'K1'] }
+  };
+  var AUD2T = { leaders: { leadership: 4 }, managers: { leadership: 1, productivity: 2, data: 1 }, sales: { sales: 4 }, marketing: { marketing: 4 }, hr: { hr: 4 }, finance: { data: 4 }, ops: { automation: 3, data: 1 }, all: { productivity: 4 } };
+  var GOAL2T = { productivity: 'productivity', content: 'marketing', sales: 'sales', data: 'data', automation: 'automation', strategy: 'leadership', knowledge: 'hr' };
+  var GOAL2M = { productivity: ['P1', 'P2'], content: ['M1', 'M2'], sales: ['S1', 'S2'], data: ['D1', 'D2'], automation: ['A1', 'A2'], strategy: ['L1', 'L2'], knowledge: ['K1', 'H2'] };
+  var KPI = {
+    productivity: 'Tiết kiệm 4–8 giờ/người/tuần cho tác vụ văn bản & tài liệu',
+    content: 'Rút ngắn 60–70% thời gian sản xuất một bài content',
+    sales: 'Phản hồi khách nhanh gấp 2–3 lần với kịch bản chuẩn hóa',
+    data: 'Giảm khoảng 50% thời gian lập báo cáo định kỳ',
+    automation: 'Đưa 2–3 quy trình vào chạy tự động trong 30 ngày sau khóa',
+    strategy: 'Có lộ trình AI 90 ngày được ban lãnh đạo thông qua',
+    knowledge: 'Nhân viên mới tự tra cứu được 70% câu hỏi thường gặp'
+  };
+  var SLOTS = { d1: [['Ngày 1', 'Sáng'], ['Ngày 1', 'Chiều']], d2: [['Ngày 1', 'Sáng'], ['Ngày 1', 'Chiều'], ['Ngày 2', 'Sáng'], ['Ngày 2', 'Chiều']], d3: [['Ngày 1', 'Sáng'], ['Ngày 1', 'Chiều'], ['Ngày 2', 'Sáng'], ['Ngày 2', 'Chiều'], ['Ngày 3', 'Sáng'], ['Ngày 3', 'Chiều']], e6: [['Tuần 1', 'Buổi 1'], ['Tuần 1', 'Buổi 2'], ['Tuần 2', 'Buổi 3'], ['Tuần 2', 'Buổi 4'], ['Tuần 3', 'Buổi 5'], ['Tuần 3', 'Buổi 6']] };
+  var PER = { d1: 2, d2: 2, d3: 2, e6: 1 }; // modules per session
+  var HOURS = { d1: 7, d2: 14, d3: 21, e6: 18 };
+  var TIME = { 'Sáng': '08:30 – 12:00', 'Chiều': '13:30 – 17:00' };
+
+  function fill(s, c) { return s.replace('{item}', c.item).replace('{cust}', c.cust).replace('{n}', c.n); }
+
+  function build(A) {
+    var c = CM.ctx[A.industry] || CM.ctx.other;
+    var aud = A.audience || [], gl = A.goals || [], pn = A.pains || [], eco = A.eco || [];
+    // score tracks
+    var sc = {}; Object.keys(TRACKS).forEach(function (k) { sc[k] = 0; });
+    aud.forEach(function (a) { var m = AUD2T[a] || {}; for (var k in m) sc[k] += m[k]; });
+    gl.forEach(function (g, i) { sc[GOAL2T[g]] += 3 - i * 0.5; });
+    var order = Object.keys(sc).sort(function (a, b) { return sc[b] - sc[a]; });
+    var main = order[0], second = sc[order[1]] > 0 ? order[1] : null;
+    if (sc[main] === 0) main = 'productivity';
+
+    var lvl = A.level || 'l1', dur = A.duration || 'd2';
+    var slots = SLOTS[dur], cap = slots.length * PER[dur];
+    var pick = [];
+    var add = function (id) { if (pick.indexOf(id) < 0 && pick.length < cap - 1) pick.push(id); };
+    if (lvl === 'l0' || lvl === 'l1') add('F1');
+    add('F2');
+    if (main === 'leadership' || pn.indexOf('security') > -1 || aud.indexOf('leaders') > -1) { if (cap >= 6) add('F3'); }
+    gl.forEach(function (g) { add(GOAL2M[g][0]); });
+    TRACKS[main].mods.forEach(add);
+    gl.forEach(function (g) { add(GOAL2M[g][1]); });
+    if (second) TRACKS[second].mods.forEach(add);
+    if (lvl === 'l3') { add('A2'); add('A3'); }
+    ['P2', 'P1', 'A1', 'D1', 'F3'].forEach(add);
+    if (lvl === 'l3') pick = pick.filter(function (x) { return x !== 'F1'; });
+    pick.push('CAP');
+
+    // sessions
+    var sessions = slots.map(function (s) { return { day: s[0], part: s[1], mods: [] }; });
+    pick.forEach(function (id, i) { var si = Math.min(sessions.length - 1, Math.floor(i / PER[dur])); sessions[si].mods.push(id); });
+    sessions = sessions.filter(function (s) { return s.mods.length; });
+    return { c: c, main: main, second: second, sessions: sessions, pick: pick, lvl: lvl, dur: dur };
+  }
+
+  function tools(A, main) {
+    var t = ['ChatGPT', 'Claude', 'Gemini'], e = A.eco || [], g = A.goals || [];
+    if (e.indexOf('ms365') > -1) t.push('Microsoft Copilot');
+    if (e.indexOf('google') > -1 || g.indexOf('knowledge') > -1) t.push('NotebookLM');
+    if (g.indexOf('content') > -1 || main === 'marketing' || e.indexOf('canva') > -1) t.push('Canva AI', 'CapCut');
+    if (g.indexOf('automation') > -1 || main === 'automation' || A.level === 'l3') t.push('Make', 'n8n');
+    if (g.indexOf('data') > -1 || main === 'data') t.push(e.indexOf('ms365') > -1 ? 'Excel + Copilot' : 'Google Sheets + Gemini', e.indexOf('ms365') > -1 ? 'Power BI' : 'Looker Studio');
+    if (e.indexOf('zalo') > -1 && (main === 'sales' || g.indexOf('sales') > -1)) t.push('Zalo OA');
+    if (e.indexOf('crm') > -1) t.push('CRM + AI');
+    return t.filter(function (x, i) { return t.indexOf(x) === i; });
+  }
+
+  window.PAGE = {
+    id: 'course', codePrefix: 'DRB-AC',
+    kicker: 'DRABUFF AI · THIẾT KẾ KHÓA HỌC INHOUSE',
+    title: 'Khóa học AI <em>may đo</em> cho đội ngũ của bạn',
+    lead: 'Trả lời 5 khối câu hỏi trong khoảng 3 phút. Drabuff AI sẽ thiết kế một <b>chương trình đào tạo AI Inhouse</b> riêng cho doanh nghiệp: chủ đề, nội dung từng buổi, bài thực hành theo đúng ngành, công cụ sử dụng và kết quả đội ngũ đạt được.',
+    startLabel: 'Bắt đầu thiết kế khóa học', finishLabel: 'Thiết kế khóa học',
+    hint: '5 KHỐI · ~3 PHÚT · MIỄN PHÍ',
+    facts: [['5 khối', 'câu hỏi trắc nghiệm & trả lời ngắn'], ['Theo buổi', 'lịch học chi tiết từng ngày'], ['100%', 'thực hành trên bài toán thật']],
+    sample:
+      '<div class="sm-card"><div class="sm-tag"><span>Ví dụ đề xuất</span><span>DRB-AC-7K2F</span></div>' +
+      '<div class="sm-title">AI Marketing Thực Chiến cho chuỗi bán lẻ</div>' +
+      '<div class="sm-meta"><span>2 ngày · 14 giờ</span><span>24 học viên</span><span>Kết hợp</span></div>' +
+      '<div class="sm-rows">' +
+        '<div class="sm-row"><b>N1·SÁNG</b><span class="sm-bar" style="width:92%">Prompt Engineering thực chiến</span></div>' +
+        '<div class="sm-row"><b>N1·CHIỀU</b><span class="sm-bar" style="width:80%">AI Content Engine</span></div>' +
+        '<div class="sm-row"><b>N2·SÁNG</b><span class="sm-bar" style="width:86%">Hình ảnh & video ngắn bằng AI</span></div>' +
+        '<div class="sm-row"><b>N2·CHIỀU</b><span class="sm-bar" style="width:70%">Capstone: dự án thật</span></div>' +
+      '</div></div>' +
+      '<div class="sm-float f1"><b>-65%</b><small>thời gian làm content</small></div>' +
+      '<div class="sm-float f2"><span class="sm-chip"><i></i>Bàn giao: 50+ prompt mẫu</span></div>',
+    thinkTitle: 'Đang thiết kế chương trình đào tạo cho bạn',
+    steps: [
+      CM.infoStep('Thông tin để Drabuff AI gửi đề xuất và hiểu bối cảnh ngành của bạn.'),
+      { title: 'Đội ngũ học viên', sub: 'Ai sẽ tham gia khóa học và họ đang ở đâu trên hành trình AI?', qs: [
+        { id: 'audience', type: 'multi', label: 'Nhóm học viên tham gia', req: true, max: 3, exclusive: ['all'], options: audiences },
+        { id: 'level', type: 'single', label: 'Mức độ sử dụng AI hiện tại', req: true, wide: true, options: levels },
+        { id: 'learners', type: 'range', label: 'Số lượng học viên dự kiến', min: 5, max: 200, step: 5, def: 30, unit: 'người', plus: true }
+      ] },
+      { title: 'Mục tiêu & vấn đề', sub: 'Sau khóa học, doanh nghiệp muốn thay đổi điều gì?', qs: [
+        { id: 'goals', type: 'multi', label: 'Mục tiêu ưu tiên', req: true, max: 3, help: 'Chọn theo thứ tự quan trọng, mục chọn trước được ưu tiên hơn.', options: goals },
+        { id: 'pains', type: 'multi', label: 'Vấn đề đang gặp', options: pains }
+      ] },
+      { title: 'Hình thức tổ chức', sub: 'Để lịch học và công cụ thực hành khớp với hệ thống bạn đang dùng.', qs: [
+        { id: 'eco', type: 'multi', label: 'Công cụ doanh nghiệp đang dùng', options: ecos },
+        { id: 'format', type: 'single', label: 'Hình thức học', req: true, options: formats },
+        { id: 'duration', type: 'single', label: 'Thời lượng mong muốn', req: true, options: durations }
+      ] },
+      { title: 'Bài toán thực tế', sub: 'Hai câu trả lời ngắn giúp Drabuff AI đưa đúng bài toán của bạn vào phần thực hành.', qs: [
+        { id: 'task', type: 'textarea', label: 'Việc lặp đi lặp lại tốn thời gian nhất của đội bạn là gì?', req: true, ph: 'VD: Mỗi tuần mất 2 ngày tổng hợp báo cáo bán hàng từ 5 chi nhánh…', sugs: ['Viết content & bài đăng hằng ngày', 'Trả lời tin nhắn khách lặp lại', 'Tổng hợp báo cáo tuần', 'Soạn báo giá & hợp đồng'] },
+        { id: 'expect', type: 'textarea', label: 'Sau khóa học, bạn muốn đội ngũ làm được gì ngay?', ph: 'VD: Mỗi nhân viên tự build được trợ lý AI cho công việc của mình…', sugs: ['Tự viết prompt ra kết quả dùng được', 'Có bộ quy trình AI chuẩn cho từng phòng', 'Tự động hóa ít nhất 1 quy trình'] }
+      ] }
+    ],
+    logs: function (A) {
+      var c = CM.ctx[A.industry] || CM.ctx.other;
+      return [
+        'Nạp hồ sơ: ' + esc(A.company) + ' · ngành ' + c.n,
+        'Phân tích ' + (A.audience || []).length + ' nhóm học viên · mức AI: ' + CM.label(levels, A.level),
+        'Đối chiếu ' + (A.goals || []).length + ' mục tiêu với ' + Object.keys(MOD).length + ' module trong thư viện Drabuff AI',
+        'Chọn lộ trình chính & sắp xếp theo độ khó tăng dần',
+        'Gắn bài toán thực tế vào phần Capstone',
+        'Ghép công cụ thực hành theo hệ sinh thái ' + (CM.labels(ecos, A.eco).join(', ') || 'phổ thông'),
+        'Ước tính kết quả & tài sản bàn giao',
+        'Hoàn tất đề xuất khóa học'
+      ];
+    },
+    generate: function (A, code) {
+      var B = build(A), c = B.c, T = TRACKS[B.main];
+      var nLearn = Number(A.learners || 30), classes = nLearn > 40 ? Math.ceil(nLearn / 35) : 1;
+      var groups = Math.max(1, Math.round(Math.min(nLearn, 35) / 5));
+      var lvLabel = { l0: 'Nền tảng → Ứng dụng', l1: 'Nền tảng → Ứng dụng', l2: 'Ứng dụng', l3: 'Nâng cao' }[B.lvl];
+      var audL = CM.labels(audiences, A.audience), goalL = CM.labels(goals, A.goals);
+      var title = T.full + (B.second && B.second !== B.main && B.sessions.length > 2 ? ' × ' + TRACKS[B.second].name : '');
+      var tl = tools(A, B.main);
+
+      var why = [
+        ['Học viên', 'Thiết kế cho <b>' + audL.join(', ') + '</b> ở mức <b>' + CM.label(levels, A.level).toLowerCase() + '</b>, nên khóa học bắt đầu ở cấp độ ' + lvLabel.toLowerCase() + '.'],
+        ['Mục tiêu', 'Ưu tiên <b>' + goalL.join(', ').toLowerCase() + '</b>; các module được chọn để mỗi buổi học tạo ra một sản phẩm dùng được ngay.'],
+        ['Ngành', 'Ví dụ và bài tập lấy từ ngành <b>' + c.n + '</b>: ' + c.ex.slice(0, 2).join('; ') + '.']
+      ];
+      if ((A.pains || []).indexOf('security') > -1) why.push(['Bảo mật', 'Có phần <b>quy chế dùng AI an toàn</b> vì bạn lo ngại lộ dữ liệu.']);
+
+      // timeline
+      var days = {}, dayOrder = [];
+      B.sessions.forEach(function (s) { if (!days[s.day]) { days[s.day] = []; dayOrder.push(s.day); } days[s.day].push(s); });
+      var labIdx = 0;
+      var tlHTML = dayOrder.map(function (d) {
+        var ss = days[d];
+        return '<div class="day"><div class="day-l"><b>' + d + '</b><span>' + ss.length + ' buổi · ' + ss.reduce(function (n, s) { return n + s.mods.length; }, 0) + ' module</span></div><div class="sess">' +
+          ss.map(function (s) {
+            var time = B.dur === 'e6' ? '19:00 – 22:00' : TIME[s.part];
+            return '<div class="ses"><div class="ses-h"><span>' + s.part.toUpperCase() + '</span><span>' + time + '</span></div>' +
+              s.mods.map(function (id) {
+                var m = MOD[id], lab;
+                if (id === 'CAP') lab = 'Bài toán của bạn: “' + esc((A.task || '').slice(0, 180)) + '”. Các nhóm dùng AI giải quyết và demo kết quả.';
+                else lab = fill(m.lab, c);
+                labIdx++;
+                return '<div class="mod"><h4>' + fill(m.t, c) + '</h4><ul>' + m.it.map(function (x) { return '<li>' + fill(x, c) + '</li>'; }).join('') + '</ul>' +
+                  '<div class="lab"><span class="mono">THỰC HÀNH</span><span>' + lab + '</span></div></div>';
+              }).join('') + '</div>';
+          }).join('') + '</div></div>';
+      }).join('');
+
+      var outcomes = [];
+      outcomes.push(['Viết prompt ra kết quả dùng được ngay', 'Mỗi học viên làm chủ khung prompt 6 thành phần và thư viện prompt của phòng.']);
+      if (B.pick.indexOf('P2') > -1) outcomes.push(['Có trợ lý AI riêng cho vị trí của mình', 'Trợ lý được nạp sẵn quy trình & giọng văn công ty.']);
+      (A.goals || []).forEach(function (g) {
+        var map = { productivity: ['Xử lý email, văn bản, biên bản họp nhanh gấp 3 lần', ''], content: ['Tự sản xuất lịch content 30 ngày cho ' + c.item, ''], sales: ['Bộ kịch bản tư vấn & chăm sóc ' + c.cust + ' chuẩn hóa', ''], data: ['Tự phân tích số liệu & dựng báo cáo không cần IT', ''], automation: ['Tự build workflow AI tự động cho phòng ban', ''], strategy: ['Lãnh đạo chốt được 3 use-case AI và lộ trình 90 ngày', ''], knowledge: ['Kho tri thức nội bộ hỏi–đáp được bằng AI', ''] };
+        if (map[g]) outcomes.push([map[g][0], '']);
+      });
+      if (A.expect) outcomes.push(['Kỳ vọng của bạn: “' + esc(A.expect.slice(0, 140)) + '”', 'Được đưa vào tiêu chí nghiệm thu khóa học.']);
+      var kpis = (A.goals || []).map(function (g) { return KPI[g]; });
+
+      var assets = [
+        ['Thư viện 50+ prompt mẫu', 'Riêng cho ngành ' + c.n + ', chia theo phòng ban'],
+        ['Slide, tài liệu & video ghi hình', 'Học viên xem lại bất cứ lúc nào'],
+        ['Bài kiểm tra đầu vào – đầu ra', 'Đo mức tiến bộ của từng học viên'],
+        ['Chứng nhận hoàn thành', 'Cấp bởi Drabuff AI'],
+        ['Đồng hành 30 ngày sau khóa', 'Nhóm Zalo hỏi đáp & review sản phẩm AI']
+      ];
+      if (B.pick.indexOf('F3') > -1) assets.splice(1, 0, ['Mẫu quy chế sử dụng AI nội bộ', 'Sẵn sàng ban hành']);
+      if (B.pick.indexOf('P2') > -1) assets.splice(1, 0, ['Bộ trợ lý AI theo vị trí', 'Build ngay trong lớp, dùng tiếp sau khóa']);
+
+      var html =
+        '<section class="panel r-head reveal">' +
+          '<p class="eyebrow"><span><span class="dot" style="display:inline-block;margin-right:10px"></span>ĐỀ XUẤT KHÓA HỌC AI INHOUSE</span><span class="mono">' + code + '</span></p>' +
+          '<p class="r-for">Thiết kế riêng cho <b>' + esc(A.company) + '</b>' + (A.contact ? ' · ' + esc(A.contact) : '') + ' · ' + CM.label(CM.industries, A.industry) + ' · ' + CM.label(CM.sizes, A.size) + '</p>' +
+          '<h2 class="r-title">' + title.replace(':', ':<br><em>').replace(/$/, '</em>') + '</h2>' +
+          '<p class="r-sum">Chương trình ' + HOURS[B.dur] + ' giờ, ' + B.sessions.length + ' buổi, ' + B.pick.length + ' module. Học viên học xong buổi nào áp dụng ngay buổi đó vào công việc thật của ' + esc(A.company) + ', và kết thúc bằng một dự án AI giải quyết chính bài toán bạn đã mô tả.</p>' +
+          '<div class="tiles">' +
+            '<div class="tile"><span>Thời lượng</span><b>' + CM.label(durations, B.dur) + '</b><small>' + HOURS[B.dur] + ' giờ học</small></div>' +
+            '<div class="tile"><span>Hình thức</span><b>' + CM.label(formats, A.format).replace(' tại doanh nghiệp', '').replace(' trực tuyến', '') + '</b><small>' + (A.format === 'online' ? 'Zoom/Meet + phòng thực hành' : 'Tại văn phòng doanh nghiệp') + '</small></div>' +
+            '<div class="tile"><span>Học viên</span><b>' + (nLearn >= 200 ? '200+' : nLearn) + ' người</b><small>' + (classes > 1 ? classes + ' lớp · ' : '') + '~' + groups + ' nhóm thực hành/lớp</small></div>' +
+            '<div class="tile"><span>Cấp độ</span><b>' + lvLabel + '</b><small>' + B.pick.length + ' module</small></div>' +
+          '</div>' +
+        '</section>' +
+        '<div class="grid2">' +
+          '<section class="panel reveal"><div class="sec-h"><p class="eyebrow">VÌ SAO LÀ KHÓA NÀY</p><h3>Được thiết kế từ chính câu trả lời của bạn</h3></div>' +
+            '<ul class="why">' + why.map(function (w, i) { return '<li><span class="k">' + w[0] + '</span><span>' + w[1] + '</span></li>'; }).join('') + '</ul></section>' +
+          '<section class="panel reveal"><div class="sec-h"><p class="eyebrow">HỌC VIÊN ĐẠT ĐƯỢC</p><h3>Kết quả sau khóa học</h3></div>' +
+            '<ul class="checks">' + outcomes.map(function (o) { return '<li>' + o[0] + (o[1] ? '<small>' + o[1] + '</small>' : '') + '</li>'; }).join('') + '</ul></section>' +
+        '</div>' +
+        '<section class="panel reveal"><div class="sec-h"><p class="eyebrow">NỘI DUNG CHI TIẾT</p><h3>Lộ trình học theo từng buổi</h3><p>Mỗi module gồm phần hướng dẫn ngắn và bài thực hành trên dữ liệu, tình huống của ngành ' + c.n + '.</p></div>' +
+          '<div class="days">' + tlHTML + '</div></section>' +
+        '<div class="grid2">' +
+          '<section class="panel reveal"><div class="sec-h"><p class="eyebrow">CHỈ SỐ MỤC TIÊU</p><h3>Đo hiệu quả sau 30 ngày</h3><p>Mức tham khảo từ các doanh nghiệp cùng quy mô. Con số cụ thể sẽ được chốt sau buổi khảo sát.</p></div>' +
+            '<ul class="checks">' + kpis.map(function (k) { return '<li>' + k + '</li>'; }).join('') + '</ul>' +
+            '<div class="sec-h" style="margin:26px 0 12px"><p class="eyebrow">CÔNG CỤ THỰC HÀNH</p></div><div class="chips">' + tl.map(function (t, i) { return '<span class="chip' + (i < 3 ? ' acc' : '') + '">' + t + '</span>'; }).join('') + '</div></section>' +
+          '<section class="panel reveal"><div class="sec-h"><p class="eyebrow">TÀI SẢN BÀN GIAO</p><h3>Doanh nghiệp nhận được</h3></div>' +
+            '<ul class="checks">' + assets.map(function (a) { return '<li>' + a[0] + '<small>' + a[1] + '</small></li>'; }).join('') + '</ul></section>' +
+        '</div>' +
+        '<section class="panel reveal"><div class="sec-h"><p class="eyebrow">CÁCH DRABUFF AI TRIỂN KHAI</p><h3>Từ đề xuất đến lớp học</h3></div>' +
+          '<ol class="howto"><li><b>Khảo sát sâu</b>Phỏng vấn quản lý và kiểm tra đầu vào học viên.</li><li><b>May đo giáo trình</b>Đưa quy trình, dữ liệu mẫu (đã ẩn danh) của doanh nghiệp vào bài tập.</li><li><b>Đào tạo thực chiến</b>Học đi đôi với làm, mỗi buổi ra một sản phẩm.</li><li><b>Đồng hành 30 ngày</b>Review kết quả áp dụng và đo chỉ số sau khóa.</li></ol></section>';
+
+      var sum = [
+        '[' + code + '] ĐỀ XUẤT KHÓA HỌC AI INHOUSE · DRABUFF AI',
+        'Doanh nghiệp: ' + A.company + (A.contact ? ' · ' + A.contact : '') + ' · Zalo: ' + A.zalo,
+        'Ngành: ' + CM.label(CM.industries, A.industry) + ' · Quy mô: ' + CM.label(CM.sizes, A.size),
+        'Khóa học: ' + title,
+        'Thời lượng: ' + CM.label(durations, B.dur) + ' (' + HOURS[B.dur] + ' giờ) · ' + CM.label(formats, A.format) + ' · ' + nLearn + ' học viên',
+        'Học viên: ' + audL.join(', ') + ' · Mức AI: ' + CM.label(levels, A.level),
+        'Mục tiêu: ' + goalL.join(', '),
+        'Module: ' + B.pick.map(function (id) { return fill(MOD[id].t, c); }).join(' | '),
+        'Bài toán thực tế: ' + (A.task || ''),
+        A.expect ? 'Kỳ vọng: ' + A.expect : ''
+      ].filter(Boolean).join('\n');
+      return { code: code, html: html, summary: sum };
+    },
+    cta: {
+      title: 'Trao đổi cùng chuyên gia Drabuff AI để chốt giáo trình',
+      text: 'Đề xuất này là bản phác thảo đầu tiên. Trong buổi trao đổi, Drabuff AI sẽ đi sâu vào quy trình thực tế, điều chỉnh nội dung từng buổi và gửi kế hoạch đào tạo hoàn chỉnh.',
+      next: 'tư vấn chi tiết và hoàn thiện giáo trình'
+    }
+  };
+})();
+
+/* Drabuff AI — interactive voxel field + assembling AI core (Three.js r128) */
+(function () {
+  var api = { setProgress: function () {}, setMode: function () {} };
+  window.Scene3D = api;
+  var cv = document.getElementById('bg3d');
+  if (!window.THREE || !cv) { document.documentElement.classList.add('no3d'); return; }
+  var renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true, powerPreference: 'high-performance' });
+  } catch (e) { document.documentElement.classList.add('no3d'); cv.style.display = 'none'; return; }
+
+  var css = getComputedStyle(document.documentElement);
+  var ACC = new THREE.Color((css.getPropertyValue('--acc') || '#45E3FF').trim());
+  var ACC2 = new THREE.Color((css.getPropertyValue('--acc2') || '#9B8CFF').trim());
+  var BG = new THREE.Color('#05070D');
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var small = Math.min(innerWidth, innerHeight) < 700;
+
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, small ? 1.5 : 1.75));
+  renderer.setClearColor(BG, 1);
+  var scene = new THREE.Scene();
+  scene.fog = new THREE.Fog(BG, 20, 56);
+  var cam = new THREE.PerspectiveCamera(42, 1, 0.1, 200);
+
+  scene.add(new THREE.AmbientLight(0x5a6aa0, 0.6));
+  var key = new THREE.DirectionalLight(0xffffff, 0.65); key.position.set(-12, 22, 14); scene.add(key);
+  var glow = new THREE.PointLight(ACC, 2.4, 22, 2); scene.add(glow);
+  var rim = new THREE.PointLight(ACC2, 2.2, 46, 2); rim.position.set(12, 10, -12); scene.add(rim);
+
+  /* ---- voxel floor ---- */
+  var COLS = small ? 20 : 38, ROWS = small ? 22 : 24, SP = 1.1;
+  var geo = new THREE.BoxGeometry(0.94, 1, 0.94); geo.translate(0, 0.5, 0);
+  var mat = new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.4, roughness: 0.38 });
+  var N = COLS * ROWS;
+  var floor = new THREE.InstancedMesh(geo, mat, N);
+  floor.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+  var base = new THREE.Color('#0D1426'), hot = new THREE.Color(), tmp = new THREE.Color();
+  var dummy = new THREE.Object3D();
+  var X = new Float32Array(N), Z = new Float32Array(N), R = new Float32Array(N);
+  for (var r = 0, i = 0; r < ROWS; r++) for (var c = 0; c < COLS; c++, i++) {
+    X[i] = (c - (COLS - 1) / 2) * SP; Z[i] = (r - (ROWS - 1) / 2) * SP - 4; R[i] = Math.random();
+    floor.setColorAt(i, base);
+  }
+  scene.add(floor);
+
+  /* ---- AI core: 3x3x3 blocks ---- */
+  var core = new THREE.Group(); scene.add(core);
+  var cubes = [];
+  var cgeo = new THREE.BoxGeometry(0.86, 0.86, 0.86);
+  var egeo = new THREE.EdgesGeometry(cgeo);
+  for (var a = -1; a <= 1; a++) for (var b = -1; b <= 1; b++) for (var d = -1; d <= 1; d++) {
+    var m = new THREE.MeshStandardMaterial({ color: 0x121a30, metalness: 0.55, roughness: 0.3, emissive: 0x000000 });
+    var mesh = new THREE.Mesh(cgeo, m);
+    var edge = new THREE.LineSegments(egeo, new THREE.LineBasicMaterial({ color: ACC, transparent: true, opacity: 0.35 }));
+    mesh.add(edge);
+    mesh.userData = { home: new THREE.Vector3(a, b, d), seed: Math.random(), lit: 0, edge: edge };
+    core.add(mesh); cubes.push(mesh);
+  }
+  cubes.sort(function (p, q) { return p.userData.seed - q.userData.seed; });
+
+  var state = { mode: 'idle', progress: 0.15, explode: 0.35, spin: 0.25 };
+  api.setProgress = function (p) { state.progress = Math.max(0, Math.min(1, p)); };
+  api.setMode = function (m) { state.mode = m; if (m === 'done') state.progress = 1; };
+
+  /* ---- pointer ---- */
+  var ndc = new THREE.Vector2(0, 0), hasPtr = false;
+  var ray = new THREE.Raycaster(), plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+  var hit = new THREE.Vector3(), target = new THREE.Vector3(0, 0, 0), ptr = new THREE.Vector3(0, 0, 0);
+  window.addEventListener('pointermove', function (e) {
+    ndc.x = (e.clientX / innerWidth) * 2 - 1; ndc.y = -(e.clientY / innerHeight) * 2 + 1; hasPtr = true;
+  }, { passive: true });
+  var burst = 0;
+  api.burst = function () { burst = 1; };
+  window.addEventListener('pointerdown', function () { burst = 1; }, { passive: true });
+
+  function resize() {
+    var w = innerWidth, h = innerHeight;
+    renderer.setSize(w, h, false); cam.aspect = w / h;
+    cam.fov = w < 700 ? 58 : 42; cam.updateProjectionMatrix();
+    core.position.set(w < 980 ? 0 : 6.5, 5.2, -6);
+  }
+  resize(); window.addEventListener('resize', resize);
+
+  var clock = 0, last = performance.now(), running = true;
+  document.addEventListener('visibilitychange', function () { running = !document.hidden; if (running) { last = performance.now(); requestAnimationFrame(frame); } });
+
+  function frame(now) {
+    if (!running) return;
+    var dt = Math.min(0.05, (now - last) / 1000); last = now;
+    clock += dt * (reduce ? 0.2 : 1);
+    var t = clock, thinking = state.mode === 'thinking', done = state.mode === 'done';
+
+    // camera with scroll + pointer parallax
+    var sy = Math.min(1, (window.scrollY || 0) / 900);
+    cam.position.x += ((ndc.x * 1.6) - cam.position.x) * 0.04;
+    cam.position.y += ((13 - sy * 3.5 + ndc.y * 0.8) - cam.position.y) * 0.05;
+    cam.position.z = 22;
+    cam.lookAt(0, 1.5 - sy * 2, -6);
+
+    // pointer target on floor
+    if (hasPtr) {
+      ray.setFromCamera(ndc, cam);
+      if (ray.ray.intersectPlane(plane, hit)) target.copy(hit);
+    } else {
+      target.set(Math.sin(t * 0.35) * 10, 0, Math.cos(t * 0.27) * 5 - 4);
+    }
+    ptr.lerp(target, 0.12);
+    glow.position.set(ptr.x, 3.2, ptr.z);
+    burst *= 0.94;
+
+    var speed = thinking ? 3.2 : 1;
+    for (var i = 0; i < N; i++) {
+      var dx = X[i] - ptr.x, dz = Z[i] - ptr.z, d2 = dx * dx + dz * dz;
+      var bump = Math.exp(-d2 / 9);
+      var ring = burst > 0.02 ? Math.exp(-Math.pow(Math.sqrt(d2) - (1 - burst) * 16, 2) / 3) * burst : 0;
+      var wave = 0.35 + 0.28 * Math.sin(X[i] * 0.33 + t * 1.1 * speed) + 0.22 * Math.cos(Z[i] * 0.41 + t * 0.8 * speed);
+      var h = Math.max(0.12, wave + bump * 3.4 + ring * 2.2 + (thinking ? 0.9 * Math.max(0, Math.sin(t * 7 + R[i] * 12)) * R[i] : 0));
+      dummy.position.set(X[i], -1.4, Z[i]); dummy.scale.set(1, h, 1); dummy.updateMatrix();
+      floor.setMatrixAt(i, dummy.matrix);
+      var heat = Math.min(1, bump * 0.95 + ring * 0.8 + (thinking ? R[i] * 0.25 * Math.max(0, Math.sin(t * 5 + R[i] * 9)) : 0));
+      hot.copy(ACC).lerp(ACC2, Math.max(0, Math.min(1, (X[i] + 20) / 40)));
+      tmp.copy(base).lerp(hot, heat);
+      floor.setColorAt(i, tmp);
+    }
+    floor.instanceMatrix.needsUpdate = true;
+    if (floor.instanceColor) floor.instanceColor.needsUpdate = true;
+
+    // core
+    var exT = thinking ? 0.55 + 0.45 * Math.sin(t * 4) : done ? 0.06 : 0.3 + 0.08 * Math.sin(t * 1.2);
+    state.explode += (exT - state.explode) * 0.08;
+    var spT = thinking ? 2.4 : done ? 0.45 : 0.22;
+    state.spin += (spT - state.spin) * 0.05;
+    core.rotation.y += dt * state.spin * (reduce ? 0.2 : 1);
+    core.rotation.x = 0.45 + Math.sin(t * 0.4) * 0.12 + ndc.y * 0.15;
+    core.rotation.z = 0.2 + ndc.x * 0.12;
+    core.position.y = 5.2 + Math.sin(t * 0.9) * 0.35;
+    var litN = Math.round(state.progress * cubes.length);
+    for (var k = 0; k < cubes.length; k++) {
+      var cu = cubes[k], u = cu.userData, s = 1 + state.explode;
+      cu.position.set(u.home.x * s, u.home.y * s, u.home.z * s);
+      var want = k < litN ? 1 : (thinking && Math.sin(t * 9 + u.seed * 30) > 0.6 ? 0.6 : 0);
+      u.lit += (want - u.lit) * 0.1;
+      cu.material.emissive.copy(ACC).multiplyScalar(u.lit * 0.85);
+      u.edge.material.opacity = 0.25 + u.lit * 0.6;
+      cu.rotation.set(0, 0, 0);
+      if (thinking) cu.rotation.y = Math.sin(t * 3 + u.seed * 6) * 0.5;
+    }
+
+    renderer.render(scene, cam);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+
+/* Drabuff AI — wizard engine (shared by both pages) */
+(function () {
+  var P = window.PAGE, C = window.DRABUFF;
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  window.UI = { esc: esc };
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var KEY = 'drabuff-' + P.id + '-v1', A = {};
+  try { A = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { A = {}; }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(A)); } catch (e) {} }
+
+  var app = $('#app'), step = 0, steps = P.steps;
+
+  /* ---------- render shell ---------- */
+  app.innerHTML =
+    '<section class="hero" id="hero">' +
+      '<div class="hero-txt reveal">' +
+        '<p class="eyebrow"><span class="dot"></span>' + P.kicker + '</p>' +
+        '<h1>' + P.title + '</h1>' +
+        '<p class="lead">' + P.lead + '</p>' +
+        '<div class="hero-cta"><button class="btn primary" id="start" type="button">' + P.startLabel + ' <span class="arr">→</span></button>' +
+        '<span class="hint mono">' + P.hint + '</span></div>' +
+        '<ul class="facts">' + P.facts.map(function (f) { return '<li><b>' + f[0] + '</b><span>' + f[1] + '</span></li>'; }).join('') + '</ul>' +
+      '</div>' +
+      '<div class="hero-vis reveal" style="animation-delay:.12s"><div class="sample" data-tilt>' + P.sample + '</div></div>' +
+    '</section>' +
+    '<section class="wiz" id="wiz" hidden>' +
+      '<aside class="rail" aria-label="Tiến trình"><p class="rail-h">TIẾN TRÌNH · ' + steps.length + ' KHỐI</p><ol class="stack">' +
+        steps.map(function (s, i) { return '<li data-i="' + i + '"><span class="blk"></span><span class="t">' + s.title + '</span></li>'; }).join('') +
+      '</ol></aside>' +
+      '<div class="panel">' +
+        '<div class="panel-h"><span class="step-no mono"></span><h2 class="step-title"></h2><p class="step-sub"></p></div>' +
+        '<div class="qs"></div>' +
+        '<p class="err" role="alert" hidden></p>' +
+        '<div class="nav"><button class="btn ghost" id="back" type="button">← Quay lại</button><span class="cnt"></span><button class="btn primary" id="next" type="button">Tiếp tục <span class="arr">→</span></button></div>' +
+      '</div>' +
+    '</section>' +
+    '<section class="think" id="think" hidden><div class="think-box">' +
+      '<p class="eyebrow"><span class="dot"></span>DRABUFF AI ENGINE · ĐANG XỬ LÝ</p>' +
+      '<h2>' + P.thinkTitle + '</h2><ul class="log mono" id="log"></ul><div class="bar"><i id="bar"></i></div>' +
+    '</div></section>' +
+    '<section class="result" id="result" hidden></section>';
+
+  /* ---------- questions ---------- */
+  function val(q) { return A[q.id]; }
+  function qHTML(q) {
+    var v = val(q);
+    var lab = q.type === 'text' || q.type === 'tel' || q.type === 'textarea' || q.type === 'range'
+      ? '<label class="q-l" for="q_' + q.id + '">' + q.label + (q.req ? '<i>*</i>' : '') + '</label>'
+      : '<span class="q-l" id="ql_' + q.id + '">' + q.label + (q.req ? '<i>*</i>' : '') + '</span>';
+    var tag = q.type === 'multi' ? '<span class="q-tag">Chọn nhiều' + (q.max ? ' · tối đa ' + q.max : '') + '</span>' : q.type === 'single' ? '<span class="q-tag">Chọn 1</span>' : '';
+    var head = '<div class="q-h">' + tag + lab + (q.help ? '<p class="q-help">' + q.help + '</p>' : '') + '</div>';
+    var cls = 'q' + (q.half ? ' half' : '');
+    if (q.type === 'text' || q.type === 'tel') {
+      return '<div class="' + cls + '" data-q="' + q.id + '">' + head + '<input class="inp" id="q_' + q.id + '" type="' + q.type + '"' +
+        (q.type === 'tel' ? ' inputmode="tel" autocomplete="tel"' : ' autocomplete="' + (q.ac || 'off') + '"') +
+        ' placeholder="' + esc(q.ph || '') + '" value="' + esc(v || '') + '" maxlength="120"></div>';
+    }
+    if (q.type === 'textarea') {
+      return '<div class="' + cls + '" data-q="' + q.id + '">' + head + '<textarea class="ta" id="q_' + q.id + '" placeholder="' + esc(q.ph || '') + '" maxlength="600">' + esc(v || '') + '</textarea>' +
+        (q.sugs ? '<div class="sugs">' + q.sugs.map(function (s) { return '<button type="button" class="sug" data-s="' + esc(s) + '">' + esc(s) + '</button>'; }).join('') + '</div>' : '') + '</div>';
+    }
+    if (q.type === 'range') {
+      if (v == null) { v = q.def; A[q.id] = v; }
+      return '<div class="' + cls + '" data-q="' + q.id + '">' + head + '<div class="rng"><input type="range" id="q_' + q.id + '" min="' + q.min + '" max="' + q.max + '" step="' + q.step + '" value="' + v + '">' +
+        '<output class="mono" for="q_' + q.id + '">' + fmtR(q, v) + '</output><div class="rng-l"><span>' + q.min + '</span><span>' + q.max + (q.plus ? '+' : '') + '</span></div></div></div>';
+    }
+    // single / multi
+    return '<div class="' + cls + '" data-q="' + q.id + '" role="group" aria-labelledby="ql_' + q.id + '">' + head +
+      '<div class="opts' + (q.wide ? ' wide' : '') + '">' + q.options.map(function (o) {
+        var on = q.type === 'single' ? v === o.v : (v || []).indexOf(o.v) > -1;
+        return '<button type="button" class="opt" data-v="' + o.v + '" aria-pressed="' + on + '"><span class="o-l">' + o.label + '</span>' +
+          (o.desc ? '<span class="o-d">' + o.desc + '</span>' : '') + '<span class="o-k" aria-hidden="true">' + (q.type === 'multi' ? '✓' : '●') + '</span></button>';
+      }).join('') + '</div></div>';
+  }
+  function fmtR(q, v) { return (Number(v) >= q.max && q.plus ? q.max + '+' : Number(v).toLocaleString('vi-VN')) + '<small>' + (q.unit || '') + '</small>'; }
+  function qById(id) { var s = steps[step]; for (var i = 0; i < s.qs.length; i++) if (s.qs[i].id === id) return s.qs[i]; }
+  function rangeFill(inp) { var p = (inp.value - inp.min) / (inp.max - inp.min) * 100; inp.style.setProperty('--p', p + '%'); }
+
+  function renderStep() {
+    var s = steps[step];
+    $('.step-no').textContent = 'KHỐI ' + String(step + 1).padStart(2, '0') + ' / ' + String(steps.length).padStart(2, '0');
+    $('.step-title').innerHTML = s.title;
+    $('.step-sub').innerHTML = s.sub || '';
+    $('.qs').innerHTML = s.qs.map(qHTML).join('');
+    $$('.qs input[type=range]').forEach(rangeFill);
+    $('.err').hidden = true;
+    $('#back').style.visibility = step === 0 ? 'hidden' : 'visible';
+    $('#next').innerHTML = step === steps.length - 1 ? P.finishLabel + ' <span class="arr">→</span>' : 'Tiếp tục <span class="arr">→</span>';
+    $$('.stack li').forEach(function (li, i) { li.className = i < step ? 'done' : i === step ? 'cur' : ''; });
+    $('.cnt').textContent = s.qs.length + ' câu hỏi';
+    window.Scene3D.setProgress(0.12 + step / steps.length * 0.7);
+  }
+
+  var qsEl = $('.qs');
+  qsEl.addEventListener('click', function (e) {
+    var sug = e.target.closest('.sug');
+    if (sug) {
+      var qd = sug.closest('.q'), ta = $('textarea', qd), cur = ta.value.trim();
+      ta.value = cur ? cur.replace(/[.;,\s]*$/, '') + '; ' + sug.dataset.s : sug.dataset.s;
+      A[qd.dataset.q] = ta.value; save(); ta.focus(); return;
+    }
+    var b = e.target.closest('.opt'); if (!b) return;
+    var qe = b.closest('.q'), q = qById(qe.dataset.q), v = b.dataset.v;
+    qe.classList.remove('bad');
+    if (q.type === 'single') {
+      A[q.id] = v; $$('.opt', qe).forEach(function (o) { o.setAttribute('aria-pressed', o === b); });
+    } else {
+      var arr = (A[q.id] || []).slice(), ix = arr.indexOf(v);
+      if (ix > -1) arr.splice(ix, 1);
+      else {
+        if (q.max && arr.length >= q.max) { b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake'); showErr('Câu này chọn tối đa ' + q.max + ' mục — bỏ bớt 1 mục trước khi chọn mục mới.'); return; }
+        if (q.exclusive && q.exclusive.indexOf(v) > -1) arr = [];
+        else if (q.exclusive) arr = arr.filter(function (x) { return q.exclusive.indexOf(x) < 0; });
+        arr.push(v);
+      }
+      A[q.id] = arr;
+      $$('.opt', qe).forEach(function (o) { o.setAttribute('aria-pressed', arr.indexOf(o.dataset.v) > -1); });
+    }
+    save();
+  });
+  qsEl.addEventListener('input', function (e) {
+    var qe = e.target.closest('.q'); if (!qe) return;
+    var q = qById(qe.dataset.q); qe.classList.remove('bad');
+    if (q.type === 'range') { A[q.id] = Number(e.target.value); $('output', qe).innerHTML = fmtR(q, e.target.value); rangeFill(e.target); }
+    else A[q.id] = e.target.value;
+    save();
+  });
+
+  function showErr(m) { var e = $('.err'); e.textContent = m; e.hidden = false; }
+  function validPhone(s) { var d = String(s || '').replace(/[\s.\-()]/g, '').replace(/^\+?84/, '0'); return /^0[35789]\d{8}$/.test(d); }
+  function validate() {
+    var s = steps[step], bad = [];
+    s.qs.forEach(function (q) {
+      var v = A[q.id], ok = true;
+      if (q.req) ok = Array.isArray(v) ? v.length > 0 : v != null && String(v).trim() !== '';
+      if (ok && q.type === 'tel' && v) ok = validPhone(v);
+      if (!ok) { bad.push(q); $('[data-q="' + q.id + '"]').classList.add('bad'); }
+    });
+    if (bad.length) {
+      var q = bad[0];
+      showErr(q.type === 'tel' && A[q.id] ? 'Số Zalo chưa đúng định dạng. Nhập 10 số, ví dụ 0912 345 678.' : 'Vui lòng hoàn thành: ' + q.label.replace(/<[^>]+>/g, '') + '.');
+      var el = $('[data-q="' + q.id + '"] input, [data-q="' + q.id + '"] textarea, [data-q="' + q.id + '"] .opt'); if (el) el.focus();
+      return false;
+    }
+    return true;
+  }
+
+  function go(id) { var el = document.getElementById(id); el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }); }
+
+  $('#start').addEventListener('click', function () {
+    $('#wiz').hidden = false; $('#result').hidden = true; $('#think').hidden = true;
+    step = 0; renderStep(); window.Scene3D.setMode('idle'); go('wiz');
+  });
+  $('#back').addEventListener('click', function () { if (step > 0) { step--; renderStep(); go('wiz'); } });
+  $('#next').addEventListener('click', function () {
+    if (!validate()) return;
+    if (step < steps.length - 1) { step++; renderStep(); go('wiz'); }
+    else run();
+  });
+
+  /* ---------- engine ---------- */
+  function run() {
+    $$('.stack li').forEach(function (li) { li.className = 'done'; });
+    $('#wiz').hidden = true; var th = $('#think'); th.hidden = false; go('think');
+    window.Scene3D.setMode('thinking');
+    var lines = P.logs(A), log = $('#log'), bar = $('#bar'), i = 0; log.innerHTML = ''; bar.style.width = '0';
+    var tick = function () {
+      if (i < lines.length) {
+        var li = document.createElement('li'); if (i === lines.length - 1) li.className = 'ok';
+        li.innerHTML = '<b>' + (i === lines.length - 1 ? '[OK]' : '[' + String(i + 1).padStart(2, '0') + ']') + '</b><span>' + lines[i] + '</span>';
+        log.appendChild(li); i++; bar.style.width = (i / lines.length * 100) + '%';
+        setTimeout(tick, reduce ? 120 : 420 + Math.random() * 260);
+      } else setTimeout(show, 500);
+    };
+    tick();
+  }
+
+  function code(prefix) {
+    var s = (A.company || '') + (A.zalo || '') + (A.industry || ''), h = 0;
+    for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+    return prefix + '-' + h.toString(36).toUpperCase().slice(-4).padStart(4, '0');
+  }
+
+  function show() {
+    var R = P.generate(A, code(P.codePrefix));
+    var zDigits = C.zalo.replace(/\D/g, '');
+    var res = $('#result');
+    res.innerHTML = R.html +
+      '<section class="panel cta reveal" id="contact"><div class="cta-l">' +
+        '<p class="eyebrow"><span class="dot"></span>BƯỚC TIẾP THEO</p>' +
+        '<h2>' + P.cta.title + '</h2><p>' + P.cta.text + '</p>' +
+        '<ol class="cta-steps"><li>Bấm <b>Sao chép đề xuất</b> để lưu bản tóm tắt.</li><li>Nhắn Zalo <b>' + C.display + '</b>, dán bản tóm tắt kèm mã <b>' + R.code + '</b>.</li><li>Chuyên gia ' + C.brand + ' liên hệ lại để ' + P.cta.next + '.</li></ol>' +
+      '</div><div class="cta-r">' +
+        '<div class="idbox"><div><span>MÃ ĐỀ XUẤT</span><b>' + R.code + '</b></div><div class="z"><span>ZALO ' + C.brand.toUpperCase() + '</span><b>' + C.display + '</b></div></div>' +
+        '<a class="btn primary" href="https://zalo.me/' + zDigits + '" target="_blank" rel="noopener">Nhắn Zalo cho ' + C.brand + ' <span class="arr">→</span></a>' +
+        '<button class="btn ghost" id="copy" type="button">Sao chép đề xuất</button>' +
+        '<p class="copied" id="copied" aria-live="polite"></p>' +
+        '<textarea id="sumtxt" readonly hidden></textarea>' +
+        '<button class="btn link" id="redo" type="button">Làm lại khảo sát</button>' +
+      '</div></section>';
+    $('#think').hidden = true; res.hidden = false;
+    window.Scene3D.setMode('done');
+    go('result');
+    $('#sumtxt').value = R.summary;
+    $('#copy').addEventListener('click', function () {
+      var t = R.summary, ok = function () { $('#copied').textContent = 'Đã sao chép. Mở Zalo và dán vào tin nhắn gửi ' + C.brand + '.'; };
+      var fb = function () { var ta = $('#sumtxt'); ta.hidden = false; ta.focus(); ta.select(); $('#copied').textContent = 'Trình duyệt chặn sao chép tự động — bản tóm tắt đã được bôi đen, nhấn Ctrl/⌘ + C.'; };
+      try { navigator.clipboard.writeText(t).then(ok, fb); } catch (e) { fb(); }
+    });
+    $('#redo').addEventListener('click', function () { $('#start').click(); });
+    if (C.webhook) {
+      try { fetch(C.webhook, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ page: P.id, code: R.code, at: new Date().toISOString(), answers: A, summary: R.summary }) }).catch(function () {}); } catch (e) {}
+    }
+    bindTilt();
+  }
+
+  /* ---------- 3D tilt ---------- */
+  function bindTilt() {
+    if (reduce || !(window.matchMedia && matchMedia('(pointer:fine)').matches)) return;
+    $$('[data-tilt]').forEach(function (el) {
+      if (el._t) return; el._t = 1;
+      var host = el.parentElement;
+      host.addEventListener('pointermove', function (e) {
+        var r = host.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+        el.style.setProperty('--ry', (x * 26 - 6) + 'deg'); el.style.setProperty('--rx', (-y * 20 + 4) + 'deg');
+      });
+      host.addEventListener('pointerleave', function () { el.style.removeProperty('--ry'); el.style.removeProperty('--rx'); });
+    });
+  }
+  bindTilt();
+})();
+
+</script>
