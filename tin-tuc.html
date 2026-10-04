@@ -1,0 +1,896 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DB Tech Radar</title>
+<meta name="description" content="Bản tin Công nghệ & AI tổng hợp tự động từ các báo điện tử uy tín tại Việt Nam — DB Agency & Academy.">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" type="image/png" href="assets/logo-mark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f3f0; --surface:#ffffff; --surface-2:#ecebe7; --ink:#1c1c1e; --ink-2:#3a3a3d;
+  --muted:#6b6b70; --line:#dedcd6; --brand:#2f2f31; --brand-ink:#ffffff;
+  --accent:#d6452f; --accent-soft:rgba(214,69,47,.12); --ai:#1d1d1f; --ai-ink:#fff;
+  --hero-bg:#1f1f21; --hero-ink:#f4f3f0; --hero-muted:#a9a8a3;
+  --shadow:0 1px 2px rgba(0,0,0,.05),0 6px 24px rgba(0,0,0,.06);
+  --shadow-h:0 2px 4px rgba(0,0,0,.06),0 14px 40px rgba(0,0,0,.12);
+  --radius:14px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121213; --surface:#1b1b1d; --surface-2:#242427; --ink:#f1f0ec; --ink-2:#d2d1cc;
+    --muted:#9a9993; --line:#2e2e31; --brand:#f1f0ec; --brand-ink:#141415;
+    --accent:#ff6a52; --accent-soft:rgba(255,106,82,.14); --ai:#f1f0ec; --ai-ink:#141415;
+    --hero-bg:#0b0b0c; --hero-ink:#f4f3f0; --hero-muted:#8f8e89;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 24px rgba(0,0,0,.25);
+    --shadow-h:0 2px 4px rgba(0,0,0,.35),0 14px 40px rgba(0,0,0,.45);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121213; --surface:#1b1b1d; --surface-2:#242427; --ink:#f1f0ec; --ink-2:#d2d1cc;
+  --muted:#9a9993; --line:#2e2e31; --brand:#f1f0ec; --brand-ink:#141415;
+  --accent:#ff6a52; --accent-soft:rgba(255,106,82,.14); --ai:#f1f0ec; --ai-ink:#141415;
+  --hero-bg:#0b0b0c; --hero-ink:#f4f3f0; --hero-muted:#8f8e89;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 24px rgba(0,0,0,.25);
+  --shadow-h:0 2px 4px rgba(0,0,0,.35),0 14px 40px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button,input,select{font:inherit;color:inherit}
+.wrap{max-width:1280px;margin:0 auto;padding:0 16px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* Logo rendered as a mask so it follows the theme colour */
+.logo-mark,.logo-full{display:inline-block;background:currentColor;-webkit-mask:var(--src) center/contain no-repeat;mask:var(--src) center/contain no-repeat}
+.logo-mark{--src:url(assets/logo-mark.png);aspect-ratio:284/194}
+.logo-full{--src:url(assets/logo-full.png);aspect-ratio:417/266}
+
+/* Top bar */
+.topbar{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid var(--line)}
+.topbar .wrap{display:flex;align-items:center;gap:14px;height:64px}
+.brand{display:flex;align-items:center;gap:12px;color:var(--brand);flex-shrink:0}
+.brand .logo-mark{height:34px}
+.brand-txt{display:flex;flex-direction:column;line-height:1.1}
+.brand-txt b{font-weight:800;font-size:16px;letter-spacing:.2px}
+.brand-txt span{font-size:11.5px;color:var(--muted);letter-spacing:.3px}
+.search{flex:1;max-width:460px;margin-left:auto;position:relative}
+.search input{width:100%;height:40px;border-radius:999px;border:1px solid var(--line);background:var(--surface-2);padding:0 16px 0 40px;outline:none;transition:border-color .2s,background .2s}
+.search input:focus{border-color:var(--ink-2);background:var(--surface)}
+.search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--muted)}
+.iconbtn{width:40px;height:40px;border-radius:999px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;cursor:pointer;flex-shrink:0;transition:background .2s,transform .2s}
+.iconbtn:hover{background:var(--surface-2)}
+.iconbtn svg{width:18px;height:18px}
+.iconbtn.spin svg{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Hero */
+.hero{background:var(--hero-bg);color:var(--hero-ink);position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(800px 400px at 85% 10%,rgba(255,255,255,.07),transparent 60%),radial-gradient(600px 300px at 0% 100%,rgba(214,69,47,.12),transparent 60%)}
+.hero .wm{position:absolute;right:-40px;top:50%;transform:translateY(-50%);height:130%;color:#fff;opacity:.05;pointer-events:none}
+.hero .wrap{position:relative;padding-top:44px;padding-bottom:36px;display:grid;grid-template-columns:1.4fr 1fr;gap:32px;align-items:end}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;color:var(--hero-muted)}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#ff5a43;box-shadow:0 0 0 0 rgba(255,90,67,.6);animation:pulse 1.8s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 10px rgba(255,90,67,0)}100%{box-shadow:0 0 0 0 rgba(255,90,67,0)}}
+.hero h1{font-size:clamp(28px,4.4vw,48px);line-height:1.08;margin:14px 0 12px;font-weight:800;letter-spacing:-.8px}
+.hero h1 em{font-style:normal;color:transparent;-webkit-text-stroke:1.2px var(--hero-ink)}
+.hero p.lead{margin:0;color:var(--hero-muted);max-width:620px;font-size:15.5px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px;background:rgba(255,255,255,.03)}
+.stat b{display:block;font-size:26px;font-weight:800;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
+.stat span{font-size:12px;color:var(--hero-muted)}
+.refresh-row{grid-column:1/-1;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--hero-muted)}
+.bar{flex:1;min-width:120px;height:3px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--hero-ink);transition:width 1s linear}
+
+/* Ticker */
+.ticker{background:var(--surface);border-bottom:1px solid var(--line);overflow:hidden}
+.ticker .wrap{display:flex;align-items:center;gap:12px;height:44px}
+.ticker .tag{flex-shrink:0;background:var(--accent);color:#fff;font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:6px;letter-spacing:.6px;text-transform:uppercase}
+.tk-track{flex:1;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent)}
+.tk-move{display:inline-flex;gap:36px;white-space:nowrap;animation:tick 90s linear infinite;padding-left:8px}
+.tk-move:hover{animation-play-state:paused}
+.tk-move a{font-size:13.5px;font-weight:500;color:var(--ink-2)}
+.tk-move a:hover{color:var(--accent)}
+.tk-move a small{color:var(--muted);font-weight:600;margin-right:6px}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* Filters */
+.filters{padding:22px 0 6px}
+.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 14px;font-size:13.5px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:all .18s;white-space:nowrap}
+.chip:hover{border-color:var(--ink-2)}
+.chip[aria-pressed="true"]{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}
+.chip .n{font-size:11.5px;opacity:.65;font-variant-numeric:tabular-nums}
+.chip .ok{width:6px;height:6px;border-radius:50%;background:#2fa86a}
+.chip .ok.err{background:var(--accent)}
+.chip .ok.wait{background:var(--muted);animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.25}}
+.row2{display:flex;align-items:center;gap:10px;margin-top:10px}
+.row2 .label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px;flex-shrink:0}
+.row2 .chips{flex:1;min-width:0}
+.sortsel{margin-left:auto;flex-shrink:0;height:34px;border-radius:999px;border:1px solid var(--line);background:var(--surface);padding:0 12px;font-size:13px;cursor:pointer}
+
+/* Section headings */
+.sec-h{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 12px;margin:28px 0 14px}
+.sec-h h2{white-space:nowrap;margin:0;font-size:21px;font-weight:800;letter-spacing:-.3px;display:flex;align-items:center;gap:10px}
+.sec-h h2::before{content:"";width:5px;height:20px;background:var(--brand);border-radius:2px}
+.sec-h .sub{color:var(--muted);font-size:13px}
+
+/* Featured */
+.featured{display:grid;grid-template-columns:1.55fr 1fr;gap:18px}
+.lead-card{position:relative;border-radius:var(--radius);overflow:hidden;min-height:440px;background:#222;color:#fff;display:flex;align-items:flex-end;box-shadow:var(--shadow)}
+.lead-card .img{position:absolute;inset:0}
+.lead-card .img img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.lead-card:hover .img img{transform:scale(1.04)}
+.lead-card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 30%,rgba(0,0,0,.85))}
+.lead-card .body{position:relative;z-index:1;padding:26px}
+.lead-card h3{font-size:clamp(20px,2.4vw,28px);line-height:1.22;margin:10px 0 8px;font-weight:700}
+.lead-card p{margin:0;color:rgba(255,255,255,.82);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.lead-card .meta{color:rgba(255,255,255,.75)}
+.side-list{display:flex;flex-direction:column;gap:12px}
+.side-item{display:grid;grid-template-columns:128px 1fr;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px;transition:box-shadow .2s,transform .2s}
+.side-item:hover{box-shadow:var(--shadow-h);transform:translateY(-2px)}
+.side-item .img{border-radius:8px;overflow:hidden;aspect-ratio:4/3;background:var(--surface-2)}
+.side-item .img img{width:100%;height:100%;object-fit:cover}
+.side-item h3{font-size:14.5px;line-height:1.35;margin:4px 0 0;font-weight:600;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+
+/* AI rail */
+.rail{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(260px,1fr);gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px;scrollbar-width:thin}
+.rail>*{scroll-snap-align:start}
+
+/* Grid cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .22s,transform .22s,border-color .22s;animation:fadeUp .4s both}
+.card:hover{box-shadow:var(--shadow-h);transform:translateY(-3px);border-color:transparent}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}}
+.card .img{position:relative;aspect-ratio:16/9;background:var(--surface-2);overflow:hidden}
+.card .img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.card:hover .img img{transform:scale(1.05)}
+.card .body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;flex:1}
+.card h3{margin:0;font-size:16px;line-height:1.38;font-weight:700;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.card:hover h3{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.card p{margin:0;color:var(--muted);font-size:13.8px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.card .foot{margin-top:auto;padding-top:6px;display:flex;gap:6px;flex-wrap:wrap}
+
+.meta{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.src{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--ink-2);font-size:12px}
+.src i{width:18px;height:18px;border-radius:5px;display:grid;place-items:center;font-style:normal;font-size:9.5px;font-weight:800;color:#fff;background:var(--c,#444);letter-spacing:-.2px}
+.lead-card .src{color:#fff}
+.dot{width:3px;height:3px;border-radius:50%;background:currentColor;opacity:.5}
+.tag{font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px;background:var(--surface-2);color:var(--ink-2)}
+.tag.ai{background:var(--ai);color:var(--ai-ink)}
+.badge-new{position:absolute;top:10px;left:10px;z-index:2;background:var(--accent);color:#fff;font-size:10.5px;font-weight:800;letter-spacing:.8px;padding:3px 8px;border-radius:5px}
+.lead-card .tag{background:rgba(255,255,255,.16);color:#fff}
+.lead-card .tag.ai{background:#fff;color:#111}
+
+/* Placeholder thumbnail */
+.ph{width:100%;height:100%;display:grid;place-items:center;background:linear-gradient(135deg,var(--surface-2),var(--bg));color:var(--muted)}
+.ph .logo-mark{width:38%;max-width:110px;opacity:.35}
+.lead-card .ph{background:linear-gradient(135deg,#2a2a2d,#141415);color:#fff}
+
+/* Skeleton */
+.sk{background:linear-gradient(90deg,var(--surface-2) 25%,var(--bg) 50%,var(--surface-2) 75%);background-size:200% 100%;animation:sh 1.3s infinite;border-radius:8px}
+@keyframes sh{to{background-position:-200% 0}}
+
+.more{display:flex;justify-content:center;margin:28px 0 8px}
+.btn{border:1px solid var(--brand);background:var(--brand);color:var(--brand-ink);border-radius:999px;padding:11px 26px;font-weight:600;cursor:pointer;transition:opacity .2s}
+.btn:hover{opacity:.88}
+.btn.ghost{background:transparent;color:var(--ink)}
+.empty{text-align:center;color:var(--muted);padding:60px 16px;border:1px dashed var(--line);border-radius:var(--radius)}
+.empty .logo-mark{width:80px;opacity:.3;margin-bottom:10px}
+
+/* Toast */
+.toast{position:fixed;left:50%;top:76px;transform:translate(-50%,-160px);opacity:0;pointer-events:none;z-index:60;background:var(--brand);color:var(--brand-ink);border-radius:999px;padding:10px 18px;font-weight:600;font-size:14px;box-shadow:var(--shadow-h);cursor:pointer;transition:transform .35s cubic-bezier(.2,.9,.3,1.2);display:flex;align-items:center;gap:8px;border:0}
+.toast.show{transform:translate(-50%,0);opacity:1;pointer-events:auto}
+
+/* Sources panel */
+details.status{margin-top:34px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:4px 18px}
+details.status summary{cursor:pointer;padding:12px 0;font-weight:600;font-size:14px}
+.st-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:6px 18px;padding:0 0 16px;font-size:13px}
+.st-list div{display:flex;align-items:center;gap:8px;color:var(--ink-2);min-width:0}
+.st-list div span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.st-list small{margin-left:auto;color:var(--muted);flex-shrink:0}
+
+/* Footer */
+footer{margin-top:48px;background:var(--hero-bg);color:var(--hero-muted);font-size:13px}
+footer .wrap{display:flex;gap:28px;align-items:center;padding-top:32px;padding-bottom:32px;flex-wrap:wrap}
+footer .logo-full{height:64px;color:var(--hero-ink)}
+footer p{margin:0;max-width:640px}
+footer b{color:var(--hero-ink)}
+
+@media (max-width:960px){
+  .hero .wrap{grid-template-columns:1fr}
+  .featured{grid-template-columns:1fr}
+  .lead-card{min-height:340px}
+}
+@media (max-width:640px){
+  .brand-txt span{display:none}
+  .brand-txt b{font-size:14px}
+  .topbar .wrap{gap:8px}
+  .search input{padding-left:36px}
+  #themeBtn{display:none}
+  .stats{grid-template-columns:repeat(3,1fr)}
+  .stat{padding:10px}
+  .stat b{font-size:20px}
+  .side-item{grid-template-columns:104px 1fr}
+  .lead-card{min-height:300px}
+  .lead-card .body{padding:18px}
+  .grid{grid-template-columns:1fr}
+  .sortsel{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="tin-tuc.html" aria-label="DB Tech Radar — trang chủ">
+      <span class="logo-mark" role="img" aria-label="Logo DB"></span>
+      <span class="brand-txt"><b>DB Tech Radar</b><span>Agency &amp; Academy</span></span>
+    </a>
+    <label class="search">
+      <span class="sr">Tìm kiếm tin tức</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Tìm: AI, ChatGPT, chuyển đổi số…" autocomplete="off">
+    </label>
+    <button class="iconbtn" id="refreshBtn" title="Cập nhật ngay" aria-label="Cập nhật ngay">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 4v5h-5"/></svg>
+    </button>
+    <button class="iconbtn" id="themeBtn" title="Đổi giao diện sáng/tối" aria-label="Đổi giao diện sáng/tối">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    </button>
+  </div>
+</header>
+
+<section class="hero">
+  <span class="logo-mark wm" aria-hidden="true"></span>
+  <div class="wrap">
+    <div>
+      <span class="eyebrow"><span class="live-dot"></span> Cập nhật tự động · Trực tiếp</span>
+      <h1>Bản tin <em>Công nghệ</em> &amp; AI<br>cho doanh nghiệp Việt</h1>
+      <p class="lead">Tổng hợp liên tục tin mới nhất về trí tuệ nhân tạo, chuyển đổi số và ứng dụng công nghệ trong doanh nghiệp từ các báo điện tử uy tín tại Việt Nam.</p>
+    </div>
+    <div class="stats">
+      <div class="stat"><b id="stArticles">0</b><span>bài viết</span></div>
+      <div class="stat"><b id="stSources">0</b><span>nguồn báo</span></div>
+      <div class="stat"><b id="stAI">0</b><span>tin về AI</span></div>
+    </div>
+    <div class="refresh-row">
+      <span id="lastUpd">Đang tải dữ liệu…</span>
+      <div class="bar" aria-hidden="true"><i id="barFill"></i></div>
+      <span id="nextUpd"></span>
+    </div>
+  </div>
+</section>
+
+<div class="ticker" aria-label="Tin mới nhất">
+  <div class="wrap">
+    <span class="tag">Mới nhất</span>
+    <div class="tk-track"><div class="tk-move" id="ticker"></div></div>
+  </div>
+</div>
+
+<main class="wrap">
+  <div class="filters">
+    <div class="chips" id="topicChips" role="toolbar" aria-label="Lọc theo chủ đề"></div>
+    <div class="row2">
+      <span class="label">Nguồn</span>
+      <div class="chips" id="srcChips" role="toolbar" aria-label="Lọc theo nguồn báo"></div>
+      <select class="sortsel" id="sort" aria-label="Sắp xếp">
+        <option value="new">Mới nhất</option>
+        <option value="ai">Ưu tiên AI</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="home">
+    <div class="sec-h"><h2>Tiêu điểm</h2><span class="sub">Những bài mới nhất từ các nguồn</span></div>
+    <div class="featured" id="featured"></div>
+
+    <div class="sec-h"><h2>Trí tuệ nhân tạo</h2><span class="sub">AI, ChatGPT, mô hình ngôn ngữ, tự động hoá</span></div>
+    <div class="rail" id="aiRail"></div>
+  </div>
+
+  <div class="sec-h"><h2 id="gridTitle">Tất cả tin tức</h2><span class="sub" id="gridSub"></span></div>
+  <div class="grid" id="grid"></div>
+  <div class="more"><button class="btn ghost" id="moreBtn" hidden>Xem thêm bài viết</button></div>
+
+  <details class="status" id="statusBox">
+    <summary>Trạng thái nguồn tin</summary>
+    <div class="st-list" id="stList"></div>
+  </details>
+</main>
+
+<button class="toast" id="toast" type="button"></button>
+
+<footer>
+  <div class="wrap">
+    <span class="logo-full" role="img" aria-label="DB Agency & Academy"></span>
+    <p><b>DB Tech Radar</b> — trang tổng hợp tin tức tự động của DB Agency &amp; Academy. Tiêu đề, mô tả và hình ảnh thuộc bản quyền của các cơ quan báo chí tương ứng; mỗi bài viết dẫn về trang gốc.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+'use strict';
+
+/* ================= Cấu hình ================= */
+
+// Nếu bạn triển khai Cloudflare Worker riêng (xem cloudflare-worker/rss-proxy.js), dán URL vào đây,
+// ví dụ: 'https://rss-proxy.ten-ban.workers.dev/?url='
+var CUSTOM_PROXY = '';
+
+var REFRESH_MS = 5 * 60 * 1000;   // tự động cập nhật mỗi 5 phút
+var PAGE_SIZE = 24;
+var MAX_AGE_DAYS = 10;            // bỏ các bài quá cũ
+var CACHE_KEY = 'dbnews:v1';
+
+// Nguồn báo. kw:true = nguồn tổng hợp, chỉ giữ bài có từ khoá công nghệ.
+var SOURCES = [
+  {id:'vnexpress', name:'VnExpress', short:'VE', color:'#9f224e', feeds:[
+    'https://vnexpress.net/rss/so-hoa.rss','https://vnexpress.net/rss/khoa-hoc.rss',
+    {url:'https://vnexpress.net/rss/kinh-doanh.rss',kw:true}]},
+  {id:'tuoitre', name:'Tuổi Trẻ', short:'TT', color:'#ed1c24', feeds:[
+    'https://tuoitre.vn/rss/cong-nghe.rss','https://tuoitre.vn/rss/nhip-song-so.rss']},
+  {id:'thanhnien', name:'Thanh Niên', short:'TN', color:'#0a4d8c', feeds:['https://thanhnien.vn/rss/cong-nghe.rss']},
+  {id:'dantri', name:'Dân Trí', short:'DT', color:'#00843d', feeds:[
+    'https://dantri.com.vn/rss/suc-manh-so.rss','https://dantri.com.vn/rss/cong-nghe.rss']},
+  {id:'vietnamnet', name:'VietNamNet', short:'VN', color:'#b51f24', feeds:[
+    'https://vietnamnet.vn/rss/cong-nghe.rss','https://vietnamnet.vn/rss/thong-tin-truyen-thong.rss']},
+  {id:'znews', name:'Znews', short:'ZN', color:'#1b6cd0', feeds:['https://znews.vn/cong-nghe.rss']},
+  {id:'vtcnews', name:'VTC News', short:'VTC', color:'#c4161c', feeds:['https://vtcnews.vn/rss/khoa-hoc-cong-nghe.rss']},
+  {id:'nld', name:'Người Lao Động', short:'NLĐ', color:'#d71920', feeds:['https://nld.com.vn/cong-nghe.rss']},
+  {id:'laodong', name:'Lao Động', short:'LĐ', color:'#e2231a', feeds:['https://laodong.vn/rss/cong-nghe.rss']},
+  {id:'nhandan', name:'Nhân Dân', short:'ND', color:'#a3191b', feeds:['https://nhandan.vn/rss/khoahoc-congnghe.rss']},
+  {id:'vneconomy', name:'VnEconomy', short:'VEC', color:'#0b6a3a', feeds:['https://vneconomy.vn/chuyen-doi-so.rss']},
+  {id:'cafebiz', name:'CafeBiz', short:'CB', color:'#0c5aa6', feeds:['https://cafebiz.vn/rss/cong-nghe.rss']},
+  {id:'genk', name:'GenK', short:'GK', color:'#e8541e', feeds:['https://genk.vn/rss/ai.rss','https://genk.vn/rss/home.rss']},
+  {id:'24h', name:'24h', short:'24h', color:'#78b43d', feeds:['https://cdn.24h.com.vn/upload/rss/congnghethongtin.rss']},
+  {id:'tinhte', name:'Tinh tế', short:'TT', color:'#2e3a8c', feeds:['https://tinhte.vn/rss']}
+];
+
+// Chủ đề — phân loại theo từ khoá trong tiêu đề + mô tả
+var TOPICS = [
+  {id:'all', name:'Tất cả'},
+  // "AI" so khớp phân biệt hoa/thường để không nhầm với từ "ai" trong tiếng Việt
+  {id:'ai', name:'Trí tuệ nhân tạo', cs:/\bA\.?I\b|\bAGI\b|\bGenAI\b/, re:/(trí tuệ nhân tạo|chat ?gpt|open ?ai|gemini|claude|anthropic|copilot|deepseek|\bLLM|\bGPT|mô hình ngôn ngữ|học máy|machine learning|deep learning|chatbot|AI tạo sinh|generative|nvidia|trợ lý ảo|agent|grok|llama|mistral|sora|midjourney)/i},
+  {id:'biz', name:'Doanh nghiệp & Chuyển đổi số', re:/(doanh nghiệp|chuyển đổi số|số hoá|số hóa|kinh tế số|startup|khởi nghiệp|đầu tư|thương mại điện tử|fintech|ngân hàng số|nền tảng|SaaS|ERP|CRM|tự động hoá|tự động hóa|năng suất|marketing|bán lẻ|logistics|quản trị|doanh thu|thị trường)/i},
+  {id:'sec', name:'An ninh mạng', re:/(bảo mật|an ninh mạng|tấn công|hacker|tin tặc|lừa đảo|mã độc|ransomware|lộ dữ liệu|rò rỉ|phishing|dữ liệu cá nhân|xác thực|lỗ hổng)/i},
+  {id:'dev', name:'Thiết bị & Sản phẩm', re:/(iphone|samsung|galaxy|smartphone|điện thoại|laptop|máy tính|chip|bán dẫn|apple|android|\bios\b|xiaomi|oppo|thiết bị|tai nghe|đồng hồ thông minh|vision pro|macbook|camera|màn hình)/i},
+  {id:'net', name:'Viễn thông & Internet', re:/(\b[45]G\b|viễn thông|internet|cáp quang|vệ tinh|starlink|mạng xã hội|facebook|tiktok|youtube|zalo|google|meta|viettel|vnpt|mobifone|cloud|đám mây|trung tâm dữ liệu|data center)/i},
+  {id:'sci', name:'Khoa học & Tương lai', re:/(khoa học|vũ trụ|nasa|spacex|robot|lượng tử|quantum|xe điện|xe tự lái|năng lượng|y học|công nghệ sinh học|nghiên cứu|phát minh)/i}
+];
+// Dùng cho nguồn tổng hợp (kw:true): chỉ giữ bài liên quan công nghệ
+var TECH_RE = /(trí tuệ nhân tạo|công nghệ|chuyển đổi số|số hoá|số hóa|kinh tế số|startup|khởi nghiệp|fintech|thương mại điện tử|phần mềm|dữ liệu|nền tảng số|internet|viễn thông|bán dẫn|\bchip|robot|tự động hoá|tự động hóa|điện toán|đám mây|an ninh mạng|bảo mật|chat ?gpt|open ?ai|nvidia|apple|google|microsoft|meta|samsung|tesla)/i;
+function hasTopic(t, hay){ return (t.cs && t.cs.test(hay)) || t.re.test(hay); }
+
+/* ================= Trạng thái ================= */
+var state = {
+  items: [],          // toàn bộ bài viết
+  topic: 'all', source: 'all', q: '', sort: 'new',
+  shown: PAGE_SIZE,
+  feedStatus: {},     // url -> {ok, n, err, via}
+  seen: null,         // Set link đã thấy (để phát hiện tin mới)
+  loading: false, lastOk: 0, nextAt: 0
+};
+var srcById = {}; SOURCES.forEach(function(s){ srcById[s.id] = s; });
+
+var $ = function(id){ return document.getElementById(id); };
+
+/* ================= Tiện ích ================= */
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function safeUrl(u){
+  if (!u) return '';
+  u = String(u).trim().replace(/&amp;/g,'&');
+  if (u.indexOf('//') === 0) u = 'https:' + u;
+  if (!/^https?:\/\//i.test(u)) return '';
+  return u.replace(/^http:\/\//i, 'https://');
+}
+function store(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+function load(k){ try { return JSON.parse(localStorage.getItem(k)); } catch(e){ return null; } }
+
+function parseDate(s){
+  if (!s) return 0;
+  s = String(s).trim();
+  var t = Date.parse(s);
+  if (!isNaN(t)) return t;
+  var s2 = s.replace(/GMT\s*\+\s*7/i, '+0700').replace(/\s+\+07:?00$/, ' +0700');
+  t = Date.parse(s2); if (!isNaN(t)) return t;
+  // dd/mm/yyyy hh:mm(:ss)
+  var m = s.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
+  if (m) return Date.UTC(+m[3], +m[2]-1, +m[1], (+m[4]||0)-7, +m[5]||0, +m[6]||0);
+  // "yyyy-mm-dd hh:mm:ss" (rss2json, UTC)
+  m = s.match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2}):(\d{2})$/);
+  if (m) return Date.UTC(+m[1], +m[2]-1, +m[3], +m[4], +m[5], +m[6]);
+  return 0;
+}
+function ago(t){
+  if (!t) return '';
+  var d = (Date.now() - t) / 1000;
+  if (d < 60) return 'vừa xong';
+  if (d < 3600) return Math.floor(d/60) + ' phút trước';
+  if (d < 86400) return Math.floor(d/3600) + ' giờ trước';
+  if (d < 86400*7) return Math.floor(d/86400) + ' ngày trước';
+  var x = new Date(t); return x.getDate() + '/' + (x.getMonth()+1) + '/' + x.getFullYear();
+}
+function timeHtml(t){ return '<time data-t="' + t + '" datetime="' + new Date(t).toISOString() + '">' + ago(t) + '</time>'; }
+function clock(t){ var d = new Date(t); return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0'); }
+function normTitle(s){ return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,' ').trim(); }
+
+/* ================= Tải RSS ================= */
+// Thứ tự thử: proxy riêng → Cloudflare Pages Function cùng domain → các proxy CORS công khai
+function proxies(){
+  var list = [];
+  if (CUSTOM_PROXY) list.push({id:'custom', url:function(u){ return CUSTOM_PROXY + encodeURIComponent(u); }});
+  if (/^https?:$/.test(location.protocol)) list.push({id:'self', url:function(u){ return '/api/rss?url=' + encodeURIComponent(u); }});
+  list.push(
+    {id:'allorigins', url:function(u){ return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u); }},
+    {id:'codetabs',   url:function(u){ return 'https://api.codetabs.com/v1/proxy/?quest=' + encodeURIComponent(u); }},
+    {id:'corsproxy',  url:function(u){ return 'https://corsproxy.io/?url=' + encodeURIComponent(u); }},
+    {id:'rss2json',   json:true, url:function(u){ return 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(u); }}
+  );
+  return list;
+}
+var proxyScore = load('dbnews:proxy') || {};   // proxy nào chạy tốt thì ưu tiên lần sau
+function orderedProxies(){
+  return proxies().sort(function(a,b){ return (proxyScore[b.id]||0) - (proxyScore[a.id]||0); });
+}
+function bump(id, d){ proxyScore[id] = Math.max(-5, Math.min(20, (proxyScore[id]||0) + d)); store('dbnews:proxy', proxyScore); }
+
+function fetchTimeout(url, ms){
+  var ctl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  var t = setTimeout(function(){ ctl && ctl.abort(); }, ms);
+  return fetch(url, {signal: ctl && ctl.signal, cache:'no-store'}).finally(function(){ clearTimeout(t); });
+}
+
+function fetchFeed(feedUrl){
+  var list = orderedProxies(), i = 0;
+  function next(lastErr){
+    if (i >= list.length) return Promise.reject(lastErr || new Error('Không tải được'));
+    var p = list[i++];
+    return fetchTimeout(p.url(feedUrl), 12000).then(function(r){
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return p.json ? r.json() : r.text();
+    }).then(function(body){
+      var items = p.json ? fromRss2Json(body) : parseXml(body);
+      if (!items) throw new Error('Không phải RSS');
+      bump(p.id, 1);
+      return {items: items, via: p.id};
+    }).catch(function(e){ bump(p.id, -1); return next(e); });
+  }
+  return next();
+}
+
+function txt(el, names){
+  for (var i = 0; i < names.length; i++){
+    var n = el.getElementsByTagName(names[i])[0];
+    if (n && n.textContent.trim()) return n.textContent.trim();
+  }
+  return '';
+}
+function attrOf(el, names, attr, filter){
+  for (var i = 0; i < names.length; i++){
+    var ns = el.getElementsByTagName(names[i]);
+    for (var j = 0; j < ns.length; j++){
+      var v = ns[j].getAttribute(attr);
+      if (v && (!filter || filter(ns[j]))) return v;
+    }
+  }
+  return '';
+}
+function parseXml(str){
+  if (typeof str !== 'string' || !/<(rss|feed|rdf:RDF|channel)[\s>]/i.test(str)) return null;
+  var doc = new DOMParser().parseFromString(str.replace(/^﻿/, '').trim(), 'text/xml');
+  if (doc.getElementsByTagName('parsererror').length) {
+    // một số feed có ký tự lỗi — thử parse bằng HTML parser
+    doc = new DOMParser().parseFromString(str, 'text/html');
+  }
+  var nodes = doc.getElementsByTagName('item');
+  var atom = false;
+  if (!nodes.length) { nodes = doc.getElementsByTagName('entry'); atom = true; }
+  var out = [];
+  for (var i = 0; i < nodes.length && i < 60; i++){
+    var it = nodes[i];
+    var link = atom ? (attrOf(it, ['link'], 'href', function(n){ var r = n.getAttribute('rel'); return !r || r === 'alternate'; }) || txt(it,['link']))
+                    : (txt(it, ['link']) || attrOf(it, ['link'], 'href') || txt(it, ['guid']));
+    var desc = txt(it, ['description', 'summary', 'content:encoded', 'content']);
+    var img = attrOf(it, ['media:content','media:thumbnail','enclosure'], 'url', function(n){
+                var ty = n.getAttribute('type') || n.getAttribute('medium') || 'image';
+                return /image/i.test(ty) || n.tagName === 'media:thumbnail';
+              }) || attrOf(it, ['image'], 'url') || txt(it, ['image']);
+    if (!img) {
+      var full = desc + ' ' + txt(it, ['content:encoded']);
+      var m = full.match(/<img[^>]+(?:data-src|src)\s*=\s*["']([^"']+)["']/i);
+      if (m) img = m[1];
+    }
+    out.push({
+      title: txt(it, ['title']),
+      link: link,
+      desc: desc,
+      img: img,
+      date: parseDate(txt(it, ['pubDate', 'dc:date', 'published', 'updated', 'pubdate']))
+    });
+  }
+  return out;
+}
+function fromRss2Json(j){
+  if (!j || j.status !== 'ok' || !j.items) return null;
+  return j.items.map(function(x){
+    var img = x.thumbnail || (x.enclosure && x.enclosure.link) || '';
+    if (!img) { var m = (x.description || x.content || '').match(/<img[^>]+src=["']([^"']+)["']/i); if (m) img = m[1]; }
+    return {title: x.title, link: x.link, desc: x.description || x.content || '', img: img, date: parseDate(x.pubDate)};
+  });
+}
+
+function cleanText(html){
+  if (!html) return '';
+  var doc = new DOMParser().parseFromString(String(html), 'text/html');
+  var t = (doc.body ? doc.body.textContent : '') || '';
+  // một số feed bị escape 2 lần
+  if (/<\/?[a-z][^>]*>/i.test(t)) { doc = new DOMParser().parseFromString(t, 'text/html'); t = doc.body ? doc.body.textContent : t; }
+  t = t.replace(/\s+/g, ' ').trim();
+  if (t.length > 260) t = t.slice(0, 250).replace(/\s+\S*$/, '') + '…';
+  return t;
+}
+
+function classify(a){
+  var hay = a.title + ' ' + a.desc;
+  var tags = [];
+  for (var i = 1; i < TOPICS.length; i++) if (hasTopic(TOPICS[i], hay)) tags.push(TOPICS[i].id);
+  return tags;
+}
+
+function normalize(raw, src, kwOnly){
+  var title = cleanText(raw.title);
+  var link = safeUrl(raw.link);
+  if (!title || !link) return null;
+  var a = {
+    id: link.replace(/[?#].*$/, ''),
+    title: title,
+    link: link,
+    desc: cleanText(raw.desc),
+    img: safeUrl(raw.img),
+    date: raw.date || 0,
+    src: src.id
+  };
+  if (a.desc && normTitle(a.desc) === normTitle(a.title)) a.desc = '';
+  a.tags = classify(a);
+  if (kwOnly && !TECH_RE.test(a.title + ' ' + a.desc) && a.tags.indexOf('ai') < 0) return null;
+  return a;
+}
+
+/* ================= Cập nhật dữ liệu ================= */
+function allFeeds(){
+  var list = [];
+  SOURCES.forEach(function(s){ s.feeds.forEach(function(f){ list.push({src:s, url: typeof f === 'string' ? f : f.url, kw: typeof f === 'object' && !!f.kw}); }); });
+  return list;
+}
+
+function refresh(manual){
+  if (state.loading) return;
+  state.loading = true;
+  $('refreshBtn').classList.add('spin');
+  var feeds = allFeeds();
+  var collected = [];
+  var progressive = !state.items.length;
+  state.newCount = 0;
+  var queue = feeds.slice(), running = 0, done = 0, okCount = 0;
+  feeds.forEach(function(f){ if (!state.feedStatus[f.url]) state.feedStatus[f.url] = {wait:true}; else state.feedStatus[f.url].wait = true; });
+  renderStatus();
+
+  return new Promise(function(resolve){
+    function pump(){
+      while (running < 5 && queue.length){
+        (function(f){
+          running++;
+          fetchFeed(f.url).then(function(res){
+            var arr = res.items.map(function(r){ return normalize(r, f.src, f.kw); }).filter(Boolean);
+            collected = collected.concat(arr);
+            state.feedStatus[f.url] = {ok:true, n:arr.length, via:res.via, at:Date.now()};
+            okCount++;
+            // lần đầu: hiển thị dần khi từng nguồn về; các lần sau: gộp một lần khi xong để không nháy
+            if (progressive) merge(collected, false);
+          }).catch(function(e){
+            var prev = state.feedStatus[f.url] || {};
+            state.feedStatus[f.url] = {ok:false, err:String(e && e.message || e), n: prev.n || 0};
+          }).then(function(){
+            running--; done++;
+            renderStatus();
+            if (done === feeds.length) finish(); else pump();
+          });
+        })(queue.shift());
+      }
+    }
+    function finish(){
+      state.loading = false;
+      $('refreshBtn').classList.remove('spin');
+      if (okCount) {
+        merge(collected, true);
+        state.lastOk = Date.now();
+        store(CACHE_KEY, {ts: state.lastOk, items: state.items.slice(0, 600)});
+      } else if (!state.items.length) {
+        renderEmptyError();
+      }
+      schedule();
+      resolve();
+    }
+    pump();
+  });
+}
+
+// Gộp bài mới vào danh sách hiện có, khử trùng, đánh dấu bài mới
+function merge(fresh, final){
+  var map = {}, titles = {};
+  var minDate = Date.now() - MAX_AGE_DAYS * 86400000;
+  var combined = fresh.concat(state.items);
+  var out = [];
+  combined.forEach(function(a){
+    if (a.date && a.date < minDate) return;
+    var tk = normTitle(a.title);
+    if (map[a.id] || titles[tk]) return;
+    map[a.id] = 1; titles[tk] = 1;
+    out.push(a);
+  });
+  var now = Date.now();
+  if (state.seen) {
+    var cnt = 0;
+    out.forEach(function(a){ if (!state.seen.has(a.id)) { a.isNew = now; cnt++; state.seen.add(a.id); } });
+    state.newCount = (state.newCount || 0) + cnt;
+    if (final && state.newCount) { showToast(state.newCount); state.newCount = 0; }
+  }
+  // bài không có ngày → coi như lúc lấy về
+  out.forEach(function(a){ if (!a.date) a.date = a.fetched || (a.fetched = now); });
+  out.sort(function(a,b){ return b.date - a.date; });
+  state.items = out;
+  if (final && !state.seen) state.seen = new Set(out.map(function(a){ return a.id; }));
+  render();
+}
+
+/* ================= Hiển thị ================= */
+function filtered(){
+  var q = normTitle(state.q);
+  var list = state.items.filter(function(a){
+    if (state.source !== 'all' && a.src !== state.source) return false;
+    if (state.topic !== 'all' && a.tags.indexOf(state.topic) < 0) return false;
+    if (q && normTitle(a.title + ' ' + a.desc + ' ' + srcById[a.src].name).indexOf(q) < 0) return false;
+    return true;
+  });
+  if (state.sort === 'ai') list = list.slice().sort(function(a,b){
+    var x = (b.tags.indexOf('ai')>=0) - (a.tags.indexOf('ai')>=0); return x || b.date - a.date; });
+  return list;
+}
+
+function thumb(a, eager){
+  if (!a.img) return '<div class="ph"><span class="logo-mark"></span></div>';
+  return '<img src="' + esc(a.img) + '" alt="" ' + (eager ? 'fetchpriority="high"' : 'loading="lazy"') +
+         ' decoding="async" referrerpolicy="no-referrer" onerror="this.outerHTML=\'<div class=&quot;ph&quot;><span class=&quot;logo-mark&quot;></span></div>\'">';
+}
+function srcBadge(a){
+  var s = srcById[a.src];
+  return '<span class="src"><i style="--c:' + s.color + '">' + esc(s.short) + '</i>' + esc(s.name) + '</span>';
+}
+function tagsHtml(a, max){
+  return a.tags.slice(0, max || 2).map(function(t){
+    var T = TOPICS.filter(function(x){ return x.id === t; })[0];
+    return '<span class="tag' + (t === 'ai' ? ' ai' : '') + '">' + esc(t === 'ai' ? 'AI' : T.name) + '</span>';
+  }).join('');
+}
+function isFresh(a){ return a.isNew && Date.now() - a.isNew < 30 * 60000; }
+function linkAttrs(a){ return 'href="' + esc(a.link) + '" target="_blank" rel="noopener noreferrer"'; }
+
+function cardHtml(a, i){
+  return '<a class="card" ' + linkAttrs(a) + ' style="animation-delay:' + Math.min(i % PAGE_SIZE, 12) * 30 + 'ms">' +
+    '<div class="img">' + (isFresh(a) ? '<span class="badge-new">MỚI</span>' : '') + thumb(a) + '</div>' +
+    '<div class="body"><div class="meta">' + srcBadge(a) + '<span class="dot"></span>' + timeHtml(a.date) + '</div>' +
+    '<h3>' + esc(a.title) + '</h3>' + (a.desc ? '<p>' + esc(a.desc) + '</p>' : '') +
+    '<div class="foot">' + tagsHtml(a) + '</div></div></a>';
+}
+
+// Chọn bài tiêu điểm: ưu tiên bài có ảnh, mỗi nguồn tối đa 1 bài
+function pickFeatured(list, n){
+  var used = {}, out = [];
+  for (var i = 0; i < list.length && out.length < n; i++){
+    var a = list[i]; if (!a.img || used[a.src]) continue;
+    used[a.src] = 1; out.push(a);
+  }
+  return out;
+}
+
+function render(){
+  var items = state.items;
+  var srcCount = {}; items.forEach(function(a){ srcCount[a.src] = (srcCount[a.src]||0) + 1; });
+  $('stArticles').textContent = items.length;
+  $('stSources').textContent = Object.keys(srcCount).length;
+  $('stAI').textContent = items.filter(function(a){ return a.tags.indexOf('ai') >= 0; }).length;
+
+  renderChips(srcCount);
+  renderTicker();
+
+  var list = filtered();
+  var isHome = state.topic === 'all' && state.source === 'all' && !state.q;
+  var homeEl = $('home');
+  homeEl.hidden = !isHome || !items.length;
+
+  var exclude = {};
+  if (isHome && items.length){
+    var feat = pickFeatured(items.slice(0, 80), 5);
+    if (feat.length){
+      var L = feat[0];
+      $('featured').innerHTML =
+        '<a class="lead-card" ' + linkAttrs(L) + '><div class="img">' + thumb(L, true) + '</div><div class="body">' +
+        '<div class="meta">' + srcBadge(L) + '<span class="dot"></span>' + timeHtml(L.date) + ' ' + tagsHtml(L, 1) + '</div>' +
+        '<h3>' + esc(L.title) + '</h3>' + (L.desc ? '<p>' + esc(L.desc) + '</p>' : '') + '</div></a>' +
+        '<div class="side-list">' + feat.slice(1).map(function(a){
+          return '<a class="side-item" ' + linkAttrs(a) + '><div class="img">' + thumb(a) + '</div><div>' +
+            '<div class="meta">' + srcBadge(a) + '<span class="dot"></span>' + timeHtml(a.date) + '</div><h3>' + esc(a.title) + '</h3></div></a>';
+        }).join('') + '</div>';
+      feat.forEach(function(a){ exclude[a.id] = 1; });
+    }
+    var ai = items.filter(function(a){ return a.tags.indexOf('ai') >= 0 && !exclude[a.id]; }).slice(0, 12);
+    $('aiRail').innerHTML = ai.length ? ai.map(cardHtml).join('') : '<div class="empty" style="grid-column:1/-1">Chưa có tin AI mới.</div>';
+    ai.forEach(function(a){ exclude[a.id] = 1; });
+    list = list.filter(function(a){ return !exclude[a.id]; });
+  }
+
+  var titleTxt = 'Tất cả tin tức';
+  if (state.q) titleTxt = 'Kết quả cho “' + state.q + '”';
+  else if (state.topic !== 'all') titleTxt = TOPICS.filter(function(t){ return t.id === state.topic; })[0].name;
+  if (state.source !== 'all') titleTxt += (titleTxt === 'Tất cả tin tức' ? '' : ' · ') + (titleTxt === 'Tất cả tin tức' ? 'Tin từ ' : '') + srcById[state.source].name;
+  $('gridTitle').textContent = titleTxt;
+  $('gridSub').textContent = list.length ? list.length + ' bài' : '';
+
+  var grid = $('grid');
+  if (!items.length && state.loading) { grid.innerHTML = skeletons(9); $('moreBtn').hidden = true; return; }
+  if (!list.length) {
+    grid.innerHTML = items.length ? '<div class="empty" style="grid-column:1/-1"><span class="logo-mark"></span><div>Không có bài viết phù hợp bộ lọc.</div></div>' : '';
+    $('moreBtn').hidden = true; return;
+  }
+  grid.innerHTML = list.slice(0, state.shown).map(cardHtml).join('');
+  $('moreBtn').hidden = list.length <= state.shown;
+  $('moreBtn').textContent = 'Xem thêm (' + (list.length - state.shown) + ' bài)';
+}
+
+function skeletons(n){
+  var s = '';
+  for (var i = 0; i < n; i++) s += '<div class="card" style="pointer-events:none"><div class="img sk" style="border-radius:0"></div><div class="body">' +
+    '<div class="sk" style="height:12px;width:40%"></div><div class="sk" style="height:18px"></div><div class="sk" style="height:18px;width:80%"></div>' +
+    '<div class="sk" style="height:12px;width:90%"></div></div></div>';
+  return s;
+}
+
+function renderChips(srcCount){
+  var tc = {}; state.items.forEach(function(a){ a.tags.forEach(function(t){ tc[t] = (tc[t]||0) + 1; }); });
+  $('topicChips').innerHTML = TOPICS.map(function(t){
+    var n = t.id === 'all' ? state.items.length : (tc[t.id] || 0);
+    return '<button class="chip" data-topic="' + t.id + '" aria-pressed="' + (state.topic === t.id) + '">' + esc(t.name) + ' <span class="n">' + n + '</span></button>';
+  }).join('');
+  var srcs = SOURCES.slice().sort(function(a,b){ return (srcCount[b.id]||0) - (srcCount[a.id]||0); });
+  $('srcChips').innerHTML = '<button class="chip" data-src="all" aria-pressed="' + (state.source === 'all') + '">Tất cả</button>' +
+    srcs.map(function(s){
+      var st = sourceHealth(s);
+      return '<button class="chip" data-src="' + s.id + '" aria-pressed="' + (state.source === s.id) + '"><span class="ok ' + st + '"></span>' + esc(s.name) +
+        ' <span class="n">' + (srcCount[s.id] || 0) + '</span></button>';
+    }).join('');
+}
+function sourceHealth(s){
+  var any = false, wait = false;
+  s.feeds.forEach(function(f){ var st = state.feedStatus[typeof f === 'string' ? f : f.url]; if (!st) return; if (st.ok) any = true; if (st.wait) wait = true; });
+  return any ? '' : (wait ? 'wait' : 'err');
+}
+
+function renderTicker(){
+  var top = state.items.slice(0, 14);
+  if (!top.length) { $('ticker').innerHTML = '<span style="color:var(--muted);font-size:13.5px">Đang lấy tin mới nhất…</span>'; return; }
+  var h = top.map(function(a){ return '<a ' + linkAttrs(a) + '><small>' + clock(a.date) + '</small>' + esc(a.title) + '</a>'; }).join('');
+  $('ticker').innerHTML = h + h;   // lặp 2 lần để chạy vòng liền mạch
+}
+
+function renderStatus(){
+  var ok = 0, total = 0, html = '';
+  allFeeds().forEach(function(f){
+    total++;
+    var st = state.feedStatus[f.url] || {};
+    if (st.ok) ok++;
+    var cls = st.ok ? '' : (st.wait ? 'wait' : 'err');
+    var path = f.url.replace(/^https?:\/\/(www\.)?/, '');
+    html += '<div><span class="ok ' + cls + '" style="width:7px;height:7px;border-radius:50%;flex-shrink:0;background:' +
+      (st.ok ? '#2fa86a' : st.wait ? 'var(--muted)' : 'var(--accent)') + '"></span><span title="' + esc(f.url) + '">' + esc(path) + '</span><small>' +
+      (st.ok ? st.n + ' bài' : st.wait ? 'đang tải…' : 'lỗi') + '</small></div>';
+  });
+  $('stList').innerHTML = html;
+  document.querySelector('#statusBox summary').textContent = 'Trạng thái nguồn tin · ' + ok + '/' + total + ' kênh hoạt động';
+  if (state.items.length) renderChips(countBySrc());
+}
+function countBySrc(){ var c = {}; state.items.forEach(function(a){ c[a.src] = (c[a.src]||0) + 1; }); return c; }
+
+function renderEmptyError(){
+  $('grid').innerHTML = '<div class="empty" style="grid-column:1/-1"><span class="logo-mark"></span>' +
+    '<div><b>Chưa tải được tin tức.</b><br>Kiểm tra kết nối Internet rồi bấm “Thử lại”. Trang sẽ tự thử lại sau ít phút.</div>' +
+    '<div style="margin-top:14px"><button class="btn" onclick="window.__dbRefresh()">Thử lại</button></div></div>';
+}
+
+/* ================= Tự động cập nhật ================= */
+var timer = null;
+function schedule(){
+  clearTimeout(timer);
+  state.nextAt = Date.now() + REFRESH_MS;
+  timer = setTimeout(function(){ refresh(); }, REFRESH_MS);
+}
+setInterval(function(){
+  if (state.lastOk) $('lastUpd').textContent = 'Cập nhật lúc ' + clock(state.lastOk) + ' · ' + new Date(state.lastOk).toLocaleDateString('vi-VN');
+  if (state.loading) { $('nextUpd').textContent = 'Đang cập nhật…'; return; }
+  if (!state.nextAt) return;
+  var left = Math.max(0, state.nextAt - Date.now());
+  $('nextUpd').textContent = 'Làm mới sau ' + Math.floor(left/60000) + ':' + String(Math.floor(left/1000) % 60).padStart(2,'0');
+  $('barFill').style.width = (100 - left / REFRESH_MS * 100) + '%';
+}, 1000);
+// cập nhật lại nhãn "x phút trước" mỗi phút
+setInterval(function(){
+  var ts = document.querySelectorAll('time[data-t]');
+  for (var i = 0; i < ts.length; i++) ts[i].textContent = ago(+ts[i].getAttribute('data-t'));
+}, 60000);
+document.addEventListener('visibilitychange', function(){
+  if (!document.hidden && state.lastOk && Date.now() - state.lastOk > REFRESH_MS) refresh();
+});
+
+var toastT;
+function showToast(n){
+  var t = $('toast');
+  t.textContent = '↑ Có ' + n + ' bài viết mới — xem ngay';
+  t.classList.add('show');
+  clearTimeout(toastT); toastT = setTimeout(function(){ t.classList.remove('show'); }, 9000);
+}
+$('toast').addEventListener('click', function(){
+  this.classList.remove('show');
+  state.topic = 'all'; state.source = 'all'; state.q = ''; $('q').value = ''; state.shown = PAGE_SIZE; render();
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+/* ================= Sự kiện ================= */
+document.addEventListener('click', function(e){
+  var c = e.target.closest('.chip'); if (!c) return;
+  if (c.dataset.topic) state.topic = c.dataset.topic;
+  if (c.dataset.src) state.source = c.dataset.src;
+  state.shown = PAGE_SIZE; render();
+});
+var qT;
+$('q').addEventListener('input', function(){ var v = this.value; clearTimeout(qT); qT = setTimeout(function(){ state.q = v.trim(); state.shown = PAGE_SIZE; render(); }, 180); });
+$('sort').addEventListener('change', function(){ state.sort = this.value; render(); });
+$('moreBtn').addEventListener('click', function(){ state.shown += PAGE_SIZE; render(); });
+$('refreshBtn').addEventListener('click', function(){ refresh(true); });
+window.__dbRefresh = function(){ refresh(true); };
+
+// Giao diện sáng/tối
+var savedTheme = load('dbnews:theme');
+if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+$('themeBtn').addEventListener('click', function(){
+  var cur = document.documentElement.getAttribute('data-theme') ||
+    (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  var nx = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', nx); store('dbnews:theme', nx);
+});
+
+/* ================= Khởi động ================= */
+var cached = load(CACHE_KEY);
+if (cached && cached.items && cached.items.length) {
+  state.items = cached.items.map(function(a){ a.tags = a.tags || classify(a); delete a.isNew; return a; });
+  state.lastOk = cached.ts;
+  state.seen = new Set(state.items.map(function(a){ return a.id; }));
+}
+state.loading = !state.items.length;
+render();
+state.loading = false;
+refresh();
+
+})();
+</script>
+</body>
+</html>
