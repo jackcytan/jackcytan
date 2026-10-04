@@ -26,6 +26,15 @@ PAGES = {
                   '--acc-soft:rgba(255,181,71,.08);--acc-soft2:rgba(255,181,71,.18);--acc2:#5B8CFF;--acc2-soft:rgba(91,140,255,.18);',
         'status': 'AUTOMATION DESIGNER',
     },
+    'drabuff-ai-ban-do-dich-vu': {
+        'title': 'Drabuff AI Service Map',
+        'desc': 'Bản đồ toàn bộ dịch vụ AI triển khai cho doanh nghiệp, có sơ đồ quy trình trực quan — Drabuff AI',
+        'css': ['base.css', 'catalog.css'],
+        'js': ['catalog-data.js', 'scene.js', 'catalog.js'],
+        'accent': '--acc:#B69CFF;--acc-d:#8E6EF2;--acc-dd:#46308F;--acc-ink:#120A2A;--acc-glow:rgba(182,156,255,.5);'
+                  '--acc-soft:rgba(182,156,255,.08);--acc-soft2:rgba(182,156,255,.18);--acc2:#45E3FF;--acc2-soft:rgba(69,227,255,.1);',
+        'status': 'AI SERVICE MAP',
+    },
 }
 
 FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
@@ -46,9 +55,9 @@ def b64(p):
 
 
 def body(cfg, logo, full):
-    css = read(os.path.join(SRC, 'base.css'))
-    js = '\n'.join([CONTACT, read(os.path.join(SRC, 'shared.js')), read(os.path.join(SRC, cfg['config'])),
-                    read(os.path.join(SRC, 'scene.js')), read(os.path.join(SRC, 'app.js'))])
+    css = '\n'.join(read(os.path.join(SRC, f)) for f in cfg.get('css', ['base.css']))
+    js_files = cfg.get('js', ['shared.js', cfg.get('config'), 'scene.js', 'app.js'])
+    js = '\n'.join([CONTACT] + [read(os.path.join(SRC, f)) for f in js_files])
     return (
         f'<title>{cfg["title"]}</title>\n'
         f'<meta name="description" content="{cfg["desc"]}">\n{FONTS}\n'

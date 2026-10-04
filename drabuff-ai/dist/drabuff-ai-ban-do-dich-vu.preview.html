@@ -1,0 +1,1161 @@
+<title>Drabuff AI Service Map</title>
+<meta name="description" content="Bản đồ toàn bộ dịch vụ AI triển khai cho doanh nghiệp, có sơ đồ quy trình trực quan — Drabuff AI">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Chakra+Petch:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: fixed WebGL voxel field behind a single centered column — hero (copy + floating 3D sample card) → wizard (block rail + glass panel of keycap options) → engine log → blueprint result + CTA.
+   Deliberately single dark theme ("control room"), accent set per page. */
+:root{
+  --bg:#05070D;
+  --bg2:#0A0F1C;
+  --panel:rgba(11,16,30,.74);
+  --panel2:rgba(17,24,44,.82);
+  --line:rgba(150,175,255,.13);
+  --line2:rgba(150,175,255,.26);
+  --fg:#E9EEFF;
+  --muted:#93A0C2;
+  --dim:#5E6A8C;
+  --ok:#3DDC97;
+  --cap:#070B15;
+  --f-display:'Chakra Petch','Be Vietnam Pro',system-ui,sans-serif;
+  --f-body:'Be Vietnam Pro',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --f-mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{background:var(--bg);color:var(--fg);font:15px/1.6 var(--f-body);-webkit-font-smoothing:antialiased;margin:0;overflow-x:hidden}
+img{max-width:100%}
+[hidden]{display:none!important}
+button{font:inherit}
+::selection{background:var(--acc);color:var(--acc-ink)}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+h1,h2,h3,h4{font-family:var(--f-display);text-wrap:balance;letter-spacing:-.005em;line-height:1.12;margin:0;font-weight:700}
+p{margin:0}
+.mono{font-family:var(--f-mono)}
+
+#bg3d{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}
+.fx{position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:
+   radial-gradient(90% 70% at 25% 30%, rgba(5,7,13,.78) 0%, rgba(5,7,13,.35) 55%, rgba(5,7,13,0) 80%),
+   linear-gradient(180deg, rgba(5,7,13,.45) 0%, rgba(5,7,13,0) 30%, rgba(5,7,13,.25) 75%, rgba(5,7,13,.8) 100%)}
+.fx::after{content:"";position:absolute;inset:0;opacity:.35;
+  background-image:linear-gradient(rgba(150,175,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(150,175,255,.05) 1px,transparent 1px);
+  background-size:48px 48px;mask-image:radial-gradient(70% 60% at 50% 40%,#000 0%,transparent 80%);-webkit-mask-image:radial-gradient(70% 60% at 50% 40%,#000 0%,transparent 80%)}
+.no3d .fx{background:radial-gradient(60% 50% at 75% 25%, var(--acc-soft) 0%, transparent 70%),radial-gradient(50% 50% at 10% 90%, var(--acc2-soft) 0%, transparent 70%)}
+
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;
+  background:rgba(5,7,13,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+@media(min-width:720px){.top{padding:12px 28px}}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--fg);min-width:0}
+.brand img{height:30px;width:auto;display:block}
+.brand .bn{display:flex;flex-direction:column;line-height:1.1}
+.brand b{font-family:var(--f-display);font-size:16px;letter-spacing:.04em}
+.brand small{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
+.top-r{display:flex;align-items:center;gap:10px}
+.status{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;color:var(--muted);display:flex;align-items:center;gap:8px;padding:7px 12px;border:1px solid var(--line);border-radius:999px;background:rgba(10,15,28,.6);white-space:nowrap}
+.status i{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 10px var(--ok)}
+@media(max-width:520px){.status .st-l{display:none}}
+
+.wrap{position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:0 16px 72px}
+@media(min-width:720px){.wrap{padding:0 28px 96px}}
+
+/* shared atoms */
+.eyebrow{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--acc);display:flex;align-items:center;gap:10px}
+.eyebrow .dot{width:8px;height:8px;border-radius:2px;background:var(--acc);box-shadow:0 0 12px var(--acc);animation:blink 1.8s steps(2) infinite}
+@keyframes blink{50%{opacity:.25}}
+.btn{--d:5px;position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;font:600 15px/1.1 var(--f-body);padding:15px 22px;border-radius:11px;
+  border:1px solid var(--line2);background:linear-gradient(180deg,#1A2440,#121a30);color:var(--fg);cursor:pointer;text-decoration:none;
+  transform:translateY(0);box-shadow:0 var(--d) 0 0 var(--cap),0 calc(var(--d) + 12px) 26px -10px rgba(0,0,0,.75);
+  transition:transform .14s cubic-bezier(.3,.7,.3,1),box-shadow .14s,filter .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 calc(var(--d) + 2px) 0 0 var(--cap),0 calc(var(--d) + 16px) 30px -10px rgba(0,0,0,.8)}
+.btn:active{transform:translateY(var(--d));box-shadow:0 0 0 0 var(--cap),0 4px 10px -4px rgba(0,0,0,.6)}
+.btn.primary{background:linear-gradient(180deg,var(--acc),var(--acc-d));color:var(--acc-ink);border-color:rgba(255,255,255,.25);
+  box-shadow:0 var(--d) 0 0 var(--acc-dd),0 16px 44px -12px var(--acc-glow)}
+.btn.primary:hover{box-shadow:0 calc(var(--d) + 2px) 0 0 var(--acc-dd),0 20px 54px -10px var(--acc-glow)}
+.btn.primary:active{box-shadow:0 0 0 0 var(--acc-dd),0 6px 20px -8px var(--acc-glow)}
+.btn.ghost{background:rgba(14,20,36,.7)}
+.btn.link{background:none;border-color:transparent;box-shadow:none;color:var(--muted);padding:10px 6px;text-decoration:underline;text-underline-offset:4px}
+.btn.link:hover,.btn.link:active{transform:none;box-shadow:none;color:var(--fg)}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.arr{transition:transform .2s}
+.btn:hover .arr{transform:translateX(4px)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1fr);gap:48px;padding-block:52px 36px;align-items:center}
+@media(min-width:980px){.hero{grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);padding-block:84px 64px}}
+.hero h1{font-size:clamp(34px,5.2vw,62px);margin-top:20px}
+.hero h1 em{font-style:normal;color:var(--acc);text-shadow:0 0 34px var(--acc-glow)}
+.lead{font-size:clamp(15.5px,1.4vw,17.5px);color:var(--muted);max-width:58ch;margin-top:20px}
+.lead b{color:var(--fg);font-weight:600}
+.hero-cta{display:flex;flex-wrap:wrap;align-items:center;gap:14px 22px;margin-top:32px}
+.hint{font-size:12px;color:var(--dim);letter-spacing:.04em}
+.facts{list-style:none;padding:0;margin:40px 0 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:560px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:rgba(8,12,22,.7);backdrop-filter:blur(8px)}
+.facts li{padding:14px 16px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.facts li+li{border-left:1px solid var(--line)}
+.facts b{font-family:var(--f-display);font-size:clamp(18px,2.2vw,24px);font-variant-numeric:tabular-nums}
+.facts span{font-size:12px;color:var(--muted);line-height:1.35}
+
+.hero-vis{perspective:1400px;display:flex;justify-content:center;padding-block:10px 30px}
+.sample{position:relative;width:min(100%,430px);transform-style:preserve-3d;transform:rotateX(var(--rx,10deg)) rotateY(var(--ry,-16deg));transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.sm-card{position:relative;transform-style:preserve-3d;border-radius:18px;padding:22px;background:linear-gradient(160deg,rgba(24,33,58,.92),rgba(10,15,28,.95));border:1px solid var(--line2);
+  box-shadow:0 1px 0 rgba(255,255,255,.08) inset,0 50px 90px -30px rgba(0,0,0,.9),0 0 0 1px rgba(0,0,0,.4)}
+.sm-tag{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase;display:flex;justify-content:space-between;gap:8px}
+.sm-title{font-family:var(--f-display);font-size:22px;margin-top:10px;line-height:1.15}
+.sm-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.sm-meta span{font-size:11.5px;padding:4px 9px;border-radius:6px;background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--muted)}
+.sm-rows{display:grid;gap:8px;margin-top:16px}
+.sm-row{display:grid;grid-template-columns:54px minmax(0,1fr);gap:10px;align-items:center;font-size:12.5px;color:var(--muted)}
+.sm-row b{font-family:var(--f-mono);font-size:10.5px;color:var(--acc);letter-spacing:.08em}
+.sm-bar{height:26px;border-radius:7px;background:linear-gradient(90deg,var(--acc-soft2),rgba(255,255,255,.03));border:1px solid var(--line);display:flex;align-items:center;padding:0 10px;color:var(--fg);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sm-float{position:absolute;border-radius:12px;padding:10px 14px;background:rgba(10,15,28,.92);border:1px solid var(--line2);backdrop-filter:blur(8px);box-shadow:0 24px 40px -16px rgba(0,0,0,.9);font-size:12px}
+.sm-float.f1{right:-18px;top:-26px;transform:translateZ(80px)}
+.sm-float.f2{left:-22px;bottom:-30px;transform:translateZ(110px)}
+.sm-float b{display:block;font-family:var(--f-display);font-size:22px;color:var(--acc);line-height:1.1}
+.sm-float small{color:var(--muted);font-size:11px}
+.sm-chip{display:inline-flex;align-items:center;gap:8px}
+.sm-chip i{width:9px;height:9px;border-radius:2px;background:var(--acc2);box-shadow:0 0 10px var(--acc2)}
+@media(max-width:560px){.sm-float.f1{right:-4px}.sm-float.f2{left:-4px}}
+
+/* wizard */
+.wiz{display:grid;grid-template-columns:minmax(0,1fr);gap:20px;padding-top:28px;scroll-margin-top:80px}
+@media(min-width:960px){.wiz{grid-template-columns:230px minmax(0,1fr);gap:32px;padding-top:40px}}
+.rail{position:relative}
+@media(min-width:960px){.rail{position:sticky;top:96px;align-self:start}}
+.rail-h{font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;color:var(--dim);margin-bottom:14px}
+.stack{list-style:none;margin:0;padding:0;display:flex;gap:8px}
+@media(min-width:960px){.stack{flex-direction:column;gap:8px}}
+.stack li{display:flex;align-items:center;gap:14px;min-width:0;flex:1}
+@media(min-width:960px){.stack li{flex:none}}
+.blk{position:relative;flex:none;width:100%;height:12px;border-radius:3px;background:#141c32;border:1px solid var(--line);box-shadow:0 4px 0 0 var(--cap);transition:background .3s,box-shadow .3s,transform .3s}
+@media(min-width:960px){.blk{width:46px;height:30px;border-radius:6px;transform:perspective(300px) rotateX(38deg)}}
+.stack li.done .blk{background:linear-gradient(180deg,var(--acc),var(--acc-d));border-color:transparent;box-shadow:0 4px 0 0 var(--acc-dd),0 0 22px -4px var(--acc-glow)}
+.stack li.cur .blk{background:var(--acc-soft2);border-color:var(--acc);animation:breathe 1.6s ease-in-out infinite}
+@keyframes breathe{50%{box-shadow:0 4px 0 0 var(--cap),0 0 26px -2px var(--acc-glow)}}
+.stack .t{display:none;font-size:13.5px;color:var(--muted)}
+@media(min-width:960px){.stack .t{display:block}}
+.stack li.cur .t{color:var(--fg);font-weight:600}
+.stack li.done .t{color:var(--fg)}
+
+.panel{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:20px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  box-shadow:0 1px 0 rgba(255,255,255,.06) inset,0 50px 100px -40px rgba(0,0,0,.9);padding:clamp(20px,3.4vw,40px)}
+.panel-h{display:grid;gap:8px;padding-bottom:22px;margin-bottom:26px;border-bottom:1px dashed var(--line2)}
+.step-no{font-size:11.5px;letter-spacing:.16em;color:var(--acc)}
+.step-title{font-size:clamp(24px,3vw,34px)}
+.step-sub{color:var(--muted);max-width:62ch}
+.qs{display:grid;grid-template-columns:minmax(0,1fr);gap:28px;align-items:start}
+@media(min-width:720px){.qs{grid-template-columns:repeat(2,minmax(0,1fr))}.q{grid-column:1/-1}.q.half{grid-column:auto}}
+.q{min-width:0;display:grid;gap:12px;align-content:start}
+.q-h{display:grid;gap:4px}
+.q-l{font-weight:600;font-size:15.5px;color:var(--fg)}
+.q-l i{font-style:normal;color:var(--acc);margin-left:4px}
+.q-help{font-size:13px;color:var(--muted)}
+.q-tag{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;color:var(--dim);text-transform:uppercase}
+.inp,.ta{width:100%;background:rgba(4,7,14,.72);border:1px solid var(--line2);border-radius:11px;padding:14px 16px;color:var(--fg);font:500 15px/1.5 var(--f-body);box-shadow:inset 0 2px 0 rgba(0,0,0,.45);transition:border-color .2s,box-shadow .2s}
+.inp::placeholder,.ta::placeholder{color:var(--dim)}
+.inp:focus,.ta:focus{outline:none;border-color:var(--acc);box-shadow:inset 0 2px 0 rgba(0,0,0,.45),0 0 0 4px var(--acc-soft)}
+.ta{min-height:96px;resize:vertical}
+.q.bad .inp,.q.bad .ta{border-color:#FF6B7A}
+.q.bad .opts{outline:1px dashed #FF6B7A;outline-offset:6px;border-radius:12px}
+.opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px 12px;padding-bottom:6px}
+.opts.wide{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+.opt{--d:6px;position:relative;text-align:left;display:flex;flex-direction:column;gap:4px;padding:13px 40px 13px 15px;border-radius:12px;border:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(32,43,72,.78),rgba(15,21,38,.9));color:var(--fg);font:500 14.5px/1.35 var(--f-body);cursor:pointer;min-width:0;
+  box-shadow:0 var(--d) 0 0 var(--cap),0 var(--d) 0 1px rgba(150,175,255,.08),0 18px 26px -16px rgba(0,0,0,.85);transform:translateY(0);
+  transition:transform .16s cubic-bezier(.3,.7,.3,1),box-shadow .16s,border-color .2s,background .2s}
+.opt:hover{transform:translateY(-2px);border-color:var(--line2)}
+.opt[aria-pressed="true"]{transform:translateY(4px);border-color:var(--acc);background:linear-gradient(180deg,var(--acc-soft2),var(--acc-soft));
+  box-shadow:0 2px 0 0 var(--acc-dd),0 0 30px -8px var(--acc-glow)}
+.o-d{font-size:12.5px;color:var(--muted);font-weight:400}
+.o-k{position:absolute;top:12px;right:12px;width:20px;height:20px;border-radius:6px;border:1px solid var(--line2);display:grid;place-items:center;font-size:12px;line-height:1;color:transparent;transition:background .2s}
+.opt[aria-pressed="true"] .o-k{background:var(--acc);border-color:var(--acc);color:var(--acc-ink)}
+.opt.shake{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.rng{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center}
+.rng output{font-family:var(--f-display);font-size:26px;color:var(--acc);min-width:6ch;text-align:right;font-variant-numeric:tabular-nums}
+.rng output small{font-family:var(--f-body);font-size:12px;color:var(--muted);margin-left:4px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:10px;border-radius:6px;background:linear-gradient(90deg,var(--acc) var(--p,30%),#141c32 var(--p,30%));border:1px solid var(--line);box-shadow:inset 0 2px 0 rgba(0,0,0,.4)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:7px;background:linear-gradient(180deg,#fff,#cfd8f0);border:0;box-shadow:0 4px 0 #6b7696,0 0 0 4px var(--acc-soft),0 8px 16px rgba(0,0,0,.6);cursor:grab}
+input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:7px;background:#e9eeff;border:0;box-shadow:0 4px 0 #6b7696,0 0 0 4px var(--acc-soft);cursor:grab}
+.rng-l{display:flex;justify-content:space-between;font-size:11.5px;color:var(--dim);font-family:var(--f-mono);grid-column:1/-1;margin-top:-8px}
+.sugs{display:flex;flex-wrap:wrap;gap:8px}
+.sug{font-size:12.5px;padding:7px 11px;border-radius:8px;border:1px dashed var(--line2);background:transparent;color:var(--muted);cursor:pointer;transition:color .2s,border-color .2s}
+.sug:hover{color:var(--fg);border-color:var(--acc)}
+.sug::before{content:"+ ";color:var(--acc)}
+.err{margin-top:20px;font-size:13.5px;color:#FF8A96;padding:10px 14px;border-radius:10px;background:rgba(255,107,122,.08);border:1px solid rgba(255,107,122,.3)}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:24px;border-top:1px dashed var(--line2);flex-wrap:wrap}
+.nav .cnt{font-family:var(--f-mono);font-size:12px;color:var(--dim)}
+
+/* engine */
+.think{display:grid;place-items:center;padding-block:60px;scroll-margin-top:80px}
+.think-box{width:min(100%,640px);text-align:left}
+.think-box h2{font-size:clamp(24px,3.4vw,36px);margin-top:12px}
+.log{list-style:none;margin:24px 0 0;padding:18px;border-radius:14px;background:rgba(3,5,10,.85);border:1px solid var(--line);font-size:12.5px;line-height:1.9;min-height:220px;color:var(--muted);overflow:hidden}
+.log li{display:flex;gap:10px;animation:in .3s ease-out}
+.log li b{color:var(--acc);font-weight:400}
+.log li.ok b{color:var(--ok)}
+@keyframes in{from{opacity:0;transform:translateY(4px)}}
+.bar{height:6px;border-radius:4px;background:#121a2e;margin-top:16px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--acc2),var(--acc));box-shadow:0 0 16px var(--acc-glow);transition:width .4s}
+
+/* result */
+.result{padding-top:36px;display:grid;gap:22px;scroll-margin-top:72px}
+.r-head{position:relative;overflow:hidden}
+.r-head .eyebrow{justify-content:space-between;flex-wrap:wrap}
+.r-for{color:var(--muted);margin-top:18px;font-size:14px}
+.r-for b{color:var(--fg)}
+.r-title{font-size:clamp(28px,4vw,46px);margin-top:8px}
+.r-title em{font-style:normal;color:var(--acc)}
+.r-sum{color:var(--muted);max-width:70ch;margin-top:14px;font-size:16px}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:26px}
+@media(min-width:760px){.tiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.tile{padding:16px;border-radius:14px;background:rgba(4,7,14,.6);border:1px solid var(--line);box-shadow:0 5px 0 0 var(--cap);min-width:0}
+.tile span{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase}
+.tile b{display:block;font-family:var(--f-display);font-size:clamp(20px,2.4vw,28px);margin-top:6px;line-height:1.1;font-variant-numeric:tabular-nums}
+.tile small{display:block;color:var(--muted);font-size:12px;margin-top:4px}
+.sec-h{display:grid;gap:6px;margin-bottom:20px}
+.sec-h h3{font-size:clamp(20px,2.4vw,27px)}
+.sec-h p:not(.eyebrow){color:var(--muted);font-size:14px;max-width:70ch}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr);gap:22px}
+@media(min-width:900px){.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.why{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.why li{display:grid;grid-template-columns:86px minmax(0,1fr);gap:12px;align-items:start;color:var(--muted);font-size:14.5px}
+.why li b{color:var(--fg);font-weight:600}
+.why .k{height:26px;padding:0 8px;border-radius:7px;display:grid;place-items:center;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;background:var(--acc-soft);color:var(--acc);font-family:var(--f-mono);font-size:12px;border:1px solid var(--line2)}
+.checks{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.checks li{position:relative;padding-left:30px;font-size:14.5px;color:var(--fg)}
+.checks li::before{content:"";position:absolute;left:0;top:3px;width:18px;height:18px;border-radius:5px;background:var(--acc-soft2);border:1px solid var(--acc)}
+.checks li::after{content:"";position:absolute;left:6px;top:7px;width:6px;height:9px;border:solid var(--acc);border-width:0 2px 2px 0;transform:rotate(45deg)}
+.checks li small{display:block;color:var(--muted);font-size:13px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:13px;padding:7px 12px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid var(--line2);color:var(--fg);box-shadow:0 3px 0 0 var(--cap)}
+.chip.acc{border-color:var(--acc);color:var(--acc)}
+.note{font-size:12.5px;color:var(--dim);margin-top:14px}
+
+/* timeline (course) */
+.days{display:grid;gap:18px}
+.day{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+@media(min-width:820px){.day{grid-template-columns:150px minmax(0,1fr);gap:22px}}
+.day-l{display:flex;flex-direction:column;gap:2px}
+@media(min-width:820px){.day-l{position:sticky;top:90px;align-self:start}}
+.day-l b{font-family:var(--f-display);font-size:24px;color:var(--acc)}
+.day-l span{font-size:12.5px;color:var(--muted)}
+.sess{display:grid;gap:12px}
+.ses{border-radius:14px;border:1px solid var(--line);background:rgba(4,7,14,.55);overflow:hidden}
+.ses-h{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 16px;background:rgba(255,255,255,.03);border-bottom:1px solid var(--line);font-family:var(--f-mono);font-size:11.5px;letter-spacing:.08em;color:var(--muted)}
+.mod{padding:16px;display:grid;gap:8px}
+.mod+.mod{border-top:1px dashed var(--line)}
+.mod h4{font-size:17px}
+.mod ul{margin:0;padding-left:18px;color:var(--muted);font-size:14px;display:grid;gap:3px}
+.lab{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;padding:10px 12px;border-radius:10px;background:var(--acc-soft);border:1px solid var(--line2);color:var(--fg)}
+.lab .mono{font-size:10.5px;letter-spacing:.12em;color:var(--acc);padding-top:2px;flex:none}
+
+/* services (automation) */
+.svcs{display:grid;gap:18px}
+.svc{display:grid;gap:16px;border-radius:16px;border:1px solid var(--line);background:rgba(4,7,14,.55);padding:clamp(16px,2.6vw,26px);box-shadow:0 6px 0 0 var(--cap)}
+.svc-h{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start}
+.svc-h h4{font-size:clamp(19px,2.2vw,24px)}
+.svc-h p{color:var(--muted);font-size:14px;margin-top:6px;max-width:68ch}
+.prio{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;padding:6px 10px;border-radius:7px;border:1px solid var(--acc);color:var(--acc);white-space:nowrap}
+.prio.p2{border-color:var(--acc2);color:var(--acc2)}
+.prio.p3{border-color:var(--line2);color:var(--muted)}
+.flow{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+@media(min-width:820px){.flow{grid-template-columns:repeat(4,minmax(0,1fr));gap:0}}
+.fs{position:relative;padding:12px 14px;border-radius:10px;background:linear-gradient(180deg,rgba(32,43,72,.7),rgba(15,21,38,.85));border:1px solid var(--line2);font-size:13px;box-shadow:0 4px 0 0 var(--cap);min-width:0}
+.fs span{display:block;font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;color:var(--acc);margin-bottom:4px}
+@media(min-width:820px){.fs{margin-right:22px}.fs:last-child{margin-right:0}.fs:not(:last-child)::after{content:"";position:absolute;right:-17px;top:50%;width:12px;height:12px;border:solid var(--acc);border-width:2px 2px 0 0;transform:translateY(-50%) rotate(45deg)}}
+.svc-b{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+@media(min-width:820px){.svc-b{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.svc-b h5{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;color:var(--dim);margin:0 0 8px;font-weight:400;text-transform:uppercase}
+.svc-b ul{margin:0;padding-left:18px;font-size:13.5px;color:var(--muted);display:grid;gap:3px}
+.svc-b p{font-size:13.5px;color:var(--fg)}
+.fit{font-size:13.5px;color:var(--muted);padding:10px 12px;border-left:2px solid var(--acc);background:var(--acc-soft);border-radius:0 8px 8px 0}
+.fit b{color:var(--fg)}
+
+.arch{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;perspective:1600px}
+@media(min-width:900px){.arch{grid-template-columns:1fr 1.4fr 1fr 1fr;align-items:stretch}}
+.lane{border-radius:14px;padding:14px;border:1px solid var(--line);background:rgba(4,7,14,.55);display:flex;flex-direction:column;gap:8px;min-width:0}
+.lane.core{border-color:var(--acc);background:linear-gradient(180deg,var(--acc-soft2),rgba(4,7,14,.6));box-shadow:0 0 50px -20px var(--acc-glow)}
+.lane h5{margin:0 0 4px;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;color:var(--dim);font-weight:400}
+.lane.core h5{color:var(--acc)}
+.node{font-size:13px;padding:9px 11px;border-radius:9px;background:rgba(255,255,255,.04);border:1px solid var(--line2);box-shadow:0 3px 0 0 var(--cap)}
+.lane.core .node{background:rgba(5,8,16,.7)}
+
+.phases{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+@media(min-width:860px){.phases{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.ph{border-radius:14px;padding:18px;border:1px solid var(--line);background:rgba(4,7,14,.55);display:grid;gap:10px;align-content:start;position:relative}
+.ph .mono{font-size:10.5px;letter-spacing:.14em;color:var(--acc)}
+.ph h4{font-size:18px}
+.ph ul{margin:0;padding-left:18px;font-size:13.5px;color:var(--muted);display:grid;gap:3px}
+.ph .tl{font-size:12px;color:var(--dim)}
+
+.howto{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:12px;counter-reset:s}
+@media(min-width:760px){.howto{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.howto li{counter-increment:s;padding:16px;border-radius:12px;border:1px solid var(--line);background:rgba(4,7,14,.5);font-size:13.5px;color:var(--muted);display:grid;gap:6px;align-content:start}
+.howto li::before{content:counter(s,decimal-leading-zero);font-family:var(--f-mono);font-size:12px;color:var(--acc)}
+.howto b{color:var(--fg);font-size:15px}
+.quote{font-size:14.5px;color:var(--fg);padding:14px 16px;border-radius:12px;background:rgba(255,255,255,.03);border:1px dashed var(--line2)}
+.quote span{display:block;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;color:var(--dim);margin-bottom:6px}
+
+/* cta */
+.cta{display:grid;grid-template-columns:minmax(0,1fr);gap:28px;border-color:var(--acc);
+  background:radial-gradient(80% 120% at 100% 0%,var(--acc-soft2),transparent 60%),var(--panel)}
+@media(min-width:900px){.cta{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);align-items:center}}
+.cta h2{font-size:clamp(26px,3.6vw,40px);margin-top:12px}
+.cta-l>p{color:var(--muted);margin-top:12px;max-width:58ch}
+.cta-steps{margin:18px 0 0;padding-left:20px;color:var(--muted);font-size:14px;display:grid;gap:4px}
+.cta-steps b{color:var(--fg)}
+.cta-r{display:grid;gap:12px}
+.idbox{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.idbox div{padding:12px 14px;border-radius:12px;background:rgba(4,7,14,.7);border:1px solid var(--line2);min-width:0}
+.idbox span{display:block;font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;color:var(--dim)}
+.idbox b{display:block;font-family:var(--f-display);font-size:20px;color:var(--fg);margin-top:2px;user-select:all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.idbox .z b{color:var(--acc)}
+.copied{font-size:12.5px;color:var(--ok);min-height:1.2em}
+#sumtxt{width:100%;min-height:140px;font:12.5px/1.5 var(--f-mono);background:rgba(4,7,14,.8);color:var(--fg);border:1px solid var(--line2);border-radius:10px;padding:12px}
+
+.foot{position:relative;z-index:2;border-top:1px solid var(--line);padding:22px 16px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;max-width:1200px;margin:0 auto;color:var(--dim);font-size:12.5px}
+.foot b{color:var(--muted)}
+@media(min-width:720px){.foot{padding:22px 28px}}
+
+.reveal{animation:rise .6s cubic-bezier(.2,.7,.2,1) both}
+@keyframes rise{from{transform:translateY(14px);opacity:.001}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+
+/* Catalog page additions — isometric layer stack hero, keycap service grid, animated process viewer */
+.sec{padding-top:72px;scroll-margin-top:70px}
+.sec-top{display:grid;gap:10px;margin-bottom:26px;max-width:760px}
+.sec-top h2{font-size:clamp(26px,3.6vw,42px)}
+.sec-top p:not(.eyebrow){color:var(--muted);font-size:16px}
+
+/* hero iso stack */
+.iso-wrap{position:relative;height:440px;display:grid;place-items:center;perspective:1800px}
+@media(max-width:560px){.iso-wrap{height:340px}}
+.iso{position:relative;width:300px;height:300px;transform-style:preserve-3d;transform:rotateX(58deg) rotateZ(-40deg);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+@media(max-width:560px){.iso{width:220px;height:220px}}
+.slab{position:absolute;inset:0;transform-style:preserve-3d;transform:translateZ(calc(var(--i) * 46px));transition:transform .35s cubic-bezier(.2,.7,.2,1);cursor:pointer;border:0;padding:0;background:none;font:inherit;color:inherit}
+@media(max-width:560px){.slab{transform:translateZ(calc(var(--i) * 34px))}}
+.slab .top{position:absolute;inset:0;border-radius:16px;background:linear-gradient(135deg,rgba(40,48,86,.86),rgba(14,18,36,.9));border:1px solid var(--line2);box-shadow:inset 0 0 0 1px rgba(255,255,255,.03),0 0 40px -18px var(--acc-glow);display:flex;align-items:flex-end;justify-content:flex-start;padding:16px 18px;transition:background .3s,border-color .3s,box-shadow .3s}
+.slab .top b{font-family:var(--f-display);font-size:17px;line-height:1.1;text-align:left;color:var(--fg)}
+.slab .top small{display:block;font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;color:var(--acc);margin-bottom:4px}
+.slab .side{position:absolute;left:0;right:0;bottom:0;height:12px;transform-origin:bottom;transform:rotateX(-90deg);background:linear-gradient(180deg,var(--acc-dd),#0a0d1c);border-radius:0 0 6px 6px;opacity:.9}
+.slab .side.r{left:auto;top:0;width:12px;height:auto;transform-origin:right;transform:rotateY(90deg);background:linear-gradient(90deg,#0a0d1c,var(--acc-dd));border-radius:0 6px 6px 0}
+.slab:hover,.slab:focus-visible{transform:translateZ(calc(var(--i) * 46px + 22px))}
+.slab:hover .top,.slab:focus-visible .top{border-color:var(--acc);background:linear-gradient(135deg,var(--acc-soft2),rgba(14,18,36,.92));box-shadow:0 0 60px -10px var(--acc-glow)}
+.slab:focus-visible{outline:none}
+.slab.base .top{background:repeating-linear-gradient(45deg,rgba(255,255,255,.03) 0 8px,transparent 8px 16px),linear-gradient(135deg,#141a32,#0a0d1c)}
+.iso-cap{position:absolute;left:50%;bottom:0;transform:translateX(-50%);font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;color:var(--dim);white-space:nowrap}
+
+/* tabs */
+.tabs{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:22px}
+.tab{--d:4px;font:600 13.5px/1.2 var(--f-body);padding:11px 15px;border-radius:10px;border:1px solid var(--line);background:linear-gradient(180deg,rgba(32,43,72,.8),rgba(15,21,38,.9));color:var(--muted);cursor:pointer;
+  box-shadow:0 var(--d) 0 0 var(--cap),0 12px 20px -14px rgba(0,0,0,.8);transform:translateY(0);transition:transform .15s,box-shadow .15s,color .2s,border-color .2s;display:inline-flex;gap:8px;align-items:center}
+.tab:hover{color:var(--fg);transform:translateY(-2px)}
+.tab[aria-selected="true"]{color:var(--acc-ink);background:linear-gradient(180deg,var(--acc),var(--acc-d));border-color:transparent;transform:translateY(3px);box-shadow:0 1px 0 0 var(--acc-dd),0 0 26px -8px var(--acc-glow)}
+.tab .ct{font-family:var(--f-mono);font-size:11px;opacity:.75}
+.cat-desc{color:var(--muted);margin:-6px 0 20px;font-size:14.5px;min-height:1.5em}
+.cat-desc b{color:var(--fg)}
+.explored{font-family:var(--f-mono);font-size:11.5px;color:var(--dim);letter-spacing:.08em}
+.explored b{color:var(--acc);font-weight:600}
+
+/* service keycaps */
+.keys{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px 14px}
+.key{--d:7px;position:relative;text-align:left;display:grid;gap:6px;align-content:start;padding:16px 16px 18px;border-radius:14px;border:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(36,46,78,.82),rgba(14,19,35,.92));color:var(--fg);cursor:pointer;min-width:0;font:inherit;
+  box-shadow:0 1px 0 rgba(255,255,255,.07) inset,0 var(--d) 0 0 var(--cap),0 var(--d) 0 1px rgba(150,175,255,.08),0 22px 30px -18px rgba(0,0,0,.9);
+  transform:translateY(0);transition:transform .16s cubic-bezier(.3,.7,.3,1),box-shadow .16s,border-color .2s,background .2s}
+.key:hover{transform:translateY(-3px);border-color:var(--line2)}
+.key:active{transform:translateY(5px)}
+.key[aria-pressed="true"]{transform:translateY(5px);border-color:var(--acc);background:linear-gradient(180deg,var(--acc-soft2),rgba(14,19,35,.92));box-shadow:0 2px 0 0 var(--acc-dd),0 0 36px -10px var(--acc-glow)}
+.key .kc{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;color:var(--acc);display:flex;justify-content:space-between;gap:8px}
+.key .kc i{font-style:normal;color:var(--dim)}
+.key b{font-family:var(--f-display);font-size:17px;line-height:1.2;font-weight:600}
+.key small{font-size:12.5px;color:var(--muted);line-height:1.4}
+.key .star{position:absolute;top:12px;right:12px;width:8px;height:8px;border-radius:50%;background:var(--acc2);box-shadow:0 0 10px var(--acc2)}
+
+/* viewer */
+.viewer{margin-top:30px;scroll-margin-top:76px}
+.vw-h{display:grid;grid-template-columns:auto minmax(0,1fr);gap:20px;align-items:center}
+@media(min-width:900px){.vw-h{grid-template-columns:auto minmax(0,1fr) auto}}
+.cube3{width:78px;height:78px;position:relative;perspective:400px;flex:none}
+.cube3 span{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-mono);font-weight:600;font-size:17px;color:var(--acc-ink);border-radius:16px;
+  background:linear-gradient(145deg,var(--acc),var(--acc-d));box-shadow:0 8px 0 0 var(--acc-dd),0 18px 40px -10px var(--acc-glow);transform:rotateX(14deg) rotateY(-14deg)}
+.vw-h h3{font-size:clamp(24px,3.2vw,36px);margin-top:6px}
+.vw-h .tg{color:var(--muted);margin-top:6px;font-size:15px}
+.vw-meta{display:flex;gap:10px;flex-wrap:wrap;grid-column:1/-1}
+@media(min-width:900px){.vw-meta{grid-column:auto}}
+.vw-meta div{padding:10px 14px;border-radius:12px;background:rgba(4,7,14,.65);border:1px solid var(--line2);min-width:120px}
+.vw-meta span{display:block;font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;color:var(--dim)}
+.vw-meta b{font-family:var(--f-display);font-size:18px}
+.cxm{display:flex;gap:4px;margin-top:6px}
+.cxm i{width:22px;height:8px;border-radius:2px;background:#1a2340;border:1px solid var(--line)}
+.cxm i.on{background:var(--acc);border-color:var(--acc);box-shadow:0 0 10px -2px var(--acc-glow)}
+.easy{margin-top:26px;display:grid;grid-template-columns:minmax(0,1fr);gap:8px;padding:18px 20px;border-radius:14px;background:linear-gradient(90deg,var(--acc-soft2),rgba(4,7,14,.4));border:1px solid var(--line2);position:relative;overflow:hidden}
+.easy::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--acc)}
+.easy span{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.16em;color:var(--acc)}
+.easy p{font-size:clamp(15.5px,1.5vw,18px);line-height:1.6;color:var(--fg);max-width:78ch}
+.fl-h{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin:34px 0 18px}
+.fl-h h4{font-size:20px}
+.fl-h p{color:var(--muted);font-size:13.5px;margin-top:4px}
+.btn.sm{padding:10px 14px;font-size:13px;--d:4px}
+
+.flow2{position:relative;display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:30px}
+.flow2 .track{position:absolute;top:36px;left:calc(50% / var(--n));right:calc(50% / var(--n));height:3px;border-radius:2px;
+  background:repeating-linear-gradient(90deg,var(--acc-dd) 0 10px,transparent 10px 16px);opacity:.9}
+.flow2 .track .fill{position:absolute;left:0;top:0;bottom:0;width:var(--p,0%);background:linear-gradient(90deg,var(--acc2),var(--acc));box-shadow:0 0 12px var(--acc-glow);transition:width .9s cubic-bezier(.4,.1,.2,1);border-radius:2px}
+.flow2 .pk{position:absolute;top:50%;left:var(--p,0%);width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px var(--acc-soft2),0 0 22px var(--acc);transition:left .9s cubic-bezier(.4,.1,.2,1)}
+.nd{position:relative;z-index:1;display:grid;gap:10px;justify-items:center;text-align:center;align-content:start;cursor:default}
+.nd-k{width:72px;height:72px;border-radius:16px;display:grid;place-items:center;font-family:var(--f-mono);font-size:15px;font-weight:600;color:var(--muted);
+  background:linear-gradient(180deg,#232d4e,#121931);border:1px solid var(--line2);box-shadow:0 7px 0 0 var(--cap),0 18px 30px -14px rgba(0,0,0,.9);transition:all .4s cubic-bezier(.2,.7,.2,1)}
+.nd h5{font-family:var(--f-display);font-size:16px;margin:4px 0 0;line-height:1.25;transition:color .3s}
+.nd p{font-size:13px;color:var(--muted);line-height:1.5;max-width:28ch}
+.nd.on .nd-k{color:var(--acc-ink);background:linear-gradient(180deg,var(--acc),var(--acc-d));border-color:transparent;transform:translateY(-6px);box-shadow:0 11px 0 0 var(--acc-dd),0 0 40px -6px var(--acc-glow)}
+.nd.on h5{color:var(--acc)}
+.nd.done .nd-k{color:var(--fg);border-color:var(--acc)}
+.nd .bt{position:absolute;top:-8px;right:calc(50% - 46px);font-family:var(--f-mono);font-size:9.5px;letter-spacing:.08em;padding:3px 6px;border-radius:5px;background:var(--acc2);color:#0b0b18;z-index:2}
+/* chevrons between nodes */
+.nd:not(:last-child)::after{content:"";position:absolute;top:30px;right:-22px;width:12px;height:12px;border:solid var(--acc);border-width:3px 3px 0 0;transform:rotate(45deg);filter:drop-shadow(0 0 6px var(--acc-glow))}
+.branch{position:relative;margin-top:30px;display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:30px}
+.br-box{grid-column:var(--bs)/span 2;position:relative;padding:14px 16px 14px 16px;border-radius:12px;border:1px dashed var(--acc2);background:var(--acc2-soft);font-size:13.5px;color:var(--fg);line-height:1.5}
+.br-box::before{content:"";position:absolute;bottom:100%;left:var(--bx);height:30px;border-left:2px dashed var(--acc2)}
+.br-box::after{content:"";position:absolute;top:-8px;left:var(--bx);width:10px;height:10px;margin-left:-5px;border:solid var(--acc2);border-width:0 2px 2px 0;transform:rotate(45deg)}
+.br-box .mono{display:block;font-size:10px;letter-spacing:.14em;color:var(--acc2);margin-bottom:4px}
+.br-box b{color:var(--acc2)}
+@media(max-width:819px){
+  .flow2{grid-template-columns:minmax(0,1fr);gap:26px}
+  .flow2 .track{display:none}
+  .nd{grid-template-columns:64px minmax(0,1fr);justify-items:start;text-align:left;column-gap:16px;row-gap:4px}
+  .nd-k{width:60px;height:60px;grid-row:span 2}
+  .nd h5{margin:6px 0 0}
+  .nd p{max-width:none}
+  .nd:not(:last-child)::after{top:auto;bottom:-22px;right:auto;left:24px;transform:rotate(135deg)}
+  .nd .bt{right:auto;left:40px;top:-8px}
+  .branch{grid-template-columns:minmax(0,1fr)}
+  .br-box{grid-column:1/-1;margin-left:30px}
+  .br-box::before,.br-box::after{left:20px}
+}
+.vw-cols{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;margin-top:34px}
+@media(min-width:860px){.vw-cols{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.vc{padding:18px;border-radius:14px;background:rgba(4,7,14,.55);border:1px solid var(--line);display:grid;gap:12px;align-content:start}
+.vc h5{margin:0;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.16em;color:var(--dim);font-weight:400}
+.vc ul{margin:0;padding-left:18px;display:grid;gap:6px;font-size:14px;color:var(--fg)}
+.vc .checks li{font-size:14px}
+.vw-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:30px;padding-top:22px;border-top:1px dashed var(--line2)}
+.vw-foot .grp{display:flex;gap:10px;flex-wrap:wrap}
+.btn.on-list{border-color:var(--acc2);color:var(--acc2)}
+
+/* architecture */
+.arch2{display:grid;grid-template-columns:minmax(0,1fr);gap:18px}
+@media(min-width:1000px){.arch2{grid-template-columns:minmax(0,1fr) 260px}}
+.stack2{display:grid;gap:0}
+.ly{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;padding:18px;border-radius:16px;border:1px solid var(--line);background:rgba(8,12,24,.72);backdrop-filter:blur(10px);box-shadow:0 6px 0 0 var(--cap);scroll-margin-top:90px;transition:border-color .3s,box-shadow .3s}
+@media(min-width:760px){.ly{grid-template-columns:230px minmax(0,1fr);align-items:center}}
+.ly.flash{border-color:var(--acc);box-shadow:0 6px 0 0 var(--acc-dd),0 0 50px -16px var(--acc-glow)}
+.ly-h .mono{font-size:10.5px;letter-spacing:.16em;color:var(--acc)}
+.ly-h h4{font-size:18px;margin-top:4px}
+.ly-h p{font-size:13px;color:var(--muted);margin-top:4px}
+.ly-b{display:flex;flex-wrap:wrap;gap:10px}
+.chip2{--d:4px;font:500 13px/1.2 var(--f-body);padding:10px 12px;border-radius:9px;border:1px solid var(--line2);background:linear-gradient(180deg,#1f2846,#121931);color:var(--fg);cursor:pointer;
+  box-shadow:0 var(--d) 0 0 var(--cap);transform:translateY(0);transition:transform .15s,box-shadow .15s,border-color .2s;display:inline-flex;gap:8px;align-items:center}
+.chip2 span{font-family:var(--f-mono);font-size:10.5px;color:var(--acc)}
+.chip2:hover{transform:translateY(-2px);border-color:var(--acc)}
+.chip2:active{transform:translateY(var(--d));box-shadow:none}
+.ly-arrow{display:flex;justify-content:center;gap:40px;padding:6px 0;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;color:var(--dim)}
+.ly-arrow span{display:flex;flex-direction:column;align-items:center;gap:2px}
+.ly-arrow i{display:block;width:2px;height:22px;background:repeating-linear-gradient(180deg,var(--acc) 0 4px,transparent 4px 8px);background-size:2px 8px;animation:flowdn 1s linear infinite}
+.ly-arrow .up i{background:repeating-linear-gradient(180deg,var(--acc2) 0 4px,transparent 4px 8px);background-size:2px 8px;animation:flowup 1s linear infinite}
+.ly-arrow .dn::after,.ly-arrow .up::before{content:"";width:8px;height:8px;border:solid var(--acc);border-width:0 2px 2px 0;transform:rotate(45deg);margin-top:-6px}
+.ly-arrow .up::before{border-color:var(--acc2);transform:rotate(-135deg);margin:0 0 -6px}
+@keyframes flowdn{to{background-position:0 8px}}
+@keyframes flowup{to{background-position:0 -8px}}
+.gov{border-radius:16px;padding:18px;border:1px dashed var(--acc2);background:linear-gradient(180deg,var(--acc2-soft),rgba(8,12,24,.72));display:grid;gap:12px;align-content:start}
+@media(min-width:1000px){.gov{position:sticky;top:90px;align-self:start}}
+.gov .mono{font-size:10.5px;letter-spacing:.16em;color:var(--acc2)}
+.gov h4{font-size:18px}
+.gov p{font-size:13px;color:var(--muted)}
+.gov .ly-b{flex-direction:column;align-items:stretch}
+
+/* llm compare */
+.cmp{display:grid;grid-template-columns:minmax(0,1fr);gap:18px}
+@media(min-width:900px){.cmp{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.cm{display:grid;gap:14px;align-content:start;padding:22px;border-radius:18px;border:1px solid var(--line);background:var(--panel);backdrop-filter:blur(14px);box-shadow:0 8px 0 0 var(--cap),0 40px 60px -40px rgba(0,0,0,.9)}
+.cm.mid{border-color:var(--acc)}
+.cm .mono{font-size:10.5px;letter-spacing:.16em;color:var(--acc)}
+.cm h4{font-size:21px}
+.cm .an{font-size:13.5px;color:var(--muted);font-style:italic}
+.meter{display:grid;gap:6px}
+.meter div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:10px;align-items:center;font-size:12.5px;color:var(--muted)}
+.meter .bars{display:flex;gap:4px}
+.meter .bars i{flex:1;height:8px;border-radius:2px;background:#1a2340}
+.meter .bars i.on{background:linear-gradient(90deg,var(--acc2),var(--acc))}
+.cm dl{margin:0;display:grid;gap:10px}
+.cm dt{font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;color:var(--dim)}
+.cm dd{margin:2px 0 0;font-size:14px;color:var(--fg)}
+.hybrid{margin-top:18px;padding:18px 20px;border-radius:14px;border:1px dashed var(--acc2);background:var(--acc2-soft);font-size:14.5px;color:var(--fg);display:grid;gap:6px}
+.hybrid .mono{font-size:10.5px;letter-spacing:.16em;color:var(--acc2)}
+
+/* journey */
+.jr{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:26px;counter-reset:j}
+@media(min-width:900px){.jr{grid-template-columns:repeat(5,minmax(0,1fr));gap:28px}}
+.jr li{counter-increment:j;position:relative;padding:18px;border-radius:14px;border:1px solid var(--line);background:rgba(8,12,24,.72);display:grid;gap:6px;align-content:start;box-shadow:0 6px 0 0 var(--cap)}
+.jr li::before{content:counter(j,decimal-leading-zero);font-family:var(--f-mono);font-size:12px;color:var(--acc)}
+.jr b{font-family:var(--f-display);font-size:16px}
+.jr span{font-size:13px;color:var(--muted)}
+.jr li:not(:last-child)::after{content:"";position:absolute;width:12px;height:12px;border:solid var(--acc);border-width:3px 3px 0 0;left:50%;bottom:-20px;transform:translateX(-50%) rotate(135deg)}
+@media(min-width:900px){.jr li:not(:last-child)::after{left:auto;bottom:auto;right:-21px;top:50%;transform:translateY(-50%) rotate(45deg)}}
+
+/* faq */
+.faq{display:grid;gap:10px}
+.faq details{border-radius:12px;border:1px solid var(--line);background:rgba(8,12,24,.72);padding:0 18px;box-shadow:0 4px 0 0 var(--cap)}
+.faq summary{cursor:pointer;list-style:none;padding:16px 0;font-weight:600;display:flex;justify-content:space-between;gap:16px;align-items:center}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-family:var(--f-mono);color:var(--acc);font-size:18px;transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{padding:0 0 16px;color:var(--muted);font-size:14.5px;max-width:80ch}
+
+/* interest list in CTA */
+.wish{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.wish .chip2{padding:8px 10px}
+.wish .chip2 em{font-style:normal;color:var(--dim);margin-left:2px}
+.wish-empty{font-size:13px;color:var(--dim);margin-top:14px}
+.cta-hero{display:flex;gap:12px;flex-wrap:wrap}
+.vw-meta .cxm{display:flex}
+@media(max-width:719px){.tabs{flex-wrap:nowrap;overflow-x:auto;margin-inline:-16px;padding:0 16px 10px;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}.tab{flex:none}}
+
+:root{--acc:#B69CFF;--acc-d:#8E6EF2;--acc-dd:#46308F;--acc-ink:#120A2A;--acc-glow:rgba(182,156,255,.5);--acc-soft:rgba(182,156,255,.08);--acc-soft2:rgba(182,156,255,.18);--acc2:#45E3FF;--acc2-soft:rgba(69,227,255,.1);}
+</style>
+<canvas id="bg3d" aria-hidden="true"></canvas><div class="fx" aria-hidden="true"></div>
+<header class="top"><a class="brand" href="#hero" aria-label="Drabuff AI"><img src="data:image/png;base64,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" alt="Drabuff" width="44" height="30"><span class="bn"><b>DRABUFF AI</b><small>Agency &amp; Academy</small></span></a><div class="top-r"><span class="status"><i></i><span class="st-l">AI SERVICE MAP · </span>ONLINE</span></div></header>
+<main id="app" class="wrap"></main>
+<footer class="foot"><span><b>Drabuff AI</b> · Đào tạo &amp; triển khai AI cho doanh nghiệp</span><span>Zalo: <b>093.404.1114</b></span></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+window.DRABUFF={brand:'Drabuff AI',zalo:'0934041114',display:'093.404.1114',webhook:''};
+/* Drabuff AI — full enterprise AI service catalogue (content) */
+window.CATS = [
+  { id: 'cx', n: 'Giao tiếp khách hàng', d: 'AI nói chuyện với khách thay bạn: nhắn tin, gọi điện, tư vấn, video.' },
+  { id: 'auto', n: 'Tự động hóa & Robot phần mềm', d: 'Bỏ việc copy–dán, nhập liệu, chuyển giấy tờ bằng tay.' },
+  { id: 'agent', n: 'AI Agent', d: 'AI không chỉ trả lời mà tự lên kế hoạch và làm trọn việc.' },
+  { id: 'know', n: 'Tri thức & Dữ liệu', d: 'Biến tài liệu và số liệu của công ty thành câu trả lời, dự báo.' },
+  { id: 'mkt', n: 'Marketing & Nội dung', d: 'Sản xuất nội dung, hình ảnh, video và lắng nghe khách hàng.' },
+  { id: 'phys', n: 'Thị giác máy & Robot vật lý', d: 'AI bước ra thế giới thật: camera, cảm biến, robot.' },
+  { id: 'llm', n: 'Nền tảng LLM & Hạ tầng', d: '"Bộ não" AI đặt ở đâu: cloud công cộng, cloud riêng hay ngay tại công ty.' },
+  { id: 'gov', n: 'Chiến lược, Quản trị & Vận hành', d: 'Làm gì trước, dùng an toàn, đào tạo con người và chăm sóc hệ thống.' }
+];
+
+window.SERVICES = [
+  /* ---------- GIAO TIẾP KHÁCH HÀNG ---------- */
+  { id: 'chatbot', cat: 'cx', code: 'C01', n: 'AI Chatbot đa kênh', tag: 'Tư vấn viên trực 24/7 trên Zalo, Facebook, Website', tl: '2–4 tuần', cx: 1,
+    easy: 'Giống một nhân viên tư vấn đã học thuộc toàn bộ bảng giá, chính sách và câu hỏi thường gặp của công ty. Không nghỉ, không quên, trả lời cùng lúc hàng trăm khách.',
+    flow: [['Khách nhắn tin', 'Khách hỏi qua Zalo OA, Fanpage hoặc khung chat website, vào bất kỳ giờ nào.'], ['AI hiểu câu hỏi', 'AI đọc tin nhắn và hiểu khách muốn gì: hỏi giá, đặt lịch, khiếu nại…'], ['Tra kho kiến thức', 'Tìm đúng thông tin trong tài liệu công ty: bảng giá, chính sách, tồn kho.'], ['Trả lời & hành động', 'Trả lời tự nhiên, xin số điện thoại, đặt lịch hoặc tạo đơn.'], ['Lưu vào CRM', 'Thông tin khách và nội dung trao đổi tự ghi vào hệ thống bán hàng.']],
+    branch: [2, 'Câu hỏi khó hoặc khách muốn gặp người thật', 'chuyển ngay cho nhân viên kèm tóm tắt cuộc trò chuyện.'],
+    ex: ['Spa tư vấn liệu trình và đặt lịch lúc 23h', 'Shop online trả lời phí ship, size, tình trạng đơn', 'Trường học tư vấn tuyển sinh mùa cao điểm'],
+    get: ['Phản hồi dưới 10 giây, 24/7', 'Tự xử lý 60–80% câu hỏi lặp lại', 'Không bỏ sót khách ngoài giờ'],
+    fit: ['Nhận trên 30 tin nhắn mỗi ngày', 'Khách hỏi đi hỏi lại những câu giống nhau', 'Muốn mở rộng mà không tăng người trực'] },
+  { id: 'voice', cat: 'cx', code: 'C02', n: 'Voice AI · Callbot tổng đài', tag: 'Tổng đài viên AI nghe và nói tiếng Việt tự nhiên', tl: '4–6 tuần', cx: 3,
+    easy: 'Như có một tổng đài viên giọng nói tự nhiên, nghe hiểu khách nói gì và trả lời ngay qua điện thoại. Gọi đến hay gọi đi đều được, hàng nghìn cuộc cùng lúc.',
+    flow: [['Cuộc gọi đến / đi', 'Khách gọi tổng đài, hoặc hệ thống tự gọi theo danh sách.'], ['Giọng nói → chữ', 'AI nghe và chép lại lời khách theo thời gian thực (Speech-to-Text).'], ['AI nghĩ câu trả lời', 'Mô hình ngôn ngữ hiểu ý và soạn câu trả lời theo kịch bản.'], ['Chữ → giọng nói', 'Đọc câu trả lời bằng giọng tự nhiên (Text-to-Speech).'], ['Tóm tắt & ghi nhận', 'Tự tóm tắt cuộc gọi, gắn kết quả, lưu vào CRM.']],
+    branch: [2, 'Khách bức xúc hoặc yêu cầu đặc biệt', 'chuyển máy cho nhân viên ngay trong cuộc gọi.'],
+    ex: ['Gọi xác nhận đơn COD trước khi giao', 'Nhắc lịch hẹn khám, nhắc đóng phí', 'Khảo sát mức hài lòng sau dịch vụ'],
+    get: ['Gọi hàng nghìn cuộc mỗi ngày', 'Giảm tải tổng đài giờ cao điểm', '100% cuộc gọi được ghi chép'],
+    fit: ['Có tổng đài hoặc đội telesales', 'Nhiều cuộc gọi lặp lại theo kịch bản'] },
+  { id: 'salesagent', cat: 'cx', code: 'C03', n: 'AI Sales Agent', tag: 'Hỏi nhu cầu, gợi ý sản phẩm và chốt đơn như sales giỏi', tl: '3–5 tuần', cx: 2,
+    easy: 'Không chỉ trả lời, mà chủ động hỏi nhu cầu, gợi ý đúng sản phẩm, xử lý băn khoăn và dẫn khách tới quyết định mua. Giống như nhân bản người bán hàng giỏi nhất của bạn.',
+    flow: [['Khách quan tâm', 'Khách bấm quảng cáo, nhắn tin hoặc để lại thông tin.'], ['Hỏi nhu cầu', 'AI hỏi vài câu ngắn để hiểu ngân sách, mục đích, sở thích.'], ['Gợi ý phù hợp', 'Chọn 1–3 sản phẩm hợp nhất trong danh mục và giải thích vì sao.'], ['Xử lý băn khoăn', 'Trả lời về giá, chất lượng, so sánh theo kịch bản chuẩn.'], ['Chốt & bàn giao', 'Tạo đơn, nhận cọc hoặc chuyển khách "nóng" cho sales chốt.']],
+    ex: ['Bất động sản: lọc khách theo tài chính, gợi ý căn phù hợp', 'Showroom xe: tư vấn phiên bản, đặt lịch lái thử', 'TMĐT: gợi ý combo để tăng giá trị đơn'],
+    get: ['Tăng tỷ lệ chuyển đổi từ tin nhắn', 'Sales chỉ tập trung vào khách nóng', 'Chất lượng tư vấn đồng đều'],
+    fit: ['Chạy quảng cáo nhiều, lead đông', 'Sản phẩm cần tư vấn trước khi mua'] },
+  { id: 'avatar', cat: 'cx', code: 'C04', n: 'AI Avatar · Người dẫn ảo', tag: 'Nhân vật số đọc kịch bản thành video, đa ngôn ngữ', tl: '1–3 tuần', cx: 1,
+    easy: 'Tạo một "người dẫn chương trình số" có khuôn mặt và giọng nói (có thể giống chính bạn), đọc bất kỳ kịch bản nào thành video mà không cần quay dựng.',
+    flow: [['Đưa nội dung', 'Giới thiệu sản phẩm, bài đào tạo, bản tin nội bộ.'], ['AI biên tập', 'Viết lại kịch bản ngắn gọn, hấp dẫn, dịch nhiều ngôn ngữ.'], ['Nhân vật số đọc', 'Avatar khớp khẩu hình với giọng nói tự nhiên.'], ['Dựng video', 'Ghép phụ đề, hình minh họa, logo thương hiệu.'], ['Phát hành', 'Đăng đa kênh hoặc dùng cho đào tạo nội bộ.']],
+    ex: ['Video đào tạo nhân viên mới hàng loạt', 'Giới thiệu sản phẩm bằng 5 ngôn ngữ', 'Bản tin nội bộ hằng tuần'],
+    get: ['Giảm 80–90% chi phí quay dựng', 'Có video trong vài phút'],
+    fit: ['Cần nhiều video đào tạo hoặc marketing', 'Phục vụ khách nước ngoài'] },
+
+  /* ---------- TỰ ĐỘNG HÓA ---------- */
+  { id: 'workflow', cat: 'auto', code: 'A01', n: 'Workflow Automation', tag: 'Nối các phần mềm thành dây chuyền tự chạy', tl: '2–4 tuần', cx: 1,
+    easy: 'Giống dây chuyền trong nhà máy: việc A xong thì tự chuyển sang B, sang C. Không ai phải copy, dán hay nhắc nhau nữa.',
+    flow: [['Sự kiện kích hoạt', 'Có đơn mới, có form đăng ký, có email, hoặc đến giờ hẹn.'], ['Lấy dữ liệu', 'Hệ thống tự lấy thông tin từ nơi phát sinh.'], ['AI xử lý', 'Phân loại, tóm tắt, viết nội dung, kiểm tra điều kiện.'], ['Ghi & cập nhật', 'Tự ghi vào Google Sheets, CRM, phần mềm kế toán.'], ['Báo đúng người', 'Nhắn Zalo hoặc email cho người phụ trách kèm việc cần làm.']],
+    ex: ['Form đăng ký → tạo khách trong CRM → nhắn Zalo cho sales', 'Đơn hàng mới → xuất hóa đơn → báo kho', 'Email báo giá → AI tóm tắt → báo trưởng phòng'],
+    get: ['Bỏ hẳn thao tác copy–dán', 'Không sót việc, không quên nhắc', 'Chạy 24/7, có nhật ký đầy đủ'],
+    fit: ['Dùng nhiều phần mềm rời rạc', 'Có quy trình lặp lại mỗi ngày'] },
+  { id: 'rpa', cat: 'auto', code: 'A02', n: 'RPA · Robot phần mềm', tag: 'Robot thao tác trên máy tính thay con người', tl: '3–6 tuần', cx: 2,
+    easy: 'Một "nhân viên ảo" ngồi trước máy tính: tự mở phần mềm, bấm nút, gõ dữ liệu, tải file, đúng như người làm nhưng nhanh hơn và không sai.',
+    flow: [['Ghi lại thao tác', 'Chuyên gia quan sát và mô tả từng bước nhân viên đang làm.'], ['Dạy robot', 'Robot được lập trình mở ứng dụng, điền form, bấm nút.'], ['Chạy theo lịch', 'Tự chạy hằng giờ, hằng ngày, kể cả ban đêm.'], ['Bắt ngoại lệ', 'Gặp trường hợp lạ thì dừng và báo người xử lý.'], ['Báo cáo', 'Gửi tổng kết số việc đã làm và lỗi gặp phải.']],
+    branch: [3, 'Dữ liệu sai định dạng hoặc giao diện thay đổi', 'robot dừng an toàn và gửi cảnh báo, không làm bừa.'],
+    ex: ['Nhập 500 hóa đơn vào phần mềm kế toán', 'Tải sao kê ngân hàng và đối soát', 'Cập nhật đơn trên nhiều sàn TMĐT'],
+    get: ['Nhanh gấp 5–10 lần người làm', 'Gần như không sai sót', 'Không cần sửa phần mềm cũ'],
+    fit: ['Phần mềm cũ không có API', 'Nhiều thao tác nhập liệu lặp lại'] },
+  { id: 'idp', cat: 'auto', code: 'A03', n: 'Xử lý tài liệu thông minh', tag: 'Đọc hóa đơn, hợp đồng, chứng từ và lấy dữ liệu ra', tl: '3–5 tuần', cx: 2,
+    easy: 'AI "đọc" ảnh chụp hoặc file PDF như người, hiểu đâu là số tiền, mã số thuế, ngày ký… rồi tự điền vào hệ thống.',
+    flow: [['Nhận tài liệu', 'Ảnh chụp, PDF scan, file đính kèm email.'], ['Nhận dạng chữ (OCR)', 'Biến hình ảnh thành văn bản, kể cả tiếng Việt có dấu.'], ['Hiểu & trích xuất', 'Xác định các trường cần lấy: tên, số tiền, ngày, điều khoản.'], ['Kiểm tra chéo', 'So với đơn hàng và quy định, đánh dấu chỗ bất thường.'], ['Đẩy vào hệ thống', 'Ghi vào ERP/Excel, lưu trữ để tìm kiếm sau.']],
+    branch: [3, 'AI không chắc chắn về một trường dữ liệu', 'chuyển người duyệt nhanh trước khi ghi.'],
+    ex: ['Hóa đơn đầu vào → phần mềm kế toán', 'Hồ sơ vay, bảo hiểm → kiểm tra thiếu giấy tờ', 'Chứng từ xuất nhập khẩu → khai báo'],
+    get: ['Giảm 60–80% thời gian nhập liệu', 'Phát hiện sai lệch từ sớm'],
+    fit: ['Xử lý trên 200 chứng từ mỗi tháng'] },
+  { id: 'inbox', cat: 'auto', code: 'A04', n: 'AI xử lý Email & Ticket', tag: 'Phân loại, soạn trả lời nháp và chia việc từ hộp thư chung', tl: '2–3 tuần', cx: 1,
+    easy: 'Như một thư ký đọc hết hộp thư mỗi sáng: biết thư nào gấp, thư nào của ai, soạn sẵn câu trả lời để bạn chỉ cần bấm gửi.',
+    flow: [['Email / ticket đến', 'Từ hộp thư chung, form hỗ trợ, cổng khách hàng.'], ['Phân loại', 'Gắn nhãn báo giá, khiếu nại, hỏi đơn, hóa đơn; chấm độ gấp.'], ['Soạn nháp', 'Viết sẵn phản hồi dựa trên lịch sử và chính sách.'], ['Giao đúng người', 'Chuyển cho bộ phận phụ trách, đặt hạn xử lý.'], ['Theo dõi hạn', 'Nhắc khi sắp trễ, báo cáo cuối tuần.']],
+    ex: ['Hộp thư sales@ nhận 300 email mỗi ngày', 'Bộ phận hỗ trợ kỹ thuật B2B'],
+    get: ['Không thư nào bị bỏ quên', 'Thời gian phản hồi giảm một nửa trở lên'],
+    fit: ['Giao dịch với khách chủ yếu qua email'] },
+
+  /* ---------- AI AGENT ---------- */
+  { id: 'agent', cat: 'agent', code: 'G01', n: 'AI Agent tác vụ', tag: 'AI tự lên kế hoạch và làm trọn một việc nhiều bước', tl: '4–8 tuần', cx: 3,
+    easy: 'Chatbot chỉ trả lời. Agent thì làm việc: bạn giao mục tiêu, nó tự chia nhỏ, tự dùng công cụ (tìm kiếm, Excel, email, phần mềm) và báo lại khi xong.',
+    flow: [['Giao mục tiêu', 'Ví dụ: "Lập báo cáo đối thủ tuần này và gửi cho tôi".'], ['Lập kế hoạch', 'Agent chia mục tiêu thành các bước nhỏ.'], ['Dùng công cụ', 'Tự tìm kiếm, đọc file, truy vấn dữ liệu, gọi phần mềm.'], ['Tự kiểm tra', 'Đánh giá kết quả, làm lại bước chưa đạt.'], ['Báo cáo / xin duyệt', 'Gửi kết quả; việc quan trọng thì chờ người duyệt.']],
+    branch: [4, 'Hành động có rủi ro (chi tiền, gửi cho khách)', 'luôn dừng lại chờ con người duyệt.'],
+    ex: ['Agent nghiên cứu thị trường hằng tuần', 'Agent đối soát công nợ và nhắc thanh toán', 'Agent tuyển dụng: lọc CV, hẹn lịch phỏng vấn'],
+    get: ['Giao trọn việc, không phải làm từng bước', 'Làm việc 24/7, có nhật ký'],
+    fit: ['Việc nhiều bước nhưng có quy tắc rõ ràng'] },
+  { id: 'multiagent', cat: 'agent', code: 'G02', n: 'Hệ thống Multi-Agent', tag: 'Một "phòng ban AI" gồm nhiều agent phối hợp', tl: '8–12 tuần', cx: 3,
+    easy: 'Giống một đội nhóm: agent trưởng nhóm nhận việc rồi giao cho agent nghiên cứu, agent viết, agent kiểm duyệt. Mỗi agent giỏi một việc, phối hợp ra kết quả hoàn chỉnh.',
+    flow: [['Yêu cầu lớn', 'Ví dụ: "Lên chiến dịch ra mắt sản phẩm mới".'], ['Agent điều phối', 'Chia việc và giao cho các agent chuyên trách.'], ['Agent chuyên môn', 'Nghiên cứu, viết, phân tích số liệu song song.'], ['Agent kiểm duyệt', 'Soát lỗi, kiểm tra thương hiệu và quy định.'], ['Tổng hợp', 'Gộp thành sản phẩm hoàn chỉnh cho người duyệt cuối.']],
+    ex: ['Phòng marketing AI: nghiên cứu → nội dung → lịch đăng', 'Bộ phận thầu: đọc hồ sơ → tính giá → soạn hồ sơ dự thầu'],
+    get: ['Xử lý việc phức tạp liên phòng ban', 'Chất lượng cao nhờ kiểm duyệt chéo'],
+    fit: ['Đã có agent đơn lẻ và muốn mở rộng'] },
+  { id: 'computeruse', cat: 'agent', code: 'G03', n: 'Agent thao tác máy tính', tag: 'AI nhìn màn hình và dùng phần mềm như con người', tl: '4–8 tuần', cx: 3,
+    easy: 'Kết hợp robot phần mềm với AI: agent "nhìn" màn hình, hiểu đang ở đâu và tự quyết định bấm gì. Giao diện có thay đổi vẫn làm được, điều mà robot RPA thông thường hay bị kẹt.',
+    flow: [['Nhận nhiệm vụ', 'Ví dụ: "Lấy báo cáo doanh thu từ 3 cổng nhà cung cấp".'], ['Nhìn màn hình', 'AI chụp và hiểu giao diện: nút, ô nhập, bảng.'], ['Thao tác', 'Di chuột, gõ phím, tải file như người dùng.'], ['Xác minh', 'Kiểm tra kết quả, thử lại nếu cần.'], ['Bàn giao', 'Lưu file, cập nhật hệ thống, báo hoàn thành.']],
+    ex: ['Đăng nhập các cổng dịch vụ công lấy dữ liệu', 'Thao tác trên phần mềm cũ không có API'],
+    get: ['Tự động hóa cả những việc "khó tự động"'],
+    fit: ['Làm việc với nhiều cổng web, phần mềm khác nhau'] },
+  { id: 'copilot', cat: 'agent', code: 'G04', n: 'Trợ lý AI cho từng nhân viên', tag: 'Mỗi vị trí có một trợ lý AI riêng đã hiểu công việc', tl: '2–4 tuần', cx: 1,
+    easy: 'Mỗi nhân viên có một trợ lý riêng đã đọc quy trình, mẫu biểu, giọng văn công ty: soạn văn bản, tóm tắt cuộc họp, trả lời câu hỏi nghiệp vụ trong vài giây.',
+    flow: [['Chọn vị trí', 'Sales, kế toán, HR, CSKH… mỗi vị trí một trợ lý.'], ['Nạp kiến thức', 'Quy trình, mẫu biểu, ví dụ làm tốt của công ty.'], ['Cài đặt an toàn', 'Phân quyền, chặn dữ liệu nhạy cảm, ghi nhật ký.'], ['Nhân viên sử dụng', 'Hỏi và giao việc qua web, Zalo hoặc Teams.'], ['Cải tiến', 'Thu phản hồi, cập nhật kiến thức hằng tháng.']],
+    ex: ['Trợ lý kế toán trả lời câu hỏi thuế nội bộ', 'Trợ lý sales soạn báo giá theo mẫu'],
+    get: ['Tiết kiệm 4–8 giờ/người/tuần', 'Người mới làm tốt như người cũ'],
+    fit: ['Mọi doanh nghiệp muốn phổ cập AI'] },
+
+  /* ---------- TRI THỨC & DỮ LIỆU ---------- */
+  { id: 'rag', cat: 'know', code: 'K01', n: 'Trợ lý tri thức nội bộ (RAG)', tag: 'Hỏi gì đáp nấy trên tài liệu công ty, có trích nguồn', tl: '3–4 tuần', cx: 2,
+    easy: 'Như một đồng nghiệp đã đọc hết mọi quy trình, chính sách, hợp đồng mẫu của công ty. Hỏi bằng tiếng Việt, trả lời ngay và chỉ rõ lấy từ tài liệu nào.',
+    flow: [['Gom tài liệu', 'Word, PDF, Excel, Google Drive, wiki nội bộ.'], ['Lập chỉ mục', 'Chia tài liệu thành đoạn nhỏ và đánh dấu theo ý nghĩa để tìm nhanh.'], ['Nhân viên hỏi', '"Chính sách đổi trả với khách sỉ thế nào?"'], ['Tìm đoạn liên quan', 'Hệ thống lấy ra các đoạn tài liệu đúng nhất.'], ['Trả lời có nguồn', 'Tổng hợp câu trả lời, dẫn link tài liệu gốc.']],
+    branch: [4, 'Không có thông tin trong tài liệu', 'AI trả lời "chưa có dữ liệu" thay vì tự bịa.'],
+    ex: ['Hướng dẫn nhân viên mới', 'Tra cứu quy định, chính sách nhanh', 'Kỹ thuật viên tra tài liệu máy móc'],
+    get: ['Rút ngắn 40–60% thời gian onboarding', 'Kiến thức không mất khi người cũ nghỉ việc'],
+    fit: ['Nhiều tài liệu, quy trình; trên 30 nhân sự'] },
+  { id: 'bi', cat: 'know', code: 'K02', n: 'AI phân tích dữ liệu & báo cáo', tag: 'Hỏi số liệu bằng tiếng Việt, nhận biểu đồ ngay', tl: '3–6 tuần', cx: 2,
+    easy: 'Thay vì chờ nhân viên làm báo cáo, lãnh đạo chỉ cần hỏi "Tháng này chi nhánh nào giảm doanh thu, vì sao?". AI tự lấy số liệu, vẽ biểu đồ và giải thích.',
+    flow: [['Kết nối dữ liệu', 'Phần mềm bán hàng, ERP, CRM, Google Sheets, quảng cáo.'], ['Làm sạch & hợp nhất', 'Gom về một kho dữ liệu chuẩn.'], ['Đặt câu hỏi', 'Gõ hoặc nói câu hỏi bằng tiếng Việt.'], ['AI truy vấn', 'Chuyển câu hỏi thành lệnh truy vấn dữ liệu (Text-to-SQL).'], ['Biểu đồ & nhận xét', 'Trả về biểu đồ, giải thích, cảnh báo bất thường.']],
+    ex: ['Báo cáo doanh thu tự gửi lúc 8h sáng', 'Cảnh báo khi tồn kho hoặc chi phí vượt ngưỡng'],
+    get: ['Giảm 70–90% thời gian làm báo cáo', 'Quyết định dựa trên số liệu thật'],
+    fit: ['Dữ liệu bán hàng, vận hành đã được số hóa'] },
+  { id: 'predict', cat: 'know', code: 'K03', n: 'AI Dự báo & Tối ưu', tag: 'Dự đoán doanh số, tồn kho, khách sắp rời bỏ', tl: '6–10 tuần', cx: 3,
+    easy: 'AI học từ dữ liệu quá khứ để đoán tương lai: tháng sau bán bao nhiêu, nên nhập bao nhiêu hàng, khách nào sắp bỏ đi. Giống dự báo thời tiết, nhưng cho việc kinh doanh.',
+    flow: [['Dữ liệu lịch sử', 'Bán hàng, mùa vụ, khuyến mãi, thời tiết…'], ['Huấn luyện mô hình', 'Mô hình học quy luật từ dữ liệu.'], ['Dự báo', 'Đưa ra con số dự kiến kèm mức độ tin cậy.'], ['Đề xuất hành động', 'Gợi ý số lượng nhập, ngân sách, khách cần giữ chân.'], ['Học lại', 'So với thực tế, mô hình tự cải thiện.']],
+    ex: ['Chuỗi bán lẻ dự báo nhập hàng từng cửa hàng', 'Dự đoán khách sắp hủy dịch vụ để giữ chân'],
+    get: ['Giảm tồn kho và giảm hết hàng', 'Chủ động thay vì chữa cháy'],
+    fit: ['Có ít nhất 1–2 năm dữ liệu'] },
+  { id: 'personalize', cat: 'know', code: 'K04', n: 'Cá nhân hóa & Gợi ý', tag: 'Mỗi khách thấy đúng sản phẩm, đúng ưu đãi', tl: '4–8 tuần', cx: 2,
+    easy: 'Giống người bán hàng nhớ từng khách quen: biết họ thích gì, đã mua gì, để gợi ý đúng món trên website, app, Zalo và email.',
+    flow: [['Thu thập hành vi', 'Xem, mua, bấm, mở tin nhắn.'], ['Hồ sơ khách', 'Xây chân dung sở thích từng người.'], ['Tính gợi ý', 'Mô hình chọn sản phẩm, nội dung phù hợp nhất.'], ['Hiển thị đúng lúc', 'Trên web, app, Zalo ZNS, email.'], ['Đo hiệu quả', 'Thử nghiệm A/B và tối ưu liên tục.']],
+    ex: ['"Khách mua X thường mua thêm Y"', 'Ưu đãi sinh nhật theo sở thích riêng'],
+    get: ['Tăng giá trị đơn và tỷ lệ mua lại'],
+    fit: ['Nhiều sản phẩm và tệp khách lớn'] },
+
+  /* ---------- MARKETING & NỘI DUNG ---------- */
+  { id: 'content', cat: 'mkt', code: 'M01', n: 'AI Content Engine', tag: 'Dây chuyền sản xuất nội dung đúng giọng thương hiệu', tl: '2–3 tuần', cx: 1,
+    easy: 'Một "xưởng nội dung" AI: lên ý tưởng, viết bài, chuyển thể thành nhiều định dạng. Con người chỉ cần duyệt và chỉnh cho đúng chất.',
+    flow: [['Brief & dữ liệu', 'Sản phẩm, chiến dịch, insight khách hàng.'], ['Lên lịch nội dung', 'AI đề xuất chủ đề 30 ngày theo mục tiêu.'], ['Viết đa định dạng', 'Bài Facebook, bài SEO, email, kịch bản video.'], ['Người duyệt', 'Duyệt 1 chạm trên Google Sheets hoặc Zalo.'], ['Đăng & đo', 'Lên lịch đăng, thu số liệu để tối ưu.']],
+    ex: ['60 bài mỗi tháng cho 3 fanpage', 'Bài SEO hàng loạt cho website'],
+    get: ['Gấp 3–5 lần sản lượng nội dung', 'Giọng thương hiệu nhất quán'],
+    fit: ['Cần nội dung đều đặn trên nhiều kênh'] },
+  { id: 'creative', cat: 'mkt', code: 'M02', n: 'AI hình ảnh & video', tag: 'Ảnh sản phẩm, banner, video ngắn trong vài phút', tl: '1–3 tuần', cx: 1,
+    easy: 'Từ một ảnh sản phẩm chụp bằng điện thoại, AI tạo ra ảnh studio, banner quảng cáo, video ngắn. Không cần thuê chụp, thuê dựng mỗi lần.',
+    flow: [['Ảnh gốc & ý tưởng', 'Ảnh sản phẩm, logo, thông điệp.'], ['AI tạo hình', 'Đổi nền, ghép bối cảnh, tạo người mẫu ảo.'], ['AI dựng video', 'Ghép cảnh, giọng đọc, phụ đề, nhạc.'], ['Kiểm soát thương hiệu', 'Đúng màu, font, logo và quy định quảng cáo.'], ['Xuất nhiều kích thước', 'Cho Facebook, TikTok, website, sàn TMĐT.']],
+    ex: ['100 ảnh sản phẩm cho sàn TMĐT', 'Video TikTok mỗi ngày'],
+    get: ['Giảm mạnh chi phí sản xuất hình ảnh'],
+    fit: ['Nhiều mã sản phẩm, chạy quảng cáo thường xuyên'] },
+  { id: 'listening', cat: 'mkt', code: 'M03', n: 'Lắng nghe mạng xã hội', tag: 'Biết khách đang nói gì về bạn và đối thủ', tl: '3–4 tuần', cx: 2,
+    easy: 'AI đọc hàng nghìn bình luận, đánh giá, bài đăng để cho bạn biết khách khen gì, chê gì, đối thủ đang làm gì. Như có người theo dõi dư luận 24/7.',
+    flow: [['Thu thập', 'Bình luận, đánh giá Google Maps, sàn TMĐT, hội nhóm.'], ['Phân tích cảm xúc', 'Tích cực, tiêu cực, trung lập theo từng chủ đề.'], ['Phát hiện vấn đề', 'Chủ đề nóng, dấu hiệu khủng hoảng.'], ['Cảnh báo', 'Báo ngay khi có làn sóng tiêu cực.'], ['Báo cáo insight', 'Tổng hợp hằng tuần: điểm mạnh, điểm yếu, cơ hội.']],
+    ex: ['Chuỗi F&B theo dõi đánh giá từng chi nhánh', 'Thương hiệu phát hiện khủng hoảng sớm'],
+    get: ['Phản ứng nhanh khi có sự cố', 'Insight để cải tiến sản phẩm'],
+    fit: ['Thương hiệu bán lẻ, nhiều điểm bán'] },
+
+  /* ---------- THỊ GIÁC & ROBOT VẬT LÝ ---------- */
+  { id: 'vision', cat: 'phys', code: 'P01', n: 'Camera AI (Computer Vision)', tag: 'Camera biết nhìn: đếm, nhận diện, phát hiện lỗi', tl: '6–10 tuần', cx: 3,
+    easy: 'Biến camera thường thành "con mắt thông minh": tự đếm khách, nhận ra hàng lỗi trên dây chuyền, phát hiện người không đội mũ bảo hộ, và báo ngay.',
+    flow: [['Camera ghi hình', 'Dùng camera sẵn có hoặc lắp thêm.'], ['AI nhận diện', 'Mô hình thị giác nhận ra người, vật, lỗi, hành vi.'], ['Áp quy tắc', 'So với tiêu chuẩn: lỗi, vi phạm, quá đông.'], ['Cảnh báo tức thì', 'Báo qua Zalo, loa hoặc đèn cho người phụ trách.'], ['Thống kê', 'Dashboard lưu lượng, tỷ lệ lỗi theo ca.']],
+    ex: ['Kiểm tra lỗi sản phẩm trên băng chuyền', 'Đếm lượt khách, thời gian chờ tại cửa hàng', 'Giám sát an toàn lao động'],
+    get: ['Kiểm tra 100% thay vì lấy mẫu', 'Phát hiện sự cố ngay lập tức'],
+    fit: ['Nhà máy, kho hàng, chuỗi cửa hàng'] },
+  { id: 'robotics', cat: 'phys', code: 'P02', n: 'Robot vật lý + AI', tag: 'Robot phục vụ, robot kho, cánh tay robot', tl: '8–16 tuần', cx: 3,
+    easy: 'Robot thật làm việc chân tay lặp lại: chạy món, chở hàng trong kho, gắp và xếp sản phẩm. AI giúp robot "nhìn", tránh vật cản và phối hợp với hệ thống.',
+    flow: [['Khảo sát mặt bằng', 'Đo không gian, luồng di chuyển, công việc cần thay.'], ['Chọn & tích hợp', 'Robot phục vụ, robot tự hành chở hàng (AMR), cánh tay robot.'], ['Dạy robot', 'Lập bản đồ, tuyến đường, thao tác gắp – đặt.'], ['Kết nối hệ thống', 'Nhận lệnh từ phần mềm bán hàng hoặc quản lý kho.'], ['Giám sát & bảo trì', 'Theo dõi hiệu suất, bảo trì định kỳ.']],
+    ex: ['Nhà hàng: robot chạy món', 'Kho: robot chở hàng tới khu đóng gói', 'Nhà máy: cánh tay robot đóng thùng'],
+    get: ['Giảm việc nặng nhọc, làm liên tục 24/7'],
+    fit: ['Việc chân tay lặp lại, khó tuyển lao động'] },
+  { id: 'iot', cat: 'phys', code: 'P03', n: 'IoT + AI bảo trì dự đoán', tag: 'Máy móc báo trước khi hỏng', tl: '8–12 tuần', cx: 3,
+    easy: 'Gắn cảm biến lên máy, AI theo dõi độ rung, nhiệt độ, điện năng và báo "máy này sắp hỏng" trước khi nó làm dừng dây chuyền. Như khám sức khỏe định kỳ cho máy.',
+    flow: [['Gắn cảm biến', 'Nhiệt độ, độ rung, dòng điện, áp suất.'], ['Truyền dữ liệu', 'Gửi liên tục về máy chủ hoặc cloud.'], ['Học "nhịp bình thường"', 'AI hiểu khi máy khỏe thì chạy thế nào.'], ['Phát hiện bất thường', 'Thấy dấu hiệu sắp hỏng trước nhiều ngày.'], ['Lên lịch bảo trì', 'Tạo phiếu bảo trì, đặt phụ tùng trước.']],
+    ex: ['Máy nén, máy ép trong nhà máy', 'Hệ thống lạnh kho thực phẩm'],
+    get: ['Giảm dừng máy đột xuất', 'Kéo dài tuổi thọ thiết bị'],
+    fit: ['Có máy móc giá trị cao, chạy liên tục'] },
+
+  /* ---------- NỀN TẢNG LLM ---------- */
+  { id: 'llmapi', cat: 'llm', code: 'L01', n: 'LLM trên Cloud công cộng', tag: 'Dùng GPT, Claude, Gemini qua API doanh nghiệp', tl: '1–2 tuần', cx: 1,
+    easy: 'Như dùng điện lưới: không cần xây nhà máy, dùng bao nhiêu trả bấy nhiêu. "Bộ não" AI nằm ở trung tâm dữ liệu của nhà cung cấp lớn; ứng dụng của bạn gửi câu hỏi và nhận câu trả lời.',
+    flow: [['Ứng dụng của bạn', 'Chatbot, agent, workflow gửi yêu cầu.'], ['Che dữ liệu nhạy cảm', 'Ẩn số CCCD, số điện thoại… trước khi gửi đi.'], ['Gửi tới LLM cloud', 'Qua kết nối mã hóa tới OpenAI, Anthropic, Google.'], ['Nhận kết quả', 'Mô hình trả lời trong vài giây.'], ['Theo dõi chi phí', 'Ghi nhật ký lượng dùng theo phòng ban.']],
+    ex: ['Khởi đầu nhanh cho mọi dự án AI', 'Doanh nghiệp vừa và nhỏ'],
+    get: ['Triển khai ngay với mô hình mạnh nhất', 'Không đầu tư phần cứng'],
+    fit: ['Dữ liệu không quá nhạy cảm', 'Muốn bắt đầu nhanh, chi phí linh hoạt'] },
+  { id: 'llmprivate', cat: 'llm', code: 'L02', n: 'LLM trên Cloud riêng', tag: 'Mô hình AI chạy trong vùng cloud riêng của doanh nghiệp', tl: '4–8 tuần', cx: 2,
+    easy: 'Như thuê nguyên một căn hộ có khóa riêng trong tòa nhà lớn: dùng hạ tầng cloud mạnh, nhưng mô hình AI và dữ liệu nằm trong "vùng riêng" chỉ doanh nghiệp bạn truy cập được.',
+    flow: [['Tạo vùng cloud riêng', 'Vùng mạng riêng (VPC) trên AWS, Azure, Google Cloud hoặc cloud trong nước.'], ['Triển khai mô hình', 'Mô hình mã nguồn mở (Llama, Qwen…) hoặc dịch vụ LLM riêng.'], ['Kết nối bảo mật', 'Đường kết nối riêng từ văn phòng, không đi qua internet công cộng.'], ['Ứng dụng sử dụng', 'Chatbot, trợ lý tri thức, agent gọi vào mô hình riêng.'], ['Mở rộng linh hoạt', 'Tăng giảm máy chủ GPU theo nhu cầu.']],
+    ex: ['Ngân hàng, bảo hiểm cần kiểm soát dữ liệu', 'Doanh nghiệp đa chi nhánh, nhiều người dùng'],
+    get: ['Dữ liệu không rời vùng riêng', 'Không phải mua và quản lý máy chủ'],
+    fit: ['Dữ liệu nhạy cảm nhưng muốn linh hoạt'] },
+  { id: 'llmonprem', cat: 'llm', code: 'L03', n: 'LLM On-premise', tag: 'Máy chủ AI đặt ngay tại doanh nghiệp, dữ liệu không ra ngoài', tl: '6–12 tuần', cx: 3,
+    easy: 'Như tự xây nhà máy điện riêng: máy chủ GPU đặt trong phòng server của bạn, AI chạy hoàn toàn nội bộ, ngắt internet vẫn chạy. Dữ liệu không bao giờ rời khỏi công ty.',
+    flow: [['Tư vấn cấu hình', 'Tính số người dùng, chọn GPU và máy chủ phù hợp.'], ['Lắp đặt phần cứng', 'Máy chủ GPU tại phòng server của doanh nghiệp.'], ['Cài mô hình', 'Mô hình mã nguồn mở, tối ưu cho tiếng Việt và tốc độ.'], ['Tích hợp nội bộ', 'Kết nối tài khoản nhân viên, tài liệu, phần mềm nội bộ.'], ['Vận hành & cập nhật', 'Giám sát, nâng cấp mô hình mới định kỳ.']],
+    ex: ['Cơ quan, doanh nghiệp nhà nước', 'Nhà máy, bệnh viện có dữ liệu mật'],
+    get: ['Kiểm soát 100% dữ liệu', 'Chi phí cố định, không tính theo lượt dùng'],
+    fit: ['Yêu cầu bảo mật cao nhất', 'Nhiều người dùng thường xuyên'] },
+  { id: 'finetune', cat: 'llm', code: 'L04', n: 'Fine-tuning mô hình riêng', tag: 'Dạy AI nói đúng chuyên môn và văn phong doanh nghiệp', tl: '4–8 tuần', cx: 3,
+    easy: 'Mô hình AI chung giống sinh viên giỏi mới ra trường. Fine-tuning là cho "thực tập chuyên sâu" tại công ty bạn để nói đúng thuật ngữ, đúng văn phong, đúng nghiệp vụ.',
+    flow: [['Chuẩn bị dữ liệu', 'Hàng nghìn ví dụ hỏi–đáp, văn bản chuẩn.'], ['Làm sạch & gán nhãn', 'Loại dữ liệu sai, ẩn thông tin cá nhân.'], ['Huấn luyện', 'Tinh chỉnh mô hình trên máy chủ GPU.'], ['Đánh giá', 'So với mô hình gốc trên bộ câu hỏi kiểm tra.'], ['Triển khai', 'Đưa lên cloud riêng hoặc máy chủ on-premise.']],
+    ex: ['Mô hình hiểu thuật ngữ y khoa, pháp lý', 'Mô hình viết đúng văn phong hành chính'],
+    get: ['Chính xác hơn trên nghiệp vụ chuyên sâu', 'Mô hình nhỏ hơn, chạy rẻ hơn'],
+    fit: ['Đã có nhiều dữ liệu mẫu chất lượng'] },
+  { id: 'gateway', cat: 'llm', code: 'L05', n: 'AI Gateway & LLMOps', tag: 'Một cổng kiểm soát mọi AI trong công ty', tl: '3–5 tuần', cx: 2,
+    easy: 'Như phòng bảo vệ kiêm kế toán cho AI: mọi yêu cầu đi qua một cổng duy nhất để chặn dữ liệu nhạy cảm, đổi mô hình khi cần, theo dõi chi phí và chất lượng.',
+    flow: [['Ứng dụng gọi AI', 'Mọi chatbot, agent, công cụ nội bộ.'], ['Xác thực', 'Kiểm tra ai đang dùng, được phép làm gì.'], ['Bảo vệ dữ liệu', 'Che thông tin nhạy cảm, chặn yêu cầu nguy hiểm.'], ['Chọn mô hình', 'Việc dễ dùng mô hình rẻ, việc khó dùng mô hình mạnh.'], ['Giám sát', 'Dashboard chi phí, tốc độ, chất lượng, nhật ký kiểm toán.']],
+    branch: [3, 'Nhà cung cấp AI gặp sự cố', 'tự chuyển sang mô hình dự phòng, người dùng không bị gián đoạn.'],
+    ex: ['Doanh nghiệp dùng nhiều mô hình AI cùng lúc'],
+    get: ['Giảm 30–50% chi phí AI', 'Kiểm soát rủi ro tập trung'],
+    fit: ['Có từ 3 ứng dụng AI trở lên'] },
+
+  /* ---------- CHIẾN LƯỢC & QUẢN TRỊ ---------- */
+  { id: 'strategy', cat: 'gov', code: 'S01', n: 'Tư vấn chiến lược & lộ trình AI', tag: 'Biết làm gì trước, đầu tư bao nhiêu, đo thế nào', tl: '2–6 tuần', cx: 1,
+    easy: 'Xây nhà cần bản vẽ trước. Drabuff AI cùng ban lãnh đạo đánh giá hiện trạng, chọn những việc AI đáng làm nhất và vẽ lộ trình 3–12 tháng có KPI rõ ràng.',
+    flow: [['Đánh giá hiện trạng', 'Phỏng vấn các phòng ban, đánh giá dữ liệu và hệ thống.'], ['Tìm cơ hội', 'Liệt kê 20–30 việc có thể ứng dụng AI.'], ['Chấm điểm ưu tiên', 'Xếp theo giá trị và độ khó, chọn việc thắng nhanh.'], ['Lộ trình & ngân sách', 'Kế hoạch theo giai đoạn, nguồn lực, KPI.'], ['Đồng hành thực thi', 'Theo dõi và điều chỉnh theo kết quả thực tế.']],
+    ex: ['Doanh nghiệp chưa biết bắt đầu từ đâu', 'Tập đoàn cần chiến lược AI toàn diện'],
+    get: ['Đầu tư đúng chỗ, tránh thử nghiệm lan man', 'Lộ trình được ban lãnh đạo đồng thuận'],
+    fit: ['Mọi doanh nghiệp trước khi đầu tư lớn'] },
+  { id: 'governance', cat: 'gov', code: 'S02', n: 'Quản trị AI & bảo mật dữ liệu', tag: 'Dùng AI an toàn, đúng luật bảo vệ dữ liệu cá nhân', tl: '3–6 tuần', cx: 2,
+    easy: 'Bộ "luật chơi" cho AI trong công ty: dữ liệu nào được đưa vào AI, ai được dùng, kiểm tra kết quả thế nào. Phù hợp Nghị định 13/2023 về bảo vệ dữ liệu cá nhân.',
+    flow: [['Rà soát rủi ro', 'Kiểm tra dữ liệu và công cụ AI nhân viên đang tự dùng.'], ['Phân loại dữ liệu', 'Công khai, nội bộ, mật, dữ liệu cá nhân.'], ['Ban hành quy chế', 'Chính sách sử dụng AI và quy trình phê duyệt.'], ['Kiểm soát kỹ thuật', 'Phân quyền, che dữ liệu, ghi nhật ký.'], ['Đào tạo & kiểm tra', 'Tập huấn nhân viên, kiểm tra định kỳ.']],
+    ex: ['Doanh nghiệp xử lý nhiều dữ liệu khách hàng', 'Chuẩn bị làm việc với đối tác nước ngoài'],
+    get: ['Giảm rủi ro lộ dữ liệu, vi phạm pháp luật'],
+    fit: ['Doanh nghiệp đã hoặc sắp dùng AI'] },
+  { id: 'training', cat: 'gov', code: 'S03', n: 'Đào tạo AI Inhouse', tag: 'Đội ngũ dùng thành thạo AI vào việc thật', tl: '1–3 tuần', cx: 1,
+    easy: 'Công cụ tốt mà người không biết dùng thì cũng vô ích. Khóa học được may đo theo công việc của từng phòng ban, học xong là làm được ngay.',
+    flow: [['Khảo sát năng lực', 'Kiểm tra đầu vào, phỏng vấn quản lý.'], ['Thiết kế giáo trình', 'Theo phòng ban, ngành và công cụ đang dùng.'], ['Đào tạo thực chiến', 'Mỗi buổi ra một sản phẩm dùng được.'], ['Dự án cuối khóa', 'Giải một bài toán thật của doanh nghiệp.'], ['Đồng hành 30 ngày', 'Hỗ trợ áp dụng và đo kết quả.']],
+    ex: ['Phổ cập AI cho toàn công ty', 'AI Leadership cho ban giám đốc'],
+    get: ['Văn hóa dùng AI lan tỏa', 'Số giờ tiết kiệm đo được'],
+    fit: ['Đi kèm mọi dự án triển khai AI'] },
+  { id: 'managed', cat: 'gov', code: 'S04', n: 'Vận hành & bảo trì AI trọn gói', tag: 'Drabuff AI chăm sóc hệ thống sau triển khai', tl: 'Hằng tháng', cx: 1,
+    easy: 'AI không phải lắp xong là xong. Như bảo dưỡng xe định kỳ: theo dõi chất lượng câu trả lời, cập nhật kiến thức mới, nâng cấp mô hình, xử lý sự cố.',
+    flow: [['Giám sát 24/7', 'Theo dõi hệ thống có chạy ổn, có lỗi, có chậm không.'], ['Chấm chất lượng', 'Đánh giá câu trả lời, phát hiện trả lời sai.'], ['Cập nhật tri thức', 'Thêm sản phẩm, chính sách mới.'], ['Tối ưu', 'Chuyển sang mô hình mới tốt hơn, rẻ hơn.'], ['Báo cáo tháng', 'KPI và đề xuất cải tiến.']],
+    ex: ['Doanh nghiệp không có đội AI riêng'],
+    get: ['Hệ thống ổn định và ngày càng tốt hơn'],
+    fit: ['Sau khi triển khai bất kỳ giải pháp nào'] }
+];
+
+/* layered architecture, top (người dùng) → bottom (hạ tầng) */
+window.LAYERS = [
+  { n: 'Điểm chạm', d: 'Nơi khách hàng và nhân viên gặp AI', ids: ['chatbot', 'voice', 'salesagent', 'avatar', 'copilot'] },
+  { n: 'Ứng dụng & tự động hóa', d: 'Các dây chuyền làm việc thay con người', ids: ['workflow', 'rpa', 'idp', 'inbox', 'content', 'creative', 'listening'] },
+  { n: 'Agent · bộ não hành động', d: 'AI tự lên kế hoạch và điều phối công việc', ids: ['agent', 'multiagent', 'computeruse'] },
+  { n: 'Tri thức & dữ liệu', d: 'Thứ AI cần biết để trả lời đúng về công ty bạn', ids: ['rag', 'bi', 'predict', 'personalize'] },
+  { n: 'Thế giới thật', d: 'Camera, cảm biến, robot đưa AI ra khỏi màn hình', ids: ['vision', 'robotics', 'iot'] },
+  { n: 'Nền tảng mô hình AI', d: 'Nơi đặt "bộ não": cloud công cộng, cloud riêng, on-premise', ids: ['llmapi', 'llmprivate', 'llmonprem', 'finetune', 'gateway'] }
+];
+
+/* Drabuff AI — interactive voxel field + assembling AI core (Three.js r128) */
+(function () {
+  var api = { setProgress: function () {}, setMode: function () {} };
+  window.Scene3D = api;
+  var cv = document.getElementById('bg3d');
+  if (!window.THREE || !cv) { document.documentElement.classList.add('no3d'); return; }
+  var renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true, powerPreference: 'high-performance' });
+  } catch (e) { document.documentElement.classList.add('no3d'); cv.style.display = 'none'; return; }
+
+  var css = getComputedStyle(document.documentElement);
+  var ACC = new THREE.Color((css.getPropertyValue('--acc') || '#45E3FF').trim());
+  var ACC2 = new THREE.Color((css.getPropertyValue('--acc2') || '#9B8CFF').trim());
+  var BG = new THREE.Color('#05070D');
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var small = Math.min(innerWidth, innerHeight) < 700;
+
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, small ? 1.5 : 1.75));
+  renderer.setClearColor(BG, 1);
+  var scene = new THREE.Scene();
+  scene.fog = new THREE.Fog(BG, 20, 56);
+  var cam = new THREE.PerspectiveCamera(42, 1, 0.1, 200);
+
+  scene.add(new THREE.AmbientLight(0x5a6aa0, 0.6));
+  var key = new THREE.DirectionalLight(0xffffff, 0.65); key.position.set(-12, 22, 14); scene.add(key);
+  var glow = new THREE.PointLight(ACC, 2.4, 22, 2); scene.add(glow);
+  var rim = new THREE.PointLight(ACC2, 2.2, 46, 2); rim.position.set(12, 10, -12); scene.add(rim);
+
+  /* ---- voxel floor ---- */
+  var COLS = small ? 20 : 38, ROWS = small ? 22 : 24, SP = 1.1;
+  var geo = new THREE.BoxGeometry(0.94, 1, 0.94); geo.translate(0, 0.5, 0);
+  var mat = new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.4, roughness: 0.38 });
+  var N = COLS * ROWS;
+  var floor = new THREE.InstancedMesh(geo, mat, N);
+  floor.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+  var base = new THREE.Color('#0D1426'), hot = new THREE.Color(), tmp = new THREE.Color();
+  var dummy = new THREE.Object3D();
+  var X = new Float32Array(N), Z = new Float32Array(N), R = new Float32Array(N);
+  for (var r = 0, i = 0; r < ROWS; r++) for (var c = 0; c < COLS; c++, i++) {
+    X[i] = (c - (COLS - 1) / 2) * SP; Z[i] = (r - (ROWS - 1) / 2) * SP - 4; R[i] = Math.random();
+    floor.setColorAt(i, base);
+  }
+  scene.add(floor);
+
+  /* ---- AI core: 3x3x3 blocks ---- */
+  var core = new THREE.Group(); scene.add(core);
+  var cubes = [];
+  var cgeo = new THREE.BoxGeometry(0.86, 0.86, 0.86);
+  var egeo = new THREE.EdgesGeometry(cgeo);
+  for (var a = -1; a <= 1; a++) for (var b = -1; b <= 1; b++) for (var d = -1; d <= 1; d++) {
+    var m = new THREE.MeshStandardMaterial({ color: 0x121a30, metalness: 0.55, roughness: 0.3, emissive: 0x000000 });
+    var mesh = new THREE.Mesh(cgeo, m);
+    var edge = new THREE.LineSegments(egeo, new THREE.LineBasicMaterial({ color: ACC, transparent: true, opacity: 0.35 }));
+    mesh.add(edge);
+    mesh.userData = { home: new THREE.Vector3(a, b, d), seed: Math.random(), lit: 0, edge: edge };
+    core.add(mesh); cubes.push(mesh);
+  }
+  cubes.sort(function (p, q) { return p.userData.seed - q.userData.seed; });
+
+  var state = { mode: 'idle', progress: 0.15, explode: 0.35, spin: 0.25 };
+  api.setProgress = function (p) { state.progress = Math.max(0, Math.min(1, p)); };
+  api.setMode = function (m) { state.mode = m; if (m === 'done') state.progress = 1; };
+
+  /* ---- pointer ---- */
+  var ndc = new THREE.Vector2(0, 0), hasPtr = false;
+  var ray = new THREE.Raycaster(), plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+  var hit = new THREE.Vector3(), target = new THREE.Vector3(0, 0, 0), ptr = new THREE.Vector3(0, 0, 0);
+  window.addEventListener('pointermove', function (e) {
+    ndc.x = (e.clientX / innerWidth) * 2 - 1; ndc.y = -(e.clientY / innerHeight) * 2 + 1; hasPtr = true;
+  }, { passive: true });
+  var burst = 0;
+  window.addEventListener('pointerdown', function () { burst = 1; }, { passive: true });
+
+  function resize() {
+    var w = innerWidth, h = innerHeight;
+    renderer.setSize(w, h, false); cam.aspect = w / h;
+    cam.fov = w < 700 ? 58 : 42; cam.updateProjectionMatrix();
+    core.position.set(w < 980 ? 0 : 6.5, 5.2, -6);
+  }
+  resize(); window.addEventListener('resize', resize);
+
+  var clock = 0, last = performance.now(), running = true;
+  document.addEventListener('visibilitychange', function () { running = !document.hidden; if (running) { last = performance.now(); requestAnimationFrame(frame); } });
+
+  function frame(now) {
+    if (!running) return;
+    var dt = Math.min(0.05, (now - last) / 1000); last = now;
+    clock += dt * (reduce ? 0.2 : 1);
+    var t = clock, thinking = state.mode === 'thinking', done = state.mode === 'done';
+
+    // camera with scroll + pointer parallax
+    var sy = Math.min(1, (window.scrollY || 0) / 900);
+    cam.position.x += ((ndc.x * 1.6) - cam.position.x) * 0.04;
+    cam.position.y += ((13 - sy * 3.5 + ndc.y * 0.8) - cam.position.y) * 0.05;
+    cam.position.z = 22;
+    cam.lookAt(0, 1.5 - sy * 2, -6);
+
+    // pointer target on floor
+    if (hasPtr) {
+      ray.setFromCamera(ndc, cam);
+      if (ray.ray.intersectPlane(plane, hit)) target.copy(hit);
+    } else {
+      target.set(Math.sin(t * 0.35) * 10, 0, Math.cos(t * 0.27) * 5 - 4);
+    }
+    ptr.lerp(target, 0.12);
+    glow.position.set(ptr.x, 3.2, ptr.z);
+    burst *= 0.94;
+
+    var speed = thinking ? 3.2 : 1;
+    for (var i = 0; i < N; i++) {
+      var dx = X[i] - ptr.x, dz = Z[i] - ptr.z, d2 = dx * dx + dz * dz;
+      var bump = Math.exp(-d2 / 9);
+      var ring = burst > 0.02 ? Math.exp(-Math.pow(Math.sqrt(d2) - (1 - burst) * 16, 2) / 3) * burst : 0;
+      var wave = 0.35 + 0.28 * Math.sin(X[i] * 0.33 + t * 1.1 * speed) + 0.22 * Math.cos(Z[i] * 0.41 + t * 0.8 * speed);
+      var h = Math.max(0.12, wave + bump * 3.4 + ring * 2.2 + (thinking ? 0.9 * Math.max(0, Math.sin(t * 7 + R[i] * 12)) * R[i] : 0));
+      dummy.position.set(X[i], -1.4, Z[i]); dummy.scale.set(1, h, 1); dummy.updateMatrix();
+      floor.setMatrixAt(i, dummy.matrix);
+      var heat = Math.min(1, bump * 0.95 + ring * 0.8 + (thinking ? R[i] * 0.25 * Math.max(0, Math.sin(t * 5 + R[i] * 9)) : 0));
+      hot.copy(ACC).lerp(ACC2, Math.max(0, Math.min(1, (X[i] + 20) / 40)));
+      tmp.copy(base).lerp(hot, heat);
+      floor.setColorAt(i, tmp);
+    }
+    floor.instanceMatrix.needsUpdate = true;
+    if (floor.instanceColor) floor.instanceColor.needsUpdate = true;
+
+    // core
+    var exT = thinking ? 0.55 + 0.45 * Math.sin(t * 4) : done ? 0.06 : 0.3 + 0.08 * Math.sin(t * 1.2);
+    state.explode += (exT - state.explode) * 0.08;
+    var spT = thinking ? 2.4 : done ? 0.45 : 0.22;
+    state.spin += (spT - state.spin) * 0.05;
+    core.rotation.y += dt * state.spin * (reduce ? 0.2 : 1);
+    core.rotation.x = 0.45 + Math.sin(t * 0.4) * 0.12 + ndc.y * 0.15;
+    core.rotation.z = 0.2 + ndc.x * 0.12;
+    core.position.y = 5.2 + Math.sin(t * 0.9) * 0.35;
+    var litN = Math.round(state.progress * cubes.length);
+    for (var k = 0; k < cubes.length; k++) {
+      var cu = cubes[k], u = cu.userData, s = 1 + state.explode;
+      cu.position.set(u.home.x * s, u.home.y * s, u.home.z * s);
+      var want = k < litN ? 1 : (thinking && Math.sin(t * 9 + u.seed * 30) > 0.6 ? 0.6 : 0);
+      u.lit += (want - u.lit) * 0.1;
+      cu.material.emissive.copy(ACC).multiplyScalar(u.lit * 0.85);
+      u.edge.material.opacity = 0.25 + u.lit * 0.6;
+      cu.rotation.set(0, 0, 0);
+      if (thinking) cu.rotation.y = Math.sin(t * 3 + u.seed * 6) * 0.5;
+    }
+
+    renderer.render(scene, cam);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+
+/* Drabuff AI — enterprise AI service catalogue app */
+(function () {
+  var C = window.DRABUFF, CATS = window.CATS, SV = window.SERVICES, LAYERS = window.LAYERS;
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var byId = {}; SV.forEach(function (s) { byId[s.id] = s; });
+  var catById = {}; CATS.forEach(function (c) { catById[c.id] = c; });
+  var zDigits = C.zalo.replace(/\D/g, '');
+
+  var KEY = 'drabuff-catalog-v1', st = { wish: [], seen: [] };
+  try { var raw = JSON.parse(localStorage.getItem(KEY) || 'null'); if (raw) st = { wish: raw.wish || [], seen: raw.seen || [] }; } catch (e) {}
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} }
+
+  var curTab = 'cx', cur = 'chatbot';
+  var app = $('#app');
+
+  /* ---------- static sections ---------- */
+  var isoLayers = LAYERS.slice().reverse(); // bottom slab = platform
+  app.innerHTML =
+    '<section class="hero" id="hero">' +
+      '<div class="hero-txt reveal">' +
+        '<p class="eyebrow"><span class="dot"></span>DRABUFF AI · BẢN ĐỒ DỊCH VỤ AI DOANH NGHIỆP</p>' +
+        '<h1>Toàn bộ AI cho doanh nghiệp, <em>từ A đến Z</em></h1>' +
+        '<p class="lead">' + SV.length + ' dịch vụ, từ chatbot, tự động hóa, robot phần mềm, AI Agent đến LLM trên cloud riêng và máy chủ on-premise. Mỗi dịch vụ có <b>sơ đồ hoạt động từng bước</b>, giải thích bằng ngôn ngữ đời thường, ví dụ thực tế và thời gian triển khai.</p>' +
+        '<div class="hero-cta"><a class="btn primary" href="#catalog">Khám phá ' + SV.length + ' dịch vụ <span class="arr">→</span></a><a class="btn ghost" href="#contact">Nhờ Drabuff AI tư vấn</a></div>' +
+        '<ul class="facts"><li><b>' + SV.length + '</b><span>dịch vụ AI triển khai</span></li><li><b>' + CATS.length + ' nhóm</b><span>từ điểm chạm đến hạ tầng</span></li><li><b>' + LAYERS.length + ' tầng</b><span>kiến trúc AI doanh nghiệp</span></li></ul>' +
+      '</div>' +
+      '<div class="hero-vis reveal" style="animation-delay:.12s"><div class="iso-wrap"><div class="iso" id="iso">' +
+        isoLayers.map(function (l, i) {
+          var li = LAYERS.indexOf(l);
+          return '<button type="button" class="slab' + (i === 0 ? ' base' : '') + '" style="--i:' + i + '" data-ly="' + li + '" aria-label="Tầng ' + (li + 1) + ': ' + l.n + '"><span class="side"></span><span class="side r"></span><span class="top"><span><small>TẦNG ' + String(li + 1).padStart(2, '0') + '</small><b>' + l.n + '</b></span></span></button>';
+        }).join('') +
+      '</div><span class="iso-cap">BẤM VÀO TỪNG TẦNG ĐỂ XEM</span></div></div>' +
+    '</section>' +
+
+    '<section class="sec" id="catalog">' +
+      '<div class="sec-top"><p class="eyebrow"><span class="dot"></span>DANH MỤC DỊCH VỤ</p><h2>Bấm vào một dịch vụ để xem nó hoạt động thế nào</h2>' +
+      '<p>Chọn nhóm, rồi bấm phím dịch vụ. Sơ đồ bên dưới chạy từng bước để bạn thấy dữ liệu đi đâu, AI làm gì và con người can thiệp ở đâu.</p></div>' +
+      '<div class="tabs" role="tablist" aria-label="Nhóm dịch vụ">' +
+        '<button type="button" class="tab" role="tab" data-tab="all">Tất cả <span class="ct">' + SV.length + '</span></button>' +
+        CATS.map(function (c) { return '<button type="button" class="tab" role="tab" data-tab="' + c.id + '">' + c.n + ' <span class="ct">' + SV.filter(function (s) { return s.cat === c.id; }).length + '</span></button>'; }).join('') +
+      '</div>' +
+      '<div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline"><p class="cat-desc" id="catDesc"></p><span class="explored" id="explored"></span></div>' +
+      '<div class="keys" id="keys"></div>' +
+      '<article class="panel viewer" id="viewer" aria-live="polite"></article>' +
+    '</section>' +
+
+    '<section class="sec" id="arch">' +
+      '<div class="sec-top"><p class="eyebrow"><span class="dot"></span>BỨC TRANH TỔNG THỂ</p><h2>Các dịch vụ AI ghép lại với nhau như thế nào</h2>' +
+      '<p>Đọc từ trên xuống: yêu cầu bắt đầu ở nơi khách hàng và nhân viên chạm vào, đi xuống các lớp xử lý, tới "bộ não" AI ở dưới cùng, rồi kết quả đi ngược lên. Bấm bất kỳ ô nào để xem chi tiết.</p></div>' +
+      '<div class="arch2"><div class="stack2">' +
+        LAYERS.map(function (l, i) {
+          var arrow = i < LAYERS.length - 1 ? '<div class="ly-arrow" aria-hidden="true"><span class="dn"><em style="font-style:normal">giao việc</em><i></i></span><span class="up"><i></i><em style="font-style:normal">trả kết quả</em></span></div>' : '';
+          return '<div class="ly" id="ly-' + i + '"><div class="ly-h"><span class="mono">TẦNG ' + String(i + 1).padStart(2, '0') + '</span><h4>' + l.n + '</h4><p>' + l.d + '</p></div><div class="ly-b">' +
+            l.ids.map(function (id) { return '<button type="button" class="chip2" data-open="' + id + '"><span>' + byId[id].code + '</span>' + byId[id].n + '</button>'; }).join('') + '</div></div>' + arrow;
+        }).join('') +
+      '</div><aside class="gov"><span class="mono">XUYÊN SUỐT MỌI TẦNG</span><h4>Chiến lược, quản trị & con người</h4><p>Không thuộc riêng tầng nào: quyết định làm gì, dùng an toàn ra sao, đào tạo ai và ai chăm sóc hệ thống.</p><div class="ly-b">' +
+        SV.filter(function (s) { return s.cat === 'gov'; }).map(function (s) { return '<button type="button" class="chip2" data-open="' + s.id + '"><span>' + s.code + '</span>' + s.n + '</button>'; }).join('') +
+      '</div></aside></div>' +
+    '</section>' +
+
+    '<section class="sec" id="llm">' +
+      '<div class="sec-top"><p class="eyebrow"><span class="dot"></span>ĐẶT "BỘ NÃO" AI Ở ĐÂU?</p><h2>Cloud công cộng, cloud riêng hay on-premise</h2>' +
+      '<p>Câu hỏi đầu tiên của hầu hết doanh nghiệp: dữ liệu của tôi đi đâu? Ba cách đặt mô hình ngôn ngữ lớn (LLM), so sánh bằng ngôn ngữ đời thường.</p></div>' +
+      '<div class="cmp">' + [
+        { id: 'llmapi', t: 'Cloud công cộng', an: 'Như dùng điện lưới', ctl: 2, spd: 5, cost: 1, where: 'Trung tâm dữ liệu của nhà cung cấp AI (bản doanh nghiệp không dùng dữ liệu của bạn để huấn luyện)', inv: 'Gần như bằng 0', run: 'Trả theo lượng sử dụng', mdl: 'Mạnh nhất thị trường: GPT, Claude, Gemini', fit: 'Doanh nghiệp vừa và nhỏ, muốn bắt đầu nhanh, dữ liệu thông thường' },
+        { id: 'llmprivate', t: 'Cloud riêng', an: 'Như thuê căn hộ có khóa riêng', ctl: 4, spd: 3, cost: 3, where: 'Vùng mạng riêng trên cloud, chỉ doanh nghiệp truy cập', inv: 'Thấp đến trung bình', run: 'Thuê máy chủ GPU theo tháng', mdl: 'Mô hình mã nguồn mở hoặc bản doanh nghiệp riêng', fit: 'Ngân hàng, bảo hiểm, chuỗi lớn, dữ liệu nhạy cảm' },
+        { id: 'llmonprem', t: 'On-premise', an: 'Như tự xây nhà máy điện', ctl: 5, spd: 2, cost: 5, where: 'Phòng server ngay tại công ty, không ra internet', inv: 'Cao (mua máy chủ GPU)', run: 'Cố định: điện, bảo trì, nhân sự', mdl: 'Mã nguồn mở, có thể fine-tune riêng', fit: 'Cơ quan nhà nước, y tế, sản xuất, dữ liệu mật' }
+      ].map(function (m, i) {
+        var bars = function (n) { var h = ''; for (var k = 1; k <= 5; k++) h += '<i' + (k <= n ? ' class="on"' : '') + '></i>'; return '<span class="bars">' + h + '</span>'; };
+        return '<div class="cm' + (i === 1 ? ' mid' : '') + '"><span class="mono">' + byId[m.id].code + '</span><h4>' + m.t + '</h4><p class="an">' + m.an + '</p>' +
+          '<div class="meter"><div><span>Kiểm soát dữ liệu</span>' + bars(m.ctl) + '</div><div><span>Tốc độ bắt đầu</span>' + bars(m.spd) + '</div><div><span>Vốn đầu tư ban đầu</span>' + bars(m.cost) + '</div></div>' +
+          '<dl><div><dt>DỮ LIỆU NẰM Ở</dt><dd>' + m.where + '</dd></div><div><dt>ĐẦU TƯ BAN ĐẦU</dt><dd>' + m.inv + '</dd></div><div><dt>CHI PHÍ VẬN HÀNH</dt><dd>' + m.run + '</dd></div><div><dt>MÔ HÌNH</dt><dd>' + m.mdl + '</dd></div><div><dt>PHÙ HỢP</dt><dd>' + m.fit + '</dd></div></dl>' +
+          '<button type="button" class="btn ghost sm" data-open="' + m.id + '">Xem quy trình triển khai <span class="arr">→</span></button></div>';
+      }).join('') + '</div>' +
+      '<div class="hybrid"><span class="mono">PHƯƠNG ÁN LAI (HYBRID)</span>Nhiều doanh nghiệp kết hợp cả hai: việc thông thường như viết content dùng cloud công cộng cho mạnh và rẻ, dữ liệu mật như hợp đồng hay hồ sơ khách chạy trên cloud riêng hoặc on-premise. Một AI Gateway (L05) đứng giữa tự chọn đường đi cho từng yêu cầu.</div>' +
+    '</section>' +
+
+    '<section class="sec" id="journey">' +
+      '<div class="sec-top"><p class="eyebrow"><span class="dot"></span>LÀM VIỆC CÙNG DRABUFF AI</p><h2>Từ buổi trao đổi đầu tiên đến hệ thống chạy thật</h2></div>' +
+      '<ol class="jr"><li><b>Trao đổi miễn phí</b><span>30–60 phút để hiểu bài toán và mục tiêu của bạn.</span></li><li><b>Khảo sát & đánh giá</b><span>Xem quy trình, dữ liệu, hệ thống hiện có; chọn việc đáng làm nhất.</span></li><li><b>Chạy thử (POC)</b><span>Dựng bản thử trên dữ liệu thật, đo kết quả trước khi đầu tư lớn.</span></li><li><b>Triển khai & đào tạo</b><span>Tích hợp vào hệ thống, đào tạo đội ngũ sử dụng.</span></li><li><b>Vận hành & mở rộng</b><span>Theo dõi KPI hằng tháng, mở rộng sang việc tiếp theo.</span></li></ol>' +
+    '</section>' +
+
+    '<section class="sec" id="faq">' +
+      '<div class="sec-top"><p class="eyebrow"><span class="dot"></span>CÂU HỎI THƯỜNG GẶP</p><h2>Những điều lãnh đạo hay hỏi trước khi bắt đầu</h2></div>' +
+      '<div class="faq">' + [
+        ['AI có thay thế nhân viên của tôi không?', 'AI nhận phần việc lặp lại: trả lời câu hỏi giống nhau, nhập liệu, tổng hợp báo cáo. Con người tập trung vào việc cần phán đoán và quan hệ. Phần lớn doanh nghiệp không cắt giảm người mà làm được nhiều việc hơn với cùng đội ngũ.'],
+        ['Dữ liệu công ty có bị lộ khi dùng AI không?', 'Tùy cách triển khai. Bản doanh nghiệp của các nền tảng cloud lớn cam kết không dùng dữ liệu của bạn để huấn luyện. Dữ liệu nhạy cảm có thể chạy trên cloud riêng hoặc máy chủ on-premise. Hệ thống luôn có che dữ liệu, phân quyền và ghi nhật ký.'],
+        ['Không có đội IT thì có triển khai được không?', 'Được. Drabuff AI triển khai trọn gói, bàn giao màn hình quản trị đơn giản, đào tạo nhân sự và có gói vận hành, bảo trì hằng tháng (S04).'],
+        ['Nên bắt đầu từ dịch vụ nào?', 'Thường là những việc thấy kết quả nhanh trong 2–4 tuần: Chatbot đa kênh (C01), Workflow Automation (A01) hoặc Trợ lý AI cho nhân viên (G04). Nếu chưa rõ, bắt đầu bằng Tư vấn chiến lược (S01).'],
+        ['AI có trả lời sai không?', 'Có thể. Vì vậy Drabuff AI giới hạn AI trả lời trong phạm vi tài liệu của bạn kèm trích nguồn, để con người duyệt ở các bước quan trọng và giám sát chất lượng liên tục.'],
+        ['Chi phí khoảng bao nhiêu?', 'Phụ thuộc vào dịch vụ, quy mô người dùng và nơi đặt mô hình. Sau buổi trao đổi, Drabuff AI gửi báo giá theo từng giai đoạn để bạn bắt đầu nhỏ, đo kết quả rồi mới mở rộng.']
+      ].map(function (f, i) { return '<details' + (i === 0 ? ' open' : '') + '><summary>' + f[0] + '</summary><p>' + f[1] + '</p></details>'; }).join('') + '</div>' +
+    '</section>' +
+
+    '<section class="sec" id="contact"><div class="panel cta">' +
+      '<div class="cta-l"><p class="eyebrow"><span class="dot"></span>BƯỚC TIẾP THEO</p>' +
+        '<h2>Chưa chắc nên bắt đầu từ đâu? Hỏi chuyên gia Drabuff AI</h2>' +
+        '<p>Drabuff AI sẽ nghe bài toán của bạn, đề xuất tổ hợp dịch vụ phù hợp với ngân sách và mức độ bảo mật, rồi gửi lộ trình triển khai kèm báo giá theo từng giai đoạn.</p>' +
+        '<p class="explored" style="margin-top:20px">DỊCH VỤ BẠN ĐÃ ĐÁNH DẤU QUAN TÂM</p><div id="wish"></div>' +
+      '</div><div class="cta-r">' +
+        '<div class="idbox"><div class="z"><span>ZALO ' + C.brand.toUpperCase() + '</span><b>' + C.display + '</b></div><div><span>ĐÃ ĐÁNH DẤU</span><b id="wishN">0 dịch vụ</b></div></div>' +
+        '<a class="btn primary" href="https://zalo.me/' + zDigits + '" target="_blank" rel="noopener">Nhắn Zalo cho ' + C.brand + ' <span class="arr">→</span></a>' +
+        '<button class="btn ghost" id="copy" type="button">Sao chép danh sách để gửi</button>' +
+        '<p class="copied" id="copied" aria-live="polite"></p><textarea id="sumtxt" readonly hidden></textarea>' +
+      '</div></div></section>';
+
+  /* ---------- catalog ---------- */
+  function renderTabs() {
+    $$('.tab').forEach(function (t) { t.setAttribute('aria-selected', t.dataset.tab === curTab); });
+    var c = catById[curTab];
+    $('#catDesc').innerHTML = c ? '<b>' + c.n + ':</b> ' + c.d : 'Toàn bộ <b>' + SV.length + ' dịch vụ</b> Drabuff AI triển khai, xếp theo nhóm.';
+    var list = curTab === 'all' ? SV : SV.filter(function (s) { return s.cat === curTab; });
+    $('#keys').innerHTML = list.map(function (s) {
+      return '<button type="button" class="key" data-id="' + s.id + '" aria-pressed="' + (s.id === cur) + '">' +
+        (st.wish.indexOf(s.id) > -1 ? '<span class="star" title="Đã đánh dấu quan tâm"></span>' : '') +
+        '<span class="kc">' + s.code + '<i>' + (st.seen.indexOf(s.id) > -1 ? 'đã xem' : '') + '</i></span><b>' + s.n + '</b><small>' + s.tag + '</small></button>';
+    }).join('');
+  }
+  function renderExplored() {
+    $('#explored').innerHTML = 'ĐÃ XEM <b>' + st.seen.length + '</b> / ' + SV.length;
+    window.Scene3D.setProgress(0.08 + st.seen.length / SV.length * 0.92);
+  }
+
+  var timer = null, step = 0;
+  function renderViewer(id) {
+    var s = byId[id], n = s.flow.length, cat = catById[s.cat];
+    var cx = ''; for (var k = 1; k <= 3; k++) cx += '<i' + (k <= s.cx ? ' class="on"' : '') + '></i>';
+    var br = s.branch, bs = 1, bx = '25%';
+    if (br) { bs = Math.min(br[0] + 1, n - 1); bx = bs === br[0] + 1 ? '25%' : '75%'; }
+    var idx = SV.indexOf(s), prev = SV[(idx - 1 + SV.length) % SV.length], next = SV[(idx + 1) % SV.length];
+    var inList = st.wish.indexOf(id) > -1;
+    $('#viewer').innerHTML =
+      '<div class="vw-h"><div class="cube3"><span>' + s.code + '</span></div>' +
+        '<div><p class="eyebrow">' + cat.n.toUpperCase() + '</p><h3>' + s.n + '</h3><p class="tg">' + s.tag + '</p></div>' +
+        '<div class="vw-meta"><div><span>THỜI GIAN TRIỂN KHAI</span><b>' + s.tl + '</b></div><div><span>ĐỘ PHỨC TẠP</span><span class="cxm">' + cx + '</span></div></div></div>' +
+      '<div class="easy"><span>NÓI CHO DỄ HIỂU</span><p>' + s.easy + '</p></div>' +
+      '<div class="fl-h"><div><h4>Cách hoạt động, từng bước</h4><p>Chấm sáng đi qua từng bước theo đúng thứ tự dữ liệu được xử lý.</p></div><button type="button" class="btn ghost sm" id="replay">Chạy lại sơ đồ</button></div>' +
+      '<div class="flow2" id="flow" style="--n:' + n + '"><div class="track"><span class="fill"></span><span class="pk"></span></div>' +
+        s.flow.map(function (f, i) {
+          return '<div class="nd" data-i="' + i + '">' + (br && br[0] === i ? '<span class="bt">NHÁNH</span>' : '') +
+            '<div class="nd-k">' + String(i + 1).padStart(2, '0') + '</div><h5>' + f[0] + '</h5><p>' + f[1] + '</p></div>';
+        }).join('') + '</div>' +
+      (br ? '<div class="branch" style="--n:' + n + '"><div class="br-box" style="--bs:' + bs + ';--bx:' + bx + '"><span class="mono">NHÁNH XỬ LÝ TẠI BƯỚC ' + String(br[0] + 1).padStart(2, '0') + '</span><b>Nếu</b> ' + br[1].charAt(0).toLowerCase() + br[1].slice(1) + ' <b>→</b> ' + br[2] + '</div></div>' : '') +
+      '<div class="vw-cols">' +
+        '<div class="vc"><h5>VÍ DỤ THỰC TẾ</h5><ul>' + s.ex.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ul></div>' +
+        '<div class="vc"><h5>DOANH NGHIỆP NHẬN ĐƯỢC</h5><ul class="checks">' + s.get.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ul></div>' +
+        '<div class="vc"><h5>PHÙ HỢP KHI</h5><ul>' + s.fit.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ul></div>' +
+      '</div>' +
+      '<div class="vw-foot"><div class="grp"><button type="button" class="btn ghost sm" data-open="' + prev.id + '">← ' + prev.code + '</button><button type="button" class="btn ghost sm" data-open="' + next.id + '">' + next.code + ' →</button></div>' +
+        '<div class="grp"><button type="button" class="btn ghost sm' + (inList ? ' on-list' : '') + '" id="wishBtn">' + (inList ? '✓ Đã đánh dấu quan tâm' : '+ Đánh dấu quan tâm') + '</button>' +
+        '<a class="btn primary sm" href="#contact">Hỏi Drabuff AI về giải pháp này <span class="arr">→</span></a></div></div>';
+    play();
+  }
+
+  function play() {
+    clearInterval(timer); step = 0;
+    var flow = $('#flow'); if (!flow) return;
+    var nodes = $$('.nd', flow), n = nodes.length, track = $('.track', flow);
+    var paint = function () {
+      nodes.forEach(function (nd, i) { nd.classList.toggle('on', i === step); nd.classList.toggle('done', i < step); });
+      track.style.setProperty('--p', (n > 1 ? step / (n - 1) * 100 : 0) + '%');
+    };
+    if (reduce) { step = n - 1; paint(); nodes.forEach(function (nd) { nd.classList.add('done'); }); return; }
+    paint();
+    timer = setInterval(function () {
+      step++;
+      if (step >= n + 1) { step = 0; }
+      if (step === n) { nodes.forEach(function (nd) { nd.classList.remove('on'); nd.classList.add('done'); }); track.style.setProperty('--p', '100%'); return; }
+      paint();
+    }, 1500);
+  }
+
+  function open(id, scroll) {
+    if (!byId[id]) return;
+    cur = id;
+    if (curTab !== 'all' && byId[id].cat !== curTab) curTab = byId[id].cat;
+    if (st.seen.indexOf(id) < 0) { st.seen.push(id); save(); }
+    renderTabs(); renderViewer(id); renderExplored();
+    if (scroll) $('#viewer').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  }
+
+  /* ---------- wish list / CTA ---------- */
+  function summary() {
+    var items = st.wish.map(function (id) { return byId[id]; });
+    return ['[Drabuff AI] Yêu cầu tư vấn triển khai AI',
+      items.length ? 'Tôi quan tâm ' + items.length + ' dịch vụ:' : 'Tôi muốn được tư vấn giải pháp AI cho doanh nghiệp.'
+    ].concat(items.map(function (s) { return '- ' + s.code + ' · ' + s.n; }))
+      .concat(['Tên doanh nghiệp: ', 'Người liên hệ: ', 'Nhu cầu chính: ']).join('\n');
+  }
+  function renderWish() {
+    var w = $('#wish');
+    w.innerHTML = st.wish.length
+      ? '<div class="wish">' + st.wish.map(function (id) { var s = byId[id]; return '<button type="button" class="chip2" data-unwish="' + id + '" title="Bỏ khỏi danh sách"><span>' + s.code + '</span>' + s.n + '<em>×</em></button>'; }).join('') + '</div>'
+      : '<p class="wish-empty">Chưa có dịch vụ nào. Khi xem một dịch vụ, bấm "Đánh dấu quan tâm" để thêm vào đây; danh sách sẽ được gửi kèm khi bạn nhắn Drabuff AI.</p>';
+    $('#wishN').textContent = st.wish.length + ' dịch vụ';
+    $('#sumtxt').value = summary();
+  }
+
+  /* ---------- events ---------- */
+  document.addEventListener('click', function (e) {
+    var t;
+    if ((t = e.target.closest('.tab'))) { curTab = t.dataset.tab; renderTabs(); return; }
+    if ((t = e.target.closest('.key'))) { open(t.dataset.id, true); return; }
+    if ((t = e.target.closest('[data-open]'))) { curTab = byId[t.dataset.open].cat; open(t.dataset.open, true); return; }
+    if ((t = e.target.closest('#replay'))) { play(); return; }
+    if ((t = e.target.closest('#wishBtn'))) {
+      var i = st.wish.indexOf(cur); if (i > -1) st.wish.splice(i, 1); else st.wish.push(cur);
+      save(); renderWish(); renderTabs();
+      t.classList.toggle('on-list', i < 0); t.textContent = i < 0 ? '✓ Đã đánh dấu quan tâm' : '+ Đánh dấu quan tâm';
+      return;
+    }
+    if ((t = e.target.closest('[data-unwish]'))) { st.wish.splice(st.wish.indexOf(t.dataset.unwish), 1); save(); renderWish(); renderTabs(); if (t.dataset.unwish === cur) renderViewer(cur); return; }
+    if ((t = e.target.closest('.slab'))) {
+      var ly = document.getElementById('ly-' + t.dataset.ly);
+      ly.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+      ly.classList.add('flash'); setTimeout(function () { ly.classList.remove('flash'); }, 1800);
+      return;
+    }
+    if ((t = e.target.closest('#copy'))) {
+      var txt = summary(), ok = function () { $('#copied').textContent = 'Đã sao chép. Mở Zalo ' + C.display + ' và dán vào tin nhắn.'; };
+      var fb = function () { var ta = $('#sumtxt'); ta.hidden = false; ta.focus(); ta.select(); $('#copied').textContent = 'Trình duyệt chặn sao chép tự động. Nội dung đã được bôi đen, nhấn Ctrl/⌘ + C.'; };
+      try { navigator.clipboard.writeText(txt).then(ok, fb); } catch (err) { fb(); }
+    }
+  });
+
+  // hero iso tilt follows pointer
+  if (!reduce && window.matchMedia && matchMedia('(pointer:fine)').matches) {
+    var iso = $('#iso'), host = iso.parentElement;
+    host.addEventListener('pointermove', function (e) {
+      var r = host.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+      iso.style.transform = 'rotateX(' + (58 - y * 14) + 'deg) rotateZ(' + (-40 + x * 18) + 'deg)';
+    });
+    host.addEventListener('pointerleave', function () { iso.style.transform = ''; });
+  }
+
+  renderTabs(); renderViewer(cur); renderExplored(); renderWish();
+  if (st.seen.indexOf(cur) < 0) { st.seen.push(cur); save(); renderExplored(); }
+})();
+
+</script>
