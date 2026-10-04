@@ -1,0 +1,31 @@
+DRABUFF Z-LAB – PHÒNG THÍ NGHIỆM ZOMBIE 3D
+Phát triển bởi Tân AI
+==========================================
+
+1) ĐƯA LÊN CLOUDFLARE PAGES (miễn phí)
+   - Vào https://dash.cloudflare.com > Workers & Pages > Create > Pages > "Upload assets".
+   - Đặt tên dự án (ví dụ: zlab) > Create project.
+   - Giải nén file zip, kéo-thả TOÀN BỘ nội dung thư mục (có index.html ở ngoài cùng) vào ô upload > Deploy.
+   - Xong! Trang sẽ chạy tại https://<ten-du-an>.pages.dev
+   - Không cần database, không cần đăng ký thành viên: người chơi vào là chơi ngay.
+     Bộ sưu tập zombie được lưu ngay trên máy người chơi.
+
+2) CÀI APP LÊN ĐIỆN THOẠI (không cần App Store / CH Play)
+   ANDROID (Chrome):
+     - Mở link trang > bấm nút tải (biểu tượng mũi tên) góc trên, hoặc menu ⋮ > "Cài đặt ứng dụng"/"Thêm vào màn hình chính".
+   IPHONE / IPAD (Safari):
+     - Mở link bằng Safari > bấm nút Chia sẻ (ô vuông có mũi tên) > "Thêm vào MH chính" > Thêm.
+   MÁY TÍNH (Chrome / Edge):
+     - Bấm biểu tượng cài đặt ở cuối thanh địa chỉ.
+   * Nếu mở link trong Zalo/Facebook, hãy chọn "Mở bằng trình duyệt" trước khi cài.
+
+3) CẬP NHẬT PHIÊN BẢN MỚI
+   - Upload lại toàn bộ thư mục lên cùng dự án (Create new deployment).
+   - Người chơi mở lại app sẽ nhận bản mới.
+
+4) NỘI DUNG
+   - Phòng lắp ráp: 17 chủng × 5 vị trí (đầu, thân, tay trái, tay phải, chân) = 85 bộ phận 3D,
+     hơn 1,4 triệu tổ hợp; chỉ số, hạng D–SS, kỹ năng & điểm yếu tính tự động.
+   - 12 công thức huyền thoại ẩn (+15% chỉ số), thuần chủng (+8%), đột biến gen.
+   - Bách khoa: 70 loại zombie từ phim ảnh, truyền hình, game, sách, truyện tranh, dân gian, tư liệu thực tế.
+   - Hầm mộ: bộ sưu tập zombie đã hồi sinh. Đấu trường: tử chiến tự động.
