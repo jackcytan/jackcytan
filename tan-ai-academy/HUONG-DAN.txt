@@ -1,0 +1,40 @@
+TÂN AI ACADEMY – HƯỚNG DẪN ĐƯA LÊN CLOUDFLARE PAGES
+Phát triển bởi Tân AI · Chứng chỉ cấp bởi Chuyên gia AI Nguyễn Văn Tân
+=====================================================================
+
+A. ĐƯA LÊN MẠNG (làm 1 lần, khoảng 3 phút)
+1. Vào https://dash.cloudflare.com  → Workers & Pages → Create → Pages
+   → "Upload assets" (Tải lên trực tiếp).
+2. Đặt tên dự án, ví dụ: tanai-academy  (link sẽ là https://tanai-academy.pages.dev)
+3. Kéo thả nguyên file ZIP này vào (hoặc giải nén rồi kéo thả cả thư mục).
+4. Bấm "Deploy site". Xong! Mở link *.pages.dev là dùng được.
+   (Muốn dùng tên miền riêng: vào dự án → Custom domains → thêm tên miền.)
+
+Cập nhật phiên bản sau này: vào dự án → Create new deployment → kéo thả ZIP mới.
+Người dùng đã cài app sẽ tự nhận bản mới ở lần mở tiếp theo.
+
+B. GỬI CHO HỌC VIÊN
+Chỉ cần gửi link (Zalo, Facebook, email, mã QR...). Trang web tự nhận biết
+điện thoại Android / iPhone và hiện đúng hướng dẫn cài đặt:
+
+  ANDROID (Chrome):
+   - Bấm nút "Cài ứng dụng ngay" trên trang → chọn "Cài đặt".
+   - Hoặc: bấm ⋮ góc trên phải Chrome → "Cài đặt ứng dụng" / "Thêm vào màn hình chính".
+
+  IPHONE / IPAD (Safari):
+   - Bấm nút Chia sẻ (ô vuông có mũi tên lên) ở thanh dưới
+     (iOS mới: bấm ••• rồi chọn Chia sẻ)
+   - Chọn "Thêm vào MH chính" → bấm "Thêm".
+
+  LƯU Ý: Nếu học viên mở link ngay trong Zalo/Facebook/Messenger thì KHÔNG cài
+  được – trang sẽ tự hiện hướng dẫn "Mở bằng Chrome/Safari" và nút sao chép link.
+
+C. THÔNG TIN KỸ THUẬT
+- Ứng dụng dạng PWA: 1 bộ file chạy cho cả Android, iPhone và máy tính.
+- Chạy offline sau lần mở đầu tiên (service worker sw.js).
+- Tiến độ, họ tên, chứng chỉ lưu trên máy học viên (không cần máy chủ, không thu phí hosting).
+- Chứng chỉ xuất ảnh JPG 2400×1697, ghi họ tên học viên, người cấp:
+  CHUYÊN GIA AI NGUYỄN VĂN TÂN.
+- Nội dung khóa học nằm trong file data.js (có thể sửa câu hỏi/bài giảng).
+  Sau khi sửa bất kỳ file nào, chạy "node build-sw.js" (trong mã nguồn) để
+  cập nhật sw.js, rồi đóng gói ZIP và deploy lại.
