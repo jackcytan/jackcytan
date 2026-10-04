@@ -1,0 +1,22 @@
+{
+  "id": "./",
+  "name": "Drabuff Prompt Hub",
+  "short_name": "Drabuff Prompt",
+  "description": "Kho prompt AI cho mọi ngành nghề và từ điển AI A–Z. Phát triển bởi Tân AI.",
+  "lang": "vi",
+  "start_url": "./?source=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#050918",
+  "theme_color": "#050918",
+  "categories": ["productivity", "education", "business"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Kho prompt", "url": "./#prompts", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Từ điển AI", "url": "./#glossary", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
+  ]
+}
