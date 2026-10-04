@@ -1,0 +1,7 @@
+TAN AI PHOTO LAB - dua len Cloudflare Pages
+1. Vao dash.cloudflare.com > Workers & Pages > Create > Pages > Upload assets.
+2. Dat ten du an (vd: tan-ai-photo), keo tha file ZIP nay (hoac giai nen roi keo tha file index.html).
+3. Bam Deploy. Mo link *.pages.dev la dung duoc ngay.
+Khach tai anh len, chinh sua, chon dinh dang (PNG/JPG/WEBP/AVIF/BMP) roi bam "Tai anh xuong".
+Anh duoc xu ly ngay tren trinh duyet cua khach, khong gui len may chu.
+Duoc phat trien boi Tan AI.
