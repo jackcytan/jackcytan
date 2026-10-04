@@ -196,7 +196,7 @@
         { id: 'tech', type: 'single', label: 'Đội ngũ kỹ thuật', req: true, options: techs },
         { id: 'data', type: 'single', label: 'Tính chất dữ liệu', req: true, half: true, options: datas },
         { id: 'timeline', type: 'single', label: 'Muốn triển khai khi nào?', req: true, half: true, options: timelines },
-        { id: 'budget', type: 'single', label: 'Định hướng đầu tư', req: true, options: budgets }
+        { id: 'budget', type: 'single', label: 'Quy mô triển khai mong muốn', req: true, options: budgets }
       ] },
       { title: 'Quy trình cụ thể', sub: 'Hai câu trả lời ngắn để Drabuff AI thiết kế sát thực tế nhất.', qs: [
         { id: 'process', type: 'textarea', label: 'Mô tả 1 quy trình đang làm thủ công mà bạn muốn tự động hóa nhất', req: true, ph: 'VD: Khách nhắn Zalo hỏi giá → nhân viên tra bảng giá → báo giá → nhập vào Excel → cuối ngày tổng hợp gửi sếp…', sugs: ['Tiếp nhận & trả lời tin nhắn khách', 'Nhập đơn hàng vào phần mềm', 'Tổng hợp báo cáo doanh số', 'Xử lý hóa đơn đầu vào'] },
@@ -300,7 +300,7 @@
         'Điểm nghẽn: ' + CM.labels(pains, A.pains).join('; '),
         'Dịch vụ đề xuất: ' + R.list.map(function (k) { return S[k].n + ' (GĐ ' + R.phase[k] + ')'; }).join(' | '),
         'Ước tính tiết kiệm: ~' + saved + ' giờ/tháng',
-        'Kỹ thuật: ' + CM.label(techs, A.tech) + ' · Dữ liệu: ' + CM.label(datas, A.data) + ' · Thời điểm: ' + CM.label(timelines, A.timeline) + ' · Đầu tư: ' + CM.label(budgets, A.budget),
+        'Kỹ thuật: ' + CM.label(techs, A.tech) + ' · Dữ liệu: ' + CM.label(datas, A.data) + ' · Thời điểm: ' + CM.label(timelines, A.timeline) + ' · Phạm vi: ' + CM.label(budgets, A.budget),
         'Quy trình muốn tự động: ' + (A.process || ''),
         A.success ? 'Thành công sau 3 tháng: ' + A.success : ''
       ].filter(Boolean).join('\n');
@@ -308,8 +308,8 @@
     },
     cta: {
       title: 'Trao đổi cùng chuyên gia Drabuff AI để triển khai',
-      text: 'Bản thiết kế này là bước phác thảo. Trong buổi trao đổi, Drabuff AI sẽ khảo sát quy trình thực tế, xác nhận khả năng tích hợp và gửi phương án triển khai chi tiết kèm báo giá cho từng giai đoạn.',
-      next: 'khảo sát quy trình, chốt phạm vi chạy thử và gửi báo giá'
+      text: 'Bản thiết kế này là bước phác thảo. Trong buổi trao đổi, Drabuff AI sẽ khảo sát quy trình thực tế, xác nhận khả năng tích hợp và gửi phương án triển khai chi tiết cho từng giai đoạn.',
+      next: 'khảo sát quy trình và chốt phạm vi chạy thử'
     }
   };
 })();

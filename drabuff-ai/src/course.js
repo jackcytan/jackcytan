@@ -315,8 +315,8 @@
     },
     cta: {
       title: 'Trao đổi cùng chuyên gia Drabuff AI để chốt giáo trình',
-      text: 'Đề xuất này là bản phác thảo đầu tiên. Trong buổi trao đổi, Drabuff AI sẽ đi sâu vào quy trình thực tế, điều chỉnh nội dung từng buổi và gửi kế hoạch đào tạo hoàn chỉnh kèm báo giá.',
-      next: 'tư vấn chi tiết, điều chỉnh giáo trình và gửi báo giá'
+      text: 'Đề xuất này là bản phác thảo đầu tiên. Trong buổi trao đổi, Drabuff AI sẽ đi sâu vào quy trình thực tế, điều chỉnh nội dung từng buổi và gửi kế hoạch đào tạo hoàn chỉnh.',
+      next: 'tư vấn chi tiết và hoàn thiện giáo trình'
     }
   };
 })();

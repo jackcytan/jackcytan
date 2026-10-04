@@ -404,13 +404,13 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:7px;bac
   background:repeating-linear-gradient(90deg,var(--acc-dd) 0 10px,transparent 10px 16px);opacity:.9}
 .flow2 .track .fill{position:absolute;left:0;top:0;bottom:0;width:var(--p,0%);background:linear-gradient(90deg,var(--acc2),var(--acc));box-shadow:0 0 12px var(--acc-glow);transition:width .9s cubic-bezier(.4,.1,.2,1);border-radius:2px}
 .flow2 .pk{position:absolute;top:50%;left:var(--p,0%);width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px var(--acc-soft2),0 0 22px var(--acc);transition:left .9s cubic-bezier(.4,.1,.2,1)}
-.nd{position:relative;z-index:1;display:grid;gap:10px;justify-items:center;text-align:center;align-content:start;cursor:default}
+.nd{position:relative;z-index:1;display:grid;gap:10px;justify-items:center;text-align:center;align-content:start;cursor:pointer;background:none;border:0;padding:0;font:inherit;color:inherit}
 .nd-k{width:72px;height:72px;border-radius:16px;display:grid;place-items:center;font-family:var(--f-mono);font-size:15px;font-weight:600;color:var(--muted);
   background:linear-gradient(180deg,#232d4e,#121931);border:1px solid var(--line2);box-shadow:0 7px 0 0 var(--cap),0 18px 30px -14px rgba(0,0,0,.9);transition:all .4s cubic-bezier(.2,.7,.2,1)}
-.nd h5{font-family:var(--f-display);font-size:16px;margin:4px 0 0;line-height:1.25;transition:color .3s}
-.nd p{font-size:13px;color:var(--muted);line-height:1.5;max-width:28ch}
+.nd .nd-t{display:block;font-weight:700;font-family:var(--f-display);font-size:16px;margin:4px 0 0;line-height:1.25;transition:color .3s}
+.nd .nd-p{display:block;font-size:13px;color:var(--muted);line-height:1.5;max-width:28ch}
 .nd.on .nd-k{color:var(--acc-ink);background:linear-gradient(180deg,var(--acc),var(--acc-d));border-color:transparent;transform:translateY(-6px);box-shadow:0 11px 0 0 var(--acc-dd),0 0 40px -6px var(--acc-glow)}
-.nd.on h5{color:var(--acc)}
+.nd.on .nd-t{color:var(--acc)}
 .nd.done .nd-k{color:var(--fg);border-color:var(--acc)}
 .nd .bt{position:absolute;top:-8px;right:calc(50% - 46px);font-family:var(--f-mono);font-size:9.5px;letter-spacing:.08em;padding:3px 6px;border-radius:5px;background:var(--acc2);color:#0b0b18;z-index:2}
 /* chevrons between nodes */
@@ -426,8 +426,8 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:7px;bac
   .flow2 .track{display:none}
   .nd{grid-template-columns:64px minmax(0,1fr);justify-items:start;text-align:left;column-gap:16px;row-gap:4px}
   .nd-k{width:60px;height:60px;grid-row:span 2}
-  .nd h5{margin:6px 0 0}
-  .nd p{max-width:none}
+  .nd .nd-t{margin:6px 0 0}
+  .nd .nd-p{max-width:none}
   .nd:not(:last-child)::after{top:auto;bottom:-22px;right:auto;left:24px;transform:rotate(135deg)}
   .nd .bt{right:auto;left:40px;top:-8px}
   .branch{grid-template-columns:minmax(0,1fr)}
@@ -522,6 +522,273 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:7px;bac
 .vw-meta .cxm{display:flex}
 @media(max-width:719px){.tabs{flex-wrap:nowrap;overflow-x:auto;margin-inline:-16px;padding:0 16px 10px;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}.tab{flex:none}}
 
+/* ================= v2: effects & new sections ================= */
+@property --ang{syntax:'<angle>';inherits:false;initial-value:0deg}
+.progress{position:fixed;left:0;right:0;top:0;height:2px;z-index:60;pointer-events:none}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--acc2),var(--acc));box-shadow:0 0 12px var(--acc-glow)}
+
+/* hero */
+.shine em{background:linear-gradient(100deg,var(--acc) 0%,#fff 45%,var(--acc2) 55%,var(--acc) 100%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;animation:shine 6s linear infinite}
+@keyframes shine{to{background-position:-250% 0}}
+.typer{margin-top:18px;font-size:clamp(13px,1.4vw,15px);color:var(--fg);display:flex;align-items:center;flex-wrap:wrap;min-height:1.6em;padding:8px 12px;border-radius:9px;background:rgba(4,7,14,.7);border:1px solid var(--line2);width:fit-content;max-width:100%}
+.typer .tp-p{color:var(--dim)}
+#typer{color:var(--acc)}
+.caret{display:inline-block;width:8px;height:1.1em;background:var(--acc);margin-left:2px;animation:blink 1s steps(2) infinite}
+.slab{animation:slabIn .9s cubic-bezier(.2,.8,.2,1) both;animation-delay:var(--d)}
+@keyframes slabIn{from{opacity:0;transform:translateZ(calc(var(--i) * 46px + 260px))}}
+.slab .top{background-image:linear-gradient(135deg,rgba(40,48,86,.86),rgba(14,18,36,.9))}
+.slab .top::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.10) 45%,transparent 60%);background-size:300% 100%;animation:sweep 5s ease-in-out infinite;animation-delay:var(--d);pointer-events:none}
+@keyframes sweep{0%,60%{background-position:150% 0}100%{background-position:-150% 0}}
+
+/* ticker */
+.ticker{position:relative;display:grid;gap:10px;padding-block:8px 4px;margin-inline:-16px;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+@media(min-width:720px){.ticker{margin-inline:-28px}}
+.tk-row{display:flex;gap:10px;width:max-content;animation:tk 70s linear infinite}
+.tk-row.rev{animation-direction:reverse;animation-duration:80s}
+.ticker:hover .tk-row{animation-play-state:paused}
+@keyframes tk{to{transform:translateX(-50%)}}
+.tk{flex:none;display:inline-flex;gap:8px;align-items:center;font:500 13px/1 var(--f-body);padding:10px 14px;border-radius:999px;border:1px solid var(--line);background:rgba(10,14,28,.75);color:var(--muted);cursor:pointer;transition:color .2s,border-color .2s}
+.tk b{font-family:var(--f-mono);font-size:10.5px;color:var(--acc);font-weight:600}
+.tk:hover{color:var(--fg);border-color:var(--acc)}
+
+/* dock */
+.dock{position:sticky;top:calc(env(safe-area-inset-top,0px) + 55px);z-index:15;margin-top:28px;padding-block:8px}
+.dock-in{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:6px;border-radius:14px;background:rgba(6,9,18,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);box-shadow:0 14px 30px -18px rgba(0,0,0,.9)}
+.dock-in::-webkit-scrollbar{display:none}
+.dock a{flex:none;font:600 12.5px/1 var(--f-body);color:var(--muted);text-decoration:none;padding:9px 12px;border-radius:9px;transition:color .2s,background .2s}
+.dock a:hover{color:var(--fg)}
+.dock a.on{color:var(--acc-ink);background:linear-gradient(180deg,var(--acc),var(--acc-d));box-shadow:0 3px 0 0 var(--acc-dd)}
+
+/* spotlight */
+.spot{position:relative}
+.spot::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(320px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.075),transparent 60%);opacity:0;transition:opacity .35s;z-index:0}
+.spot:hover::after{opacity:1}
+
+/* reveal */
+.rv{transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+.rv-wait{opacity:0;transform:translateY(28px)}
+
+/* finder */
+.finder{display:grid;grid-template-columns:minmax(0,1fr);gap:22px}
+@media(min-width:1000px){.finder{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:start}}
+.pains{display:flex;flex-wrap:wrap;gap:10px;align-content:start}
+.pain{--d:5px;font:500 14px/1.3 var(--f-body);text-align:left;padding:12px 14px;border-radius:11px;border:1px solid var(--line);background:linear-gradient(180deg,rgba(32,43,72,.8),rgba(15,21,38,.9));color:var(--fg);cursor:pointer;box-shadow:0 var(--d) 0 0 var(--cap),0 14px 22px -16px rgba(0,0,0,.9);transform:translateY(0);transition:transform .15s,box-shadow .15s,border-color .2s,background .2s}
+.pain:hover{transform:translateY(-2px);border-color:var(--line2)}
+.pain[aria-pressed="true"]{transform:translateY(4px);border-color:var(--acc);background:linear-gradient(180deg,var(--acc-soft2),var(--acc-soft));box-shadow:0 1px 0 0 var(--acc-dd),0 0 24px -8px var(--acc-glow)}
+.pain[aria-pressed="true"]::before{content:"✓ ";color:var(--acc)}
+.fr-out{border-radius:18px;border:1px solid var(--line);background:var(--panel);backdrop-filter:blur(16px);padding:18px;display:grid;gap:12px}
+@media(min-width:1000px){.fr-out{position:sticky;top:130px}}
+.fr-h{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.fr-h .mono{font-size:10.5px;letter-spacing:.14em;color:var(--acc)}
+.fr-list{display:grid;gap:10px}
+.fr{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;text-align:left;padding:14px;border-radius:13px;border:1px solid var(--line);background:rgba(4,7,14,.6);color:var(--fg);cursor:pointer;font:inherit;box-shadow:0 4px 0 0 var(--cap);animation:rise .5s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--dl);transition:border-color .2s,transform .15s}
+.fr:hover{border-color:var(--acc);transform:translateX(4px)}
+.fr-rk{font-size:22px;color:var(--acc);font-weight:600;position:relative;z-index:1}
+.fr-b{display:grid;gap:3px;min-width:0;position:relative;z-index:1}
+.fr-b .kc{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;color:var(--dim)}
+.fr-b b{font-family:var(--f-display);font-size:16.5px}
+.fr-b small{color:var(--muted);font-size:12.5px}
+.fr-bar{height:6px;border-radius:3px;background:#161e36;overflow:hidden;margin-top:6px}
+.fr-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--acc2),var(--acc));box-shadow:0 0 10px var(--acc-glow);animation:grow 1s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--dl)}
+@keyframes grow{from{width:0!important}}
+.fr-w{font-size:11.5px;color:var(--dim)}
+.fr-go{font-size:12.5px;color:var(--acc);font-weight:600;white-space:nowrap;position:relative;z-index:1}
+
+/* catalog bar */
+.cat-bar{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+.search{display:flex;align-items:center;gap:10px;flex:1;min-width:min(100%,260px);max-width:520px;padding:4px 4px 4px 14px;border-radius:12px;border:1px solid var(--line2);background:rgba(4,7,14,.75);box-shadow:inset 0 2px 0 rgba(0,0,0,.4)}
+.search:focus-within{border-color:var(--acc);box-shadow:inset 0 2px 0 rgba(0,0,0,.4),0 0 0 4px var(--acc-soft)}
+.search .mono{font-size:10.5px;letter-spacing:.14em;color:var(--acc)}
+.search input{flex:1;min-width:0;background:none;border:0;outline:none;color:var(--fg);font:500 14.5px var(--f-body);padding:10px 6px}
+.search input::placeholder{color:var(--dim)}
+.key{animation:rise .45s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--dl)}
+.key>*{position:relative;z-index:1}
+.empty{color:var(--muted);padding:18px 0}
+.empty a{color:var(--acc)}
+
+/* viewer v2 */
+.vw-in{animation:vwIn .5s cubic-bezier(.2,.7,.2,1) both;position:relative;z-index:1}
+@keyframes vwIn{from{opacity:.001;transform:translateY(12px) scale(.995)}}
+.vw-meta small{display:block;font-size:11.5px;color:var(--muted);margin-top:2px}
+.fl-ctl{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.fl-ctl .mono{font-size:11px;letter-spacing:.12em;color:var(--acc);min-width:96px}
+.nd .ring{position:absolute;inset:-6px;border-radius:20px;border:2px solid var(--acc);opacity:0;pointer-events:none}
+.nd-k{position:relative}
+.nd.on .ring{animation:ring 1.6s ease-out infinite}
+@keyframes ring{0%{opacity:.8;transform:scale(.9)}100%{opacity:0;transform:scale(1.35)}}
+.nd:hover .nd-k{border-color:var(--acc)}
+.nd:focus-visible{outline:none}
+.nd:focus-visible .nd-k{outline:2px solid var(--acc);outline-offset:4px}
+.ba{margin-top:34px}
+.ba-h{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.ba-h h4{font-size:20px}
+.seg{display:inline-flex;padding:4px;border-radius:11px;background:rgba(4,7,14,.75);border:1px solid var(--line2);gap:4px;flex-wrap:wrap}
+.seg button{font:600 12.5px/1 var(--f-body);padding:9px 12px;border-radius:8px;border:0;background:none;color:var(--muted);cursor:pointer;transition:all .2s}
+.seg button[aria-pressed="true"]{background:linear-gradient(180deg,var(--acc),var(--acc-d));color:var(--acc-ink);box-shadow:0 2px 0 0 var(--acc-dd)}
+.ba-g{display:grid;gap:8px}
+.ba-row{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1fr) 34px minmax(0,1fr);gap:10px;align-items:stretch;animation:rise .5s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--dl)}
+.ba-row>span{padding:12px 14px;border-radius:11px;font-size:14px;transition:opacity .35s,filter .35s,transform .35s}
+.ba-row .lb{font-weight:600;color:var(--fg);background:rgba(255,255,255,.03);border:1px solid var(--line)}
+.ba-row .b{color:var(--muted);background:rgba(255,107,122,.06);border:1px solid rgba(255,107,122,.22)}
+.ba-row .a{color:var(--fg);background:linear-gradient(90deg,var(--acc-soft2),var(--acc-soft));border:1px solid var(--acc);box-shadow:0 0 24px -12px var(--acc-glow)}
+.ba-row .ar{position:relative;padding:0}
+.ba-row .ar::before{content:"";position:absolute;left:4px;right:10px;top:50%;height:2px;background:linear-gradient(90deg,rgba(255,107,122,.5),var(--acc))}
+.ba-row .ar::after{content:"";position:absolute;right:4px;top:50%;width:9px;height:9px;margin-top:-4.5px;border:solid var(--acc);border-width:2px 2px 0 0;transform:rotate(45deg)}
+.ba-hd>span{padding:0 14px;font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;background:none!important;border:0!important;box-shadow:none!important}
+.ba-hd .b{color:#FF8A96}.ba-hd .a{color:var(--acc)}
+.ba-g[data-mode="before"] .a,.ba-g[data-mode="after"] .b{opacity:.18;filter:blur(1.5px)}
+.ba-g[data-mode="after"] .a{transform:scale(1.02)}
+@media(max-width:700px){.ba-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr);}.ba-row .lb{grid-column:1/-1}.ba-row .ar{display:none}.ba-hd .lb{display:none}}
+.vw-cols.four{grid-template-columns:minmax(0,1fr)}
+@media(min-width:700px){.vw-cols.four{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1100px){.vw-cols.four{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.vw-cols.two{grid-template-columns:minmax(0,1fr);margin-top:16px}
+@media(min-width:860px){.vw-cols.two{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.vc ul.need li::marker{content:"◇  ";color:var(--acc2)}
+.vc ul.kpi li::marker{content:"▲  ";color:var(--acc)}
+.vc.human{border-color:var(--acc2);background:linear-gradient(180deg,var(--acc2-soft),rgba(4,7,14,.55))}
+.vc.human p{font-size:14.5px;color:var(--fg);line-height:1.55}
+.vc.human h5:first-child{color:var(--acc2)}
+
+/* arch v2 */
+.side-col{display:grid;gap:16px;align-content:start}
+@media(min-width:1000px){.side-col{position:sticky;top:130px;align-self:start}}
+@media(max-width:999px){.side-col{order:-1}}
+.arch2{grid-template-columns:minmax(0,1fr)}
+@media(min-width:1000px){.arch2{grid-template-columns:minmax(0,1fr) 320px}}
+.sim{border-radius:16px;padding:18px;border:1px solid var(--acc);background:linear-gradient(180deg,var(--acc-soft2),rgba(8,12,24,.85));display:grid;gap:12px;box-shadow:0 0 50px -24px var(--acc-glow)}
+.sim .mono{font-size:10.5px;letter-spacing:.16em;color:var(--acc)}
+.sim h4{font-size:17px}
+.sim-sc{display:grid;gap:8px}
+.sim-sc .tab{width:100%;text-align:left;justify-content:flex-start;font-size:13px}
+.sim-sc .tab[aria-pressed="true"]{color:var(--acc-ink);background:linear-gradient(180deg,var(--acc),var(--acc-d));border-color:transparent;transform:translateY(3px);box-shadow:0 1px 0 0 var(--acc-dd)}
+.sim-log{list-style:none;margin:0;padding:0;display:grid;gap:6px;max-height:420px;overflow:auto}
+.sim-log li{display:grid;grid-template-columns:40px minmax(0,1fr);gap:10px;padding:9px 10px;border-radius:10px;border:1px solid var(--line);background:rgba(4,7,14,.6);font-size:12.5px;color:var(--muted);opacity:.55;transition:all .35s}
+.sim-log li b{display:block;color:var(--fg);font-size:12px;margin-bottom:2px}
+.sim-log .sl-k{font-family:var(--f-mono);font-size:11px;color:var(--acc);padding-top:1px}
+.sim-log li.on{opacity:1;border-color:var(--acc);background:var(--acc-soft2);transform:translateX(-4px);box-shadow:0 0 24px -10px var(--acc-glow)}
+.sim-log li.done{opacity:.95}
+.chip2.hot{border-color:var(--acc);color:var(--acc-ink);background:linear-gradient(180deg,var(--acc),var(--acc-d));transform:translateY(-3px) scale(1.06);box-shadow:0 6px 0 0 var(--acc-dd),0 0 36px -4px var(--acc-glow);animation:hot 1s ease-in-out infinite}
+.chip2.hot span{color:var(--acc-ink)}
+@keyframes hot{50%{box-shadow:0 6px 0 0 var(--acc-dd),0 0 56px 0 var(--acc-glow)}}
+.ly-arrow em{font-style:normal}
+.ly{position:relative}
+.ly>*{position:relative;z-index:1}
+
+/* maturity */
+.stairs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;align-items:end;height:280px;perspective:1200px;margin-bottom:22px}
+@media(max-width:640px){.stairs{height:auto;grid-template-columns:minmax(0,1fr);align-items:stretch}}
+.stair{position:relative;height:calc(var(--h) * 20% );min-height:80px;border:0;padding:0;cursor:pointer;background:none;font:inherit;color:inherit;transform-style:preserve-3d;transition:transform .3s cubic-bezier(.2,.7,.2,1)}
+@media(max-width:640px){.stair{height:auto;min-height:0}}
+.st-top{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-start;gap:4px;padding:14px;text-align:left;border-radius:14px 14px 6px 6px;font-size:14px;font-weight:600;line-height:1.25;color:var(--fg);
+  background:linear-gradient(180deg,rgba(40,50,86,.9),rgba(12,17,32,.95));border:1px solid var(--line2);box-shadow:0 10px 0 0 var(--cap),0 30px 40px -20px rgba(0,0,0,.9);transition:all .3s}
+@media(max-width:640px){.st-top{position:relative;border-radius:12px}}
+.st-top b{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;color:var(--acc);font-weight:600}
+.stair:hover{transform:translateY(-6px)}
+.stair.below .st-top{border-color:var(--acc-dd);background:linear-gradient(180deg,var(--acc-soft2),rgba(12,17,32,.95))}
+.stair.on .st-top{background:linear-gradient(180deg,var(--acc),var(--acc-d));color:var(--acc-ink);border-color:transparent;box-shadow:0 10px 0 0 var(--acc-dd),0 0 60px -10px var(--acc-glow)}
+.stair.on .st-top b{color:var(--acc-ink)}
+.stair.on{transform:translateY(-10px)}
+.lv-in{display:grid;grid-template-columns:minmax(0,1fr);gap:22px;position:relative;z-index:1;animation:vwIn .45s cubic-bezier(.2,.7,.2,1) both}
+@media(min-width:900px){.lv-in{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) minmax(0,1fr)}}
+.lv-in .mono{font-size:10.5px;letter-spacing:.16em;color:var(--acc)}
+.lv-in h3{font-size:clamp(22px,2.8vw,30px);margin-top:6px}
+.lv-d{color:var(--muted);margin-top:8px}
+.lv-next{margin-top:16px;padding:12px 14px;border-radius:11px;border:1px dashed var(--acc2);background:var(--acc2-soft);font-size:14px}
+.lv-next .mono{display:block;color:var(--acc2);margin-bottom:4px}
+.lv-in h5{margin:0 0 12px;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.16em;color:var(--dim);font-weight:400}
+
+/* llm v2 */
+.prio2{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
+.prio2 .tab[aria-pressed="true"]{color:var(--acc-ink);background:linear-gradient(180deg,var(--acc),var(--acc-d));border-color:transparent;transform:translateY(3px);box-shadow:0 1px 0 0 var(--acc-dd),0 0 26px -8px var(--acc-glow)}
+@media(min-width:700px){.cmp{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1150px){.cmp{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.cm{transition:transform .35s cubic-bezier(.2,.7,.2,1),opacity .35s,border-color .3s,box-shadow .3s}
+.cm>*{position:relative;z-index:1}
+.cm .badge{position:absolute;top:-11px;right:16px;font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;padding:5px 9px;border-radius:6px;background:var(--acc);color:var(--acc-ink);opacity:0;transform:translateY(6px);transition:all .3s;z-index:2}
+.cm.pick{border-color:var(--acc);transform:translateY(-8px);box-shadow:0 14px 0 0 var(--acc-dd),0 0 70px -20px var(--acc-glow)}
+.cm.pick .badge{opacity:1;transform:none}
+.cm.dim{opacity:.55}
+.cm.mid{border-color:var(--line)}
+.meter div{grid-template-columns:120px minmax(0,1fr)}
+.hybrid{transition:border-color .3s,box-shadow .3s}
+.hybrid.pick{border-style:solid;border-color:var(--acc);box-shadow:0 0 70px -24px var(--acc-glow)}
+.hybrid p{color:var(--muted);font-size:14px}
+.hy-flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:8px 0}
+.hy-flow>i{width:26px;height:2px;background:var(--acc2);position:relative;flex:none}
+.hy-flow>i::after{content:"";position:absolute;right:-1px;top:-4px;width:8px;height:8px;border:solid var(--acc2);border-width:2px 2px 0 0;transform:rotate(45deg)}
+.hy-n{font-size:13px;padding:9px 12px;border-radius:9px;border:1px solid var(--line2);background:rgba(4,7,14,.7);box-shadow:0 3px 0 0 var(--cap)}
+.hy-n.acc{border-color:var(--acc);color:var(--acc)}
+.hy-split{display:grid;gap:6px}
+
+/* table */
+.tb-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.tb-bar select{font:500 13.5px var(--f-body);color:var(--fg);background:rgba(4,7,14,.8);border:1px solid var(--line2);border-radius:11px;padding:11px 12px;max-width:100%}
+.tb-wrap{overflow-x:auto;border-radius:16px;border:1px solid var(--line);background:rgba(6,9,18,.82);backdrop-filter:blur(12px)}
+.tb{width:100%;border-collapse:collapse;min-width:900px;font-size:13.5px}
+.tb th{position:sticky;top:0;text-align:left;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;font-weight:400;color:var(--dim);padding:14px;background:rgba(10,14,28,.95);border-bottom:1px solid var(--line2);text-transform:uppercase}
+.tb td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--muted)}
+.tb td b{display:block;color:var(--fg);font-weight:600}
+.tb td small{display:block;font-size:12px;color:var(--dim);margin-top:2px}
+.tb td.c{color:var(--acc);font-size:12px}
+.tb td.nw{white-space:nowrap}
+.tb tbody tr{cursor:pointer;transition:background .2s}
+.tb tbody tr:hover,.tb tbody tr:focus-visible{background:var(--acc-soft);outline:none}
+.tb tbody tr:hover td b{color:var(--acc)}
+.tb .cxm{margin-top:4px}
+
+/* glossary */
+.gl{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.flip{height:190px;perspective:900px;border:0;padding:0;background:none;cursor:pointer;font:inherit;color:inherit;text-align:left}
+.fl-in{position:relative;display:block;width:100%;height:100%;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.3,.7,.2,1)}
+.flip.on .fl-in{transform:rotateY(180deg)}
+@media(hover:hover){.flip:hover .fl-in{transform:rotateY(12deg)}.flip.on:hover .fl-in{transform:rotateY(168deg)}}
+.fl-f,.fl-b{position:absolute;inset:0;border-radius:14px;backface-visibility:hidden;-webkit-backface-visibility:hidden;padding:16px;display:flex;flex-direction:column;gap:8px;border:1px solid var(--line2);box-shadow:0 6px 0 0 var(--cap)}
+.fl-f{justify-content:space-between;background:linear-gradient(160deg,rgba(40,50,86,.9),rgba(12,17,32,.95))}
+.fl-f b{font-family:var(--f-display);font-size:20px;line-height:1.15}
+.fl-f small{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;color:var(--acc)}
+.fl-b{transform:rotateY(180deg);background:linear-gradient(160deg,var(--acc-soft2),rgba(10,14,28,.97));border-color:var(--acc);overflow:auto}
+.fl-b b{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;color:var(--acc)}
+.fl-b span{font-size:13.5px;color:var(--fg);line-height:1.45}
+.fl-b em{font-style:normal;font-size:12.5px;color:var(--muted);border-top:1px dashed var(--line2);padding-top:8px;margin-top:auto}
+
+/* journey v2 */
+.jr small{display:block;margin-top:8px;font-size:12.5px;color:var(--fg);padding-top:8px;border-top:1px dashed var(--line2)}
+.jr small i{display:block;font-style:normal;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;color:var(--acc2);margin-bottom:2px}
+.jr li>*{position:relative;z-index:1}
+
+/* animated border CTA */
+.glow-border{position:relative}
+.glow-border::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1.5px;pointer-events:none;
+  background:conic-gradient(from var(--ang),transparent 0 55%,var(--acc) 72%,var(--acc2) 84%,transparent 96%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:spinb 5s linear infinite}
+@keyframes spinb{to{--ang:360deg}}
+
+/* floating action */
+.fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:40;display:inline-flex;align-items:center;gap:10px;padding:12px 16px;border-radius:999px;text-decoration:none;
+  font:700 13.5px/1 var(--f-body);color:var(--acc-ink);background:linear-gradient(180deg,var(--acc),var(--acc-d));box-shadow:0 5px 0 0 var(--acc-dd),0 18px 40px -10px var(--acc-glow);transition:transform .15s}
+.fab:hover{transform:translateY(-2px)}
+.fab b{min-width:22px;height:22px;border-radius:11px;display:grid;place-items:center;background:var(--acc-ink);color:var(--acc);font-size:11.5px;padding:0 6px}
+.fab-dot{width:8px;height:8px;border-radius:50%;background:var(--acc-ink);animation:blink 1.4s steps(2) infinite}
+.fab.bump{animation:bump .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes bump{40%{transform:scale(1.12)}}
+@media(max-width:520px){.fab-t{display:none}.fab{padding:14px}}
+.foot{padding-bottom:84px}
+.sec{scroll-margin-top:130px}
+.viewer{scroll-margin-top:130px}
+.ly{scroll-margin-top:140px}
+.facts b span{font-size:inherit;color:inherit;line-height:inherit}
+.sim,.gov{backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.sim{background:linear-gradient(180deg,rgba(40,30,80,.92),rgba(8,12,24,.94))}
+.gov{background:linear-gradient(180deg,rgba(10,40,52,.85),rgba(8,12,24,.92))}
+.sim-log{max-height:360px}
+.stair .st-top{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.cm{background:rgba(9,13,26,.9)}
+.sim-toast{position:fixed;left:50%;bottom:calc(76px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);width:min(560px,calc(100% - 32px));z-index:45;padding:12px 16px;border-radius:14px;border:1px solid var(--acc);background:rgba(14,10,34,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 20px 50px -16px var(--acc-glow);font-size:13.5px;color:var(--fg);opacity:0;pointer-events:none;transition:opacity .3s,transform .3s}
+.sim-toast.on{opacity:1;transform:translate(-50%,0)}
+.sim-toast .mono{display:block;font-size:10.5px;letter-spacing:.12em;color:var(--acc);margin-bottom:4px}
+@media(min-width:1000px){.sim-toast{display:none}}
+
 :root{--acc:#B69CFF;--acc-d:#8E6EF2;--acc-dd:#46308F;--acc-ink:#120A2A;--acc-glow:rgba(182,156,255,.5);--acc-soft:rgba(182,156,255,.08);--acc-soft2:rgba(182,156,255,.18);--acc2:#45E3FF;--acc2-soft:rgba(69,227,255,.1);}
 </style>
 <canvas id="bg3d" aria-hidden="true"></canvas><div class="fx" aria-hidden="true"></div>
@@ -569,14 +836,14 @@ window.SERVICES = [
     easy: 'Tạo một "người dẫn chương trình số" có khuôn mặt và giọng nói (có thể giống chính bạn), đọc bất kỳ kịch bản nào thành video mà không cần quay dựng.',
     flow: [['Đưa nội dung', 'Giới thiệu sản phẩm, bài đào tạo, bản tin nội bộ.'], ['AI biên tập', 'Viết lại kịch bản ngắn gọn, hấp dẫn, dịch nhiều ngôn ngữ.'], ['Nhân vật số đọc', 'Avatar khớp khẩu hình với giọng nói tự nhiên.'], ['Dựng video', 'Ghép phụ đề, hình minh họa, logo thương hiệu.'], ['Phát hành', 'Đăng đa kênh hoặc dùng cho đào tạo nội bộ.']],
     ex: ['Video đào tạo nhân viên mới hàng loạt', 'Giới thiệu sản phẩm bằng 5 ngôn ngữ', 'Bản tin nội bộ hằng tuần'],
-    get: ['Giảm 80–90% chi phí quay dựng', 'Có video trong vài phút'],
+    get: ['Từ vài ngày quay dựng xuống vài phút', 'Có video trong vài phút'],
     fit: ['Cần nhiều video đào tạo hoặc marketing', 'Phục vụ khách nước ngoài'] },
 
   /* ---------- TỰ ĐỘNG HÓA ---------- */
   { id: 'workflow', cat: 'auto', code: 'A01', n: 'Workflow Automation', tag: 'Nối các phần mềm thành dây chuyền tự chạy', tl: '2–4 tuần', cx: 1,
     easy: 'Giống dây chuyền trong nhà máy: việc A xong thì tự chuyển sang B, sang C. Không ai phải copy, dán hay nhắc nhau nữa.',
     flow: [['Sự kiện kích hoạt', 'Có đơn mới, có form đăng ký, có email, hoặc đến giờ hẹn.'], ['Lấy dữ liệu', 'Hệ thống tự lấy thông tin từ nơi phát sinh.'], ['AI xử lý', 'Phân loại, tóm tắt, viết nội dung, kiểm tra điều kiện.'], ['Ghi & cập nhật', 'Tự ghi vào Google Sheets, CRM, phần mềm kế toán.'], ['Báo đúng người', 'Nhắn Zalo hoặc email cho người phụ trách kèm việc cần làm.']],
-    ex: ['Form đăng ký → tạo khách trong CRM → nhắn Zalo cho sales', 'Đơn hàng mới → xuất hóa đơn → báo kho', 'Email báo giá → AI tóm tắt → báo trưởng phòng'],
+    ex: ['Form đăng ký → tạo khách trong CRM → nhắn Zalo cho sales', 'Đơn hàng mới → xuất hóa đơn → báo kho', 'Email đơn hàng → AI tóm tắt → báo trưởng phòng'],
     get: ['Bỏ hẳn thao tác copy–dán', 'Không sót việc, không quên nhắc', 'Chạy 24/7, có nhật ký đầy đủ'],
     fit: ['Dùng nhiều phần mềm rời rạc', 'Có quy trình lặp lại mỗi ngày'] },
   { id: 'rpa', cat: 'auto', code: 'A02', n: 'RPA · Robot phần mềm', tag: 'Robot thao tác trên máy tính thay con người', tl: '3–6 tuần', cx: 2,
@@ -595,7 +862,7 @@ window.SERVICES = [
     fit: ['Xử lý trên 200 chứng từ mỗi tháng'] },
   { id: 'inbox', cat: 'auto', code: 'A04', n: 'AI xử lý Email & Ticket', tag: 'Phân loại, soạn trả lời nháp và chia việc từ hộp thư chung', tl: '2–3 tuần', cx: 1,
     easy: 'Như một thư ký đọc hết hộp thư mỗi sáng: biết thư nào gấp, thư nào của ai, soạn sẵn câu trả lời để bạn chỉ cần bấm gửi.',
-    flow: [['Email / ticket đến', 'Từ hộp thư chung, form hỗ trợ, cổng khách hàng.'], ['Phân loại', 'Gắn nhãn báo giá, khiếu nại, hỏi đơn, hóa đơn; chấm độ gấp.'], ['Soạn nháp', 'Viết sẵn phản hồi dựa trên lịch sử và chính sách.'], ['Giao đúng người', 'Chuyển cho bộ phận phụ trách, đặt hạn xử lý.'], ['Theo dõi hạn', 'Nhắc khi sắp trễ, báo cáo cuối tuần.']],
+    flow: [['Email / ticket đến', 'Từ hộp thư chung, form hỗ trợ, cổng khách hàng.'], ['Phân loại', 'Gắn nhãn yêu cầu tư vấn, khiếu nại, hỏi đơn, hóa đơn; chấm độ gấp.'], ['Soạn nháp', 'Viết sẵn phản hồi dựa trên lịch sử và chính sách.'], ['Giao đúng người', 'Chuyển cho bộ phận phụ trách, đặt hạn xử lý.'], ['Theo dõi hạn', 'Nhắc khi sắp trễ, báo cáo cuối tuần.']],
     ex: ['Hộp thư sales@ nhận 300 email mỗi ngày', 'Bộ phận hỗ trợ kỹ thuật B2B'],
     get: ['Không thư nào bị bỏ quên', 'Thời gian phản hồi giảm một nửa trở lên'],
     fit: ['Giao dịch với khách chủ yếu qua email'] },
@@ -623,7 +890,7 @@ window.SERVICES = [
   { id: 'copilot', cat: 'agent', code: 'G04', n: 'Trợ lý AI cho từng nhân viên', tag: 'Mỗi vị trí có một trợ lý AI riêng đã hiểu công việc', tl: '2–4 tuần', cx: 1,
     easy: 'Mỗi nhân viên có một trợ lý riêng đã đọc quy trình, mẫu biểu, giọng văn công ty: soạn văn bản, tóm tắt cuộc họp, trả lời câu hỏi nghiệp vụ trong vài giây.',
     flow: [['Chọn vị trí', 'Sales, kế toán, HR, CSKH… mỗi vị trí một trợ lý.'], ['Nạp kiến thức', 'Quy trình, mẫu biểu, ví dụ làm tốt của công ty.'], ['Cài đặt an toàn', 'Phân quyền, chặn dữ liệu nhạy cảm, ghi nhật ký.'], ['Nhân viên sử dụng', 'Hỏi và giao việc qua web, Zalo hoặc Teams.'], ['Cải tiến', 'Thu phản hồi, cập nhật kiến thức hằng tháng.']],
-    ex: ['Trợ lý kế toán trả lời câu hỏi thuế nội bộ', 'Trợ lý sales soạn báo giá theo mẫu'],
+    ex: ['Trợ lý kế toán trả lời câu hỏi thuế nội bộ', 'Trợ lý sales soạn đề xuất theo mẫu'],
     get: ['Tiết kiệm 4–8 giờ/người/tuần', 'Người mới làm tốt như người cũ'],
     fit: ['Mọi doanh nghiệp muốn phổ cập AI'] },
 
@@ -638,7 +905,7 @@ window.SERVICES = [
   { id: 'bi', cat: 'know', code: 'K02', n: 'AI phân tích dữ liệu & báo cáo', tag: 'Hỏi số liệu bằng tiếng Việt, nhận biểu đồ ngay', tl: '3–6 tuần', cx: 2,
     easy: 'Thay vì chờ nhân viên làm báo cáo, lãnh đạo chỉ cần hỏi "Tháng này chi nhánh nào giảm doanh thu, vì sao?". AI tự lấy số liệu, vẽ biểu đồ và giải thích.',
     flow: [['Kết nối dữ liệu', 'Phần mềm bán hàng, ERP, CRM, Google Sheets, quảng cáo.'], ['Làm sạch & hợp nhất', 'Gom về một kho dữ liệu chuẩn.'], ['Đặt câu hỏi', 'Gõ hoặc nói câu hỏi bằng tiếng Việt.'], ['AI truy vấn', 'Chuyển câu hỏi thành lệnh truy vấn dữ liệu (Text-to-SQL).'], ['Biểu đồ & nhận xét', 'Trả về biểu đồ, giải thích, cảnh báo bất thường.']],
-    ex: ['Báo cáo doanh thu tự gửi lúc 8h sáng', 'Cảnh báo khi tồn kho hoặc chi phí vượt ngưỡng'],
+    ex: ['Báo cáo doanh thu tự gửi lúc 8h sáng', 'Cảnh báo khi tồn kho hoặc chỉ số vượt ngưỡng'],
     get: ['Giảm 70–90% thời gian làm báo cáo', 'Quyết định dựa trên số liệu thật'],
     fit: ['Dữ liệu bán hàng, vận hành đã được số hóa'] },
   { id: 'predict', cat: 'know', code: 'K03', n: 'AI Dự báo & Tối ưu', tag: 'Dự đoán doanh số, tồn kho, khách sắp rời bỏ', tl: '6–10 tuần', cx: 3,
@@ -665,7 +932,7 @@ window.SERVICES = [
     easy: 'Từ một ảnh sản phẩm chụp bằng điện thoại, AI tạo ra ảnh studio, banner quảng cáo, video ngắn. Không cần thuê chụp, thuê dựng mỗi lần.',
     flow: [['Ảnh gốc & ý tưởng', 'Ảnh sản phẩm, logo, thông điệp.'], ['AI tạo hình', 'Đổi nền, ghép bối cảnh, tạo người mẫu ảo.'], ['AI dựng video', 'Ghép cảnh, giọng đọc, phụ đề, nhạc.'], ['Kiểm soát thương hiệu', 'Đúng màu, font, logo và quy định quảng cáo.'], ['Xuất nhiều kích thước', 'Cho Facebook, TikTok, website, sàn TMĐT.']],
     ex: ['100 ảnh sản phẩm cho sàn TMĐT', 'Video TikTok mỗi ngày'],
-    get: ['Giảm mạnh chi phí sản xuất hình ảnh'],
+    get: ['Chủ động sản xuất hình ảnh mỗi ngày, không chờ đợi'],
     fit: ['Nhiều mã sản phẩm, chạy quảng cáo thường xuyên'] },
   { id: 'listening', cat: 'mkt', code: 'M03', n: 'Lắng nghe mạng xã hội', tag: 'Biết khách đang nói gì về bạn và đối thủ', tl: '3–4 tuần', cx: 2,
     easy: 'AI đọc hàng nghìn bình luận, đánh giá, bài đăng để cho bạn biết khách khen gì, chê gì, đối thủ đang làm gì. Như có người theo dõi dư luận 24/7.',
@@ -697,10 +964,10 @@ window.SERVICES = [
   /* ---------- NỀN TẢNG LLM ---------- */
   { id: 'llmapi', cat: 'llm', code: 'L01', n: 'LLM trên Cloud công cộng', tag: 'Dùng GPT, Claude, Gemini qua API doanh nghiệp', tl: '1–2 tuần', cx: 1,
     easy: 'Như dùng điện lưới: không cần xây nhà máy, dùng bao nhiêu trả bấy nhiêu. "Bộ não" AI nằm ở trung tâm dữ liệu của nhà cung cấp lớn; ứng dụng của bạn gửi câu hỏi và nhận câu trả lời.',
-    flow: [['Ứng dụng của bạn', 'Chatbot, agent, workflow gửi yêu cầu.'], ['Che dữ liệu nhạy cảm', 'Ẩn số CCCD, số điện thoại… trước khi gửi đi.'], ['Gửi tới LLM cloud', 'Qua kết nối mã hóa tới OpenAI, Anthropic, Google.'], ['Nhận kết quả', 'Mô hình trả lời trong vài giây.'], ['Theo dõi chi phí', 'Ghi nhật ký lượng dùng theo phòng ban.']],
+    flow: [['Ứng dụng của bạn', 'Chatbot, agent, workflow gửi yêu cầu.'], ['Che dữ liệu nhạy cảm', 'Ẩn số CCCD, số điện thoại… trước khi gửi đi.'], ['Gửi tới LLM cloud', 'Qua kết nối mã hóa tới OpenAI, Anthropic, Google.'], ['Nhận kết quả', 'Mô hình trả lời trong vài giây.'], ['Theo dõi sử dụng', 'Ghi nhật ký lượng dùng theo phòng ban.']],
     ex: ['Khởi đầu nhanh cho mọi dự án AI', 'Doanh nghiệp vừa và nhỏ'],
-    get: ['Triển khai ngay với mô hình mạnh nhất', 'Không đầu tư phần cứng'],
-    fit: ['Dữ liệu không quá nhạy cảm', 'Muốn bắt đầu nhanh, chi phí linh hoạt'] },
+    get: ['Triển khai ngay với mô hình mạnh nhất', 'Không cần máy chủ riêng'],
+    fit: ['Dữ liệu không quá nhạy cảm', 'Muốn bắt đầu nhanh, linh hoạt'] },
   { id: 'llmprivate', cat: 'llm', code: 'L02', n: 'LLM trên Cloud riêng', tag: 'Mô hình AI chạy trong vùng cloud riêng của doanh nghiệp', tl: '4–8 tuần', cx: 2,
     easy: 'Như thuê nguyên một căn hộ có khóa riêng trong tòa nhà lớn: dùng hạ tầng cloud mạnh, nhưng mô hình AI và dữ liệu nằm trong "vùng riêng" chỉ doanh nghiệp bạn truy cập được.',
     flow: [['Tạo vùng cloud riêng', 'Vùng mạng riêng (VPC) trên AWS, Azure, Google Cloud hoặc cloud trong nước.'], ['Triển khai mô hình', 'Mô hình mã nguồn mở (Llama, Qwen…) hoặc dịch vụ LLM riêng.'], ['Kết nối bảo mật', 'Đường kết nối riêng từ văn phòng, không đi qua internet công cộng.'], ['Ứng dụng sử dụng', 'Chatbot, trợ lý tri thức, agent gọi vào mô hình riêng.'], ['Mở rộng linh hoạt', 'Tăng giảm máy chủ GPU theo nhu cầu.']],
@@ -711,29 +978,29 @@ window.SERVICES = [
     easy: 'Như tự xây nhà máy điện riêng: máy chủ GPU đặt trong phòng server của bạn, AI chạy hoàn toàn nội bộ, ngắt internet vẫn chạy. Dữ liệu không bao giờ rời khỏi công ty.',
     flow: [['Tư vấn cấu hình', 'Tính số người dùng, chọn GPU và máy chủ phù hợp.'], ['Lắp đặt phần cứng', 'Máy chủ GPU tại phòng server của doanh nghiệp.'], ['Cài mô hình', 'Mô hình mã nguồn mở, tối ưu cho tiếng Việt và tốc độ.'], ['Tích hợp nội bộ', 'Kết nối tài khoản nhân viên, tài liệu, phần mềm nội bộ.'], ['Vận hành & cập nhật', 'Giám sát, nâng cấp mô hình mới định kỳ.']],
     ex: ['Cơ quan, doanh nghiệp nhà nước', 'Nhà máy, bệnh viện có dữ liệu mật'],
-    get: ['Kiểm soát 100% dữ liệu', 'Chi phí cố định, không tính theo lượt dùng'],
+    get: ['Kiểm soát 100% dữ liệu', 'Vẫn hoạt động khi không có internet'],
     fit: ['Yêu cầu bảo mật cao nhất', 'Nhiều người dùng thường xuyên'] },
   { id: 'finetune', cat: 'llm', code: 'L04', n: 'Fine-tuning mô hình riêng', tag: 'Dạy AI nói đúng chuyên môn và văn phong doanh nghiệp', tl: '4–8 tuần', cx: 3,
     easy: 'Mô hình AI chung giống sinh viên giỏi mới ra trường. Fine-tuning là cho "thực tập chuyên sâu" tại công ty bạn để nói đúng thuật ngữ, đúng văn phong, đúng nghiệp vụ.',
     flow: [['Chuẩn bị dữ liệu', 'Hàng nghìn ví dụ hỏi–đáp, văn bản chuẩn.'], ['Làm sạch & gán nhãn', 'Loại dữ liệu sai, ẩn thông tin cá nhân.'], ['Huấn luyện', 'Tinh chỉnh mô hình trên máy chủ GPU.'], ['Đánh giá', 'So với mô hình gốc trên bộ câu hỏi kiểm tra.'], ['Triển khai', 'Đưa lên cloud riêng hoặc máy chủ on-premise.']],
     ex: ['Mô hình hiểu thuật ngữ y khoa, pháp lý', 'Mô hình viết đúng văn phong hành chính'],
-    get: ['Chính xác hơn trên nghiệp vụ chuyên sâu', 'Mô hình nhỏ hơn, chạy rẻ hơn'],
+    get: ['Chính xác hơn trên nghiệp vụ chuyên sâu', 'Mô hình nhỏ hơn, chạy nhanh hơn'],
     fit: ['Đã có nhiều dữ liệu mẫu chất lượng'] },
   { id: 'gateway', cat: 'llm', code: 'L05', n: 'AI Gateway & LLMOps', tag: 'Một cổng kiểm soát mọi AI trong công ty', tl: '3–5 tuần', cx: 2,
-    easy: 'Như phòng bảo vệ kiêm kế toán cho AI: mọi yêu cầu đi qua một cổng duy nhất để chặn dữ liệu nhạy cảm, đổi mô hình khi cần, theo dõi chi phí và chất lượng.',
-    flow: [['Ứng dụng gọi AI', 'Mọi chatbot, agent, công cụ nội bộ.'], ['Xác thực', 'Kiểm tra ai đang dùng, được phép làm gì.'], ['Bảo vệ dữ liệu', 'Che thông tin nhạy cảm, chặn yêu cầu nguy hiểm.'], ['Chọn mô hình', 'Việc dễ dùng mô hình rẻ, việc khó dùng mô hình mạnh.'], ['Giám sát', 'Dashboard chi phí, tốc độ, chất lượng, nhật ký kiểm toán.']],
+    easy: 'Như phòng bảo vệ kiêm điều phối cho AI: mọi yêu cầu đi qua một cổng duy nhất để chặn dữ liệu nhạy cảm, đổi mô hình khi cần, theo dõi mức sử dụng và chất lượng.',
+    flow: [['Ứng dụng gọi AI', 'Mọi chatbot, agent, công cụ nội bộ.'], ['Xác thực', 'Kiểm tra ai đang dùng, được phép làm gì.'], ['Bảo vệ dữ liệu', 'Che thông tin nhạy cảm, chặn yêu cầu nguy hiểm.'], ['Chọn mô hình', 'Việc nhẹ dùng mô hình nhanh, việc khó dùng mô hình mạnh.'], ['Giám sát', 'Dashboard mức sử dụng, tốc độ, chất lượng, nhật ký kiểm toán.']],
     branch: [3, 'Nhà cung cấp AI gặp sự cố', 'tự chuyển sang mô hình dự phòng, người dùng không bị gián đoạn.'],
     ex: ['Doanh nghiệp dùng nhiều mô hình AI cùng lúc'],
-    get: ['Giảm 30–50% chi phí AI', 'Kiểm soát rủi ro tập trung'],
+    get: ['Dùng đúng mô hình cho đúng việc', 'Kiểm soát rủi ro tập trung'],
     fit: ['Có từ 3 ứng dụng AI trở lên'] },
 
   /* ---------- CHIẾN LƯỢC & QUẢN TRỊ ---------- */
-  { id: 'strategy', cat: 'gov', code: 'S01', n: 'Tư vấn chiến lược & lộ trình AI', tag: 'Biết làm gì trước, đầu tư bao nhiêu, đo thế nào', tl: '2–6 tuần', cx: 1,
+  { id: 'strategy', cat: 'gov', code: 'S01', n: 'Tư vấn chiến lược & lộ trình AI', tag: 'Biết làm gì trước, cần nguồn lực gì, đo thế nào', tl: '2–6 tuần', cx: 1,
     easy: 'Xây nhà cần bản vẽ trước. Drabuff AI cùng ban lãnh đạo đánh giá hiện trạng, chọn những việc AI đáng làm nhất và vẽ lộ trình 3–12 tháng có KPI rõ ràng.',
-    flow: [['Đánh giá hiện trạng', 'Phỏng vấn các phòng ban, đánh giá dữ liệu và hệ thống.'], ['Tìm cơ hội', 'Liệt kê 20–30 việc có thể ứng dụng AI.'], ['Chấm điểm ưu tiên', 'Xếp theo giá trị và độ khó, chọn việc thắng nhanh.'], ['Lộ trình & ngân sách', 'Kế hoạch theo giai đoạn, nguồn lực, KPI.'], ['Đồng hành thực thi', 'Theo dõi và điều chỉnh theo kết quả thực tế.']],
+    flow: [['Đánh giá hiện trạng', 'Phỏng vấn các phòng ban, đánh giá dữ liệu và hệ thống.'], ['Tìm cơ hội', 'Liệt kê 20–30 việc có thể ứng dụng AI.'], ['Chấm điểm ưu tiên', 'Xếp theo giá trị và độ khó, chọn việc thắng nhanh.'], ['Lộ trình & nguồn lực', 'Kế hoạch theo giai đoạn, nhân sự, KPI.'], ['Đồng hành thực thi', 'Theo dõi và điều chỉnh theo kết quả thực tế.']],
     ex: ['Doanh nghiệp chưa biết bắt đầu từ đâu', 'Tập đoàn cần chiến lược AI toàn diện'],
-    get: ['Đầu tư đúng chỗ, tránh thử nghiệm lan man', 'Lộ trình được ban lãnh đạo đồng thuận'],
-    fit: ['Mọi doanh nghiệp trước khi đầu tư lớn'] },
+    get: ['Làm đúng việc, tránh thử nghiệm lan man', 'Lộ trình được ban lãnh đạo đồng thuận'],
+    fit: ['Mọi doanh nghiệp trước khi triển khai lớn'] },
   { id: 'governance', cat: 'gov', code: 'S02', n: 'Quản trị AI & bảo mật dữ liệu', tag: 'Dùng AI an toàn, đúng luật bảo vệ dữ liệu cá nhân', tl: '3–6 tuần', cx: 2,
     easy: 'Bộ "luật chơi" cho AI trong công ty: dữ liệu nào được đưa vào AI, ai được dùng, kiểm tra kết quả thế nào. Phù hợp Nghị định 13/2023 về bảo vệ dữ liệu cá nhân.',
     flow: [['Rà soát rủi ro', 'Kiểm tra dữ liệu và công cụ AI nhân viên đang tự dùng.'], ['Phân loại dữ liệu', 'Công khai, nội bộ, mật, dữ liệu cá nhân.'], ['Ban hành quy chế', 'Chính sách sử dụng AI và quy trình phê duyệt.'], ['Kiểm soát kỹ thuật', 'Phân quyền, che dữ liệu, ghi nhật ký.'], ['Đào tạo & kiểm tra', 'Tập huấn nhân viên, kiểm tra định kỳ.']],
@@ -748,7 +1015,7 @@ window.SERVICES = [
     fit: ['Đi kèm mọi dự án triển khai AI'] },
   { id: 'managed', cat: 'gov', code: 'S04', n: 'Vận hành & bảo trì AI trọn gói', tag: 'Drabuff AI chăm sóc hệ thống sau triển khai', tl: 'Hằng tháng', cx: 1,
     easy: 'AI không phải lắp xong là xong. Như bảo dưỡng xe định kỳ: theo dõi chất lượng câu trả lời, cập nhật kiến thức mới, nâng cấp mô hình, xử lý sự cố.',
-    flow: [['Giám sát 24/7', 'Theo dõi hệ thống có chạy ổn, có lỗi, có chậm không.'], ['Chấm chất lượng', 'Đánh giá câu trả lời, phát hiện trả lời sai.'], ['Cập nhật tri thức', 'Thêm sản phẩm, chính sách mới.'], ['Tối ưu', 'Chuyển sang mô hình mới tốt hơn, rẻ hơn.'], ['Báo cáo tháng', 'KPI và đề xuất cải tiến.']],
+    flow: [['Giám sát 24/7', 'Theo dõi hệ thống có chạy ổn, có lỗi, có chậm không.'], ['Chấm chất lượng', 'Đánh giá câu trả lời, phát hiện trả lời sai.'], ['Cập nhật tri thức', 'Thêm sản phẩm, chính sách mới.'], ['Tối ưu', 'Chuyển sang mô hình mới tốt hơn, nhanh hơn.'], ['Báo cáo tháng', 'KPI và đề xuất cải tiến.']],
     ex: ['Doanh nghiệp không có đội AI riêng'],
     get: ['Hệ thống ổn định và ngày càng tốt hơn'],
     fit: ['Sau khi triển khai bất kỳ giải pháp nào'] }
@@ -763,6 +1030,247 @@ window.LAYERS = [
   { n: 'Thế giới thật', d: 'Camera, cảm biến, robot đưa AI ra khỏi màn hình', ids: ['vision', 'robotics', 'iot'] },
   { n: 'Nền tảng mô hình AI', d: 'Nơi đặt "bộ não": cloud công cộng, cloud riêng, on-premise', ids: ['llmapi', 'llmprivate', 'llmonprem', 'finetune', 'gateway'] }
 ];
+
+/* Drabuff AI — catalogue v2: new services, per-service specs, finder, maturity, scenarios, glossary */
+(function () {
+  var CATS = window.CATS, SV = window.SERVICES;
+  CATS.splice(5, 0, { id: 'dept', n: 'Giải pháp theo phòng ban', d: 'Gói AI may sẵn cho từng phòng ban: nhân sự, tài chính, pháp chế, mua hàng.' });
+
+  var NEW = [
+    { id: 'journey', cat: 'cx', code: 'C05', n: 'Chăm sóc khách tự động', tag: 'Gửi đúng tin, đúng người, đúng lúc qua Zalo ZNS, email, SMS', tl: '3–5 tuần', cx: 2,
+      easy: 'Như có người nhớ từng khách: hôm nay sinh nhật ai, ai mua đã 30 ngày cần nhắc, ai bỏ giỏ hàng. AI tự soạn lời nhắn riêng cho từng người và gửi đúng lúc.',
+      flow: [['Khách có hành động', 'Mua hàng, bỏ giỏ, đăng ký, lâu không quay lại.'], ['Phân nhóm khách', 'AI xếp khách vào nhóm theo hành vi và mức độ gắn bó.'], ['Chọn kịch bản', 'Cảm ơn, nhắc lịch, ưu đãi riêng cho từng nhóm.'], ['AI viết lời nhắn', 'Cá nhân hóa theo tên, sản phẩm đã mua, sở thích.'], ['Gửi & đo', 'Gửi qua Zalo ZNS, email, SMS; đo tỷ lệ mở và mua lại.']],
+      ex: ['Nhắc tái khám, nhắc thay lõi lọc nước định kỳ', 'Chuỗi tin chào mừng khách mới trong 7 ngày', 'Kéo khách lâu không mua quay lại'],
+      get: ['Tăng tỷ lệ mua lại', 'Không bỏ quên khách cũ', 'Chăm sóc hàng nghìn khách không cần thêm người'],
+      fit: ['Tệp khách từ vài nghìn người trở lên', 'Sản phẩm, dịch vụ được mua lặp lại'] },
+    { id: 'translate', cat: 'cx', code: 'C06', n: 'AI Phiên dịch đa ngôn ngữ', tag: 'Trò chuyện, họp, tư vấn với người nước ngoài theo thời gian thực', tl: '2–4 tuần', cx: 2,
+      easy: 'Như có phiên dịch viên ngồi cạnh mọi lúc: khách nhắn tiếng Hàn, nhân viên đọc và trả lời bằng tiếng Việt, khách nhận lại bằng tiếng Hàn.',
+      flow: [['Khách nhắn hoặc nói', 'Bằng tiếng Anh, Trung, Hàn, Nhật…'], ['Nhận dạng ngôn ngữ', 'AI tự biết khách đang dùng ngôn ngữ nào.'], ['Dịch theo ngữ cảnh', 'Đúng thuật ngữ ngành, đúng văn phong lịch sự.'], ['Nhân viên trả lời', 'Bằng tiếng Việt như bình thường.'], ['Dịch ngược cho khách', 'Khách nhận câu trả lời bằng ngôn ngữ của mình.']],
+      ex: ['Khách sạn, spa phục vụ khách quốc tế', 'Nhà máy làm việc với chuyên gia nước ngoài', 'Doanh nghiệp xuất khẩu trao đổi với đối tác'],
+      get: ['Phục vụ khách quốc tế không cần tuyển phiên dịch', 'Giao tiếp nhanh, đúng thuật ngữ'],
+      fit: ['Có khách hoặc đối tác nước ngoài thường xuyên'] },
+    { id: 'integration', cat: 'agent', code: 'G05', n: 'Tích hợp AI vào hệ thống (API & MCP)', tag: 'Cho AI kết nối an toàn với CRM, ERP, kho và phần mềm nội bộ', tl: '3–6 tuần', cx: 2,
+      easy: 'AI giỏi đến đâu mà không chạm được vào dữ liệu công ty thì cũng chỉ nói chung chung. Tích hợp là lắp "ổ cắm" chuẩn để AI đọc tồn kho, tạo đơn, cập nhật khách hàng, đúng quyền được cấp.',
+      flow: [['Liệt kê hệ thống', 'CRM, ERP, phần mềm bán hàng, kho, Google Workspace.'], ['Thiết kế "ổ cắm"', 'Tạo kết nối chuẩn (API, MCP server) cho từng chức năng.'], ['Phân quyền', 'AI chỉ được đọc/ghi đúng phần được cho phép.'], ['Kết nối AI', 'Chatbot, agent, trợ lý dùng chung các ổ cắm này.'], ['Giám sát', 'Ghi lại mọi lần AI truy cập dữ liệu.']],
+      ex: ['Chatbot tra tồn kho thật từ phần mềm kho', 'Agent tạo đơn trực tiếp trên CRM', 'Trợ lý đọc công nợ từ ERP'],
+      get: ['AI trả lời bằng dữ liệu thật, cập nhật từng phút', 'Tích hợp một lần, nhiều ứng dụng AI dùng chung'],
+      fit: ['Đã có phần mềm quản lý và muốn AI dùng được'] },
+    { id: 'dataplatform', cat: 'know', code: 'K05', n: 'Dữ liệu sẵn sàng cho AI', tag: 'Gom, làm sạch và chuẩn hóa dữ liệu để AI dùng được', tl: '4–8 tuần', cx: 2,
+      easy: 'AI giống đầu bếp: nguyên liệu bẩn thì món ăn dở. Bước này dọn "kho nguyên liệu": gom dữ liệu rải rác về một nơi, làm sạch, đặt tên thống nhất.',
+      flow: [['Kiểm kê dữ liệu', 'Dữ liệu đang nằm ở đâu: Excel, phần mềm, giấy tờ.'], ['Thu thập tự động', 'Kết nối để dữ liệu tự chảy về kho chung.'], ['Làm sạch', 'Xóa trùng, sửa sai, thống nhất định dạng.'], ['Chuẩn hóa', 'Định nghĩa thống nhất: thế nào là "khách mới", "doanh thu".'], ['Sẵn sàng phục vụ', 'Báo cáo, dự báo, chatbot, agent cùng dùng một nguồn đúng.']],
+      ex: ['Gom dữ liệu bán hàng từ 10 chi nhánh', 'Hợp nhất khách hàng trùng giữa các kênh'],
+      get: ['Một nguồn số liệu đúng cho cả công ty', 'Nền móng cho mọi dự án AI sau này'],
+      fit: ['Dữ liệu nằm rải rác ở nhiều nơi'] },
+    { id: 'meeting', cat: 'know', code: 'K06', n: 'AI biên bản & phân tích hội thoại', tag: 'Biên bản họp tự động, phân tích cuộc gọi bán hàng và CSKH', tl: '2–3 tuần', cx: 1,
+      easy: 'Như có thư ký ngồi trong mọi cuộc họp và cuộc gọi: ghi lại, tóm tắt, liệt kê việc cần làm, và chỉ ra cuộc gọi nào sales xử lý tốt, cuộc nào chưa.',
+      flow: [['Ghi âm', 'Cuộc họp online/offline, cuộc gọi tổng đài.'], ['Chuyển thành chữ', 'Nhận dạng giọng nói tiếng Việt, phân biệt người nói.'], ['Tóm tắt', 'Ý chính, quyết định, việc cần làm, người phụ trách.'], ['Phân tích', 'Chấm điểm cuộc gọi theo kịch bản, cảm xúc khách.'], ['Gửi & lưu', 'Gửi biên bản cho người dự; lưu vào CRM hoặc Drive.']],
+      ex: ['Biên bản giao ban tự động', 'Chấm điểm 100% cuộc gọi sales', 'Phát hiện khách không hài lòng qua cuộc gọi'],
+      get: ['Không còn quên việc sau cuộc họp', 'Huấn luyện sales dựa trên cuộc gọi thật'],
+      fit: ['Họp nhiều, có tổng đài hoặc đội telesales'] },
+    { id: 'seo', cat: 'mkt', code: 'M04', n: 'AI SEO & GEO', tag: 'Xuất hiện trên Google và trong câu trả lời của ChatGPT, Gemini', tl: '4–8 tuần', cx: 2,
+      easy: 'Khách hàng giờ không chỉ tìm trên Google mà còn hỏi chatbot AI. GEO giúp thương hiệu của bạn được AI nhắc tên khi khách hỏi "nên chọn ở đâu".',
+      flow: [['Nghiên cứu câu hỏi', 'Khách thường hỏi gì trên Google và chatbot AI.'], ['Kiểm tra hiện diện', 'Thương hiệu đang được AI nhắc tới thế nào.'], ['Sản xuất nội dung chuẩn', 'Bài chuyên sâu, có dữ liệu, cấu trúc rõ ràng.'], ['Tối ưu kỹ thuật', 'Schema, tốc độ, liên kết, hồ sơ doanh nghiệp.'], ['Theo dõi thứ hạng', 'Thứ hạng Google và tần suất được AI trích dẫn.']],
+      ex: ['Phòng khám được AI gợi ý khi khách hỏi "khám da ở đâu uy tín"', 'Website B2B lên top từ khóa ngành'],
+      get: ['Tăng khách tự tìm đến', 'Có mặt ở kênh tìm kiếm mới'],
+      fit: ['Có website, muốn giảm phụ thuộc vào quảng cáo'] },
+    { id: 'ads', cat: 'mkt', code: 'M05', n: 'AI tối ưu quảng cáo', tag: 'Phân tích, thử nghiệm và tối ưu quảng cáo Facebook, Google, TikTok', tl: '2–4 tuần', cx: 2,
+      easy: 'Như có chuyên viên quảng cáo theo dõi số liệu từng giờ: mẫu nào hiệu quả thì đề xuất tăng, mẫu nào kém thì đề xuất dừng, liên tục tạo mẫu mới để thử.',
+      flow: [['Kết nối tài khoản', 'Facebook, Google, TikTok Ads và dữ liệu đơn hàng thật.'], ['Phân tích hiệu quả', 'Mẫu, đối tượng, khung giờ nào mang lại khách thật.'], ['Tạo mẫu mới', 'AI viết tiêu đề, nội dung, gợi ý hình ảnh để thử.'], ['Đề xuất điều chỉnh', 'Tăng, giảm, dừng nhóm quảng cáo theo quy tắc.'], ['Báo cáo', 'Tổng hợp hằng ngày, giải thích bằng lời dễ hiểu.']],
+      ex: ['Shop TMĐT thử 30 mẫu quảng cáo mỗi tuần', 'Doanh nghiệp B2B lọc lead chất lượng từ Google Ads'],
+      get: ['Ra quyết định quảng cáo nhanh hơn', 'Thử nhiều mẫu hơn, tìm ra mẫu tốt sớm hơn'],
+      fit: ['Chạy quảng cáo thường xuyên trên nhiều nền tảng'] },
+    { id: 'hr', cat: 'dept', code: 'D01', n: 'AI cho Nhân sự (HR)', tag: 'Tuyển dụng, onboarding và hỏi đáp chính sách nhân sự', tl: '3–5 tuần', cx: 2,
+      easy: 'Một bộ trợ lý cho phòng nhân sự: viết tin tuyển dụng, lọc CV, hẹn phỏng vấn, đón nhân viên mới và trả lời câu hỏi về nghỉ phép, bảo hiểm, quy định.',
+      flow: [['Viết JD & đăng tuyển', 'AI viết tin tuyển dụng hấp dẫn, đăng nhiều kênh.'], ['Lọc CV', 'Chấm điểm hồ sơ theo tiêu chí vị trí, có giải thích.'], ['Hẹn phỏng vấn', 'Tự gửi lịch, nhắc ứng viên, chuẩn bị câu hỏi.'], ['Onboarding', 'Lộ trình 30 ngày, tài liệu, trợ lý hỏi đáp cho người mới.'], ['Hỏi đáp chính sách', 'Nhân viên hỏi về nghỉ phép, bảo hiểm, quy định 24/7.']],
+      ex: ['Tuyển 200 công nhân mùa cao điểm', 'Hỏi đáp chính sách cho 1.000 nhân viên'],
+      get: ['Rút ngắn thời gian tuyển dụng', 'HR tập trung vào con người thay vì giấy tờ'],
+      fit: ['Tuyển dụng thường xuyên, nhiều nhân sự'] },
+    { id: 'finance', cat: 'dept', code: 'D02', n: 'AI cho Tài chính – Kế toán', tag: 'Nhập chứng từ, đối soát, nhắc công nợ, báo cáo và dự báo dòng tiền', tl: '4–8 tuần', cx: 2,
+      easy: 'Phòng kế toán có thêm "đồng nghiệp số" làm phần việc nặng: nhập hóa đơn, đối soát ngân hàng, nhắc công nợ, lập báo cáo và cảnh báo dòng tiền.',
+      flow: [['Thu chứng từ', 'Hóa đơn điện tử, sao kê, chứng từ giấy.'], ['Đọc & nhập liệu', 'AI trích xuất và nhập vào phần mềm kế toán.'], ['Đối soát', 'So khớp hóa đơn, thanh toán, sao kê; đánh dấu chênh lệch.'], ['Nhắc công nợ', 'Tự gửi nhắc thanh toán theo lịch và lịch sử khách.'], ['Báo cáo & dự báo', 'Báo cáo nhanh, dự báo dòng tiền các tuần tới.']],
+      branch: [2, 'Có khoản chênh lệch không tự giải thích được', 'đưa vào danh sách chờ kế toán trưởng duyệt.'],
+      ex: ['Đối soát sao kê hằng ngày', 'Nhắc công nợ đại lý tự động', 'Báo cáo quản trị đầu tháng'],
+      get: ['Khóa sổ cuối tháng nhanh hơn', 'Phát hiện chênh lệch sớm', 'Chủ động dòng tiền'],
+      fit: ['Nhiều chứng từ, nhiều đối tác, nhiều tài khoản ngân hàng'] },
+    { id: 'legal', cat: 'dept', code: 'D03', n: 'AI cho Pháp chế & Hợp đồng', tag: 'Rà soát hợp đồng, so sánh phiên bản, tra cứu quy định', tl: '3–6 tuần', cx: 2,
+      easy: 'AI đọc hợp đồng trong vài phút, chỉ ra điều khoản bất lợi, thiếu sót hoặc khác mẫu chuẩn của công ty, để pháp chế tập trung vào phần cần chuyên môn.',
+      flow: [['Tải hợp đồng', 'File Word/PDF từ đối tác.'], ['So với mẫu chuẩn', 'Đối chiếu với bộ điều khoản chuẩn của công ty.'], ['Đánh dấu rủi ro', 'Điều khoản bất lợi, mơ hồ, thiếu; xếp theo mức độ.'], ['Đề xuất sửa', 'Gợi ý câu chữ thay thế kèm giải thích.'], ['Pháp chế duyệt', 'Luật sư/pháp chế xem lại và quyết định.']],
+      ex: ['Rà soát hợp đồng mua bán hàng loạt', 'Tra cứu quy định mới liên quan đến ngành'],
+      get: ['Rà soát nhanh hơn nhiều lần', 'Không bỏ sót điều khoản quan trọng'],
+      fit: ['Ký nhiều hợp đồng mỗi tháng'] },
+    { id: 'supply', cat: 'dept', code: 'D04', n: 'AI cho Mua hàng & Chuỗi cung ứng', tag: 'Dự báo nhu cầu, gợi ý đặt hàng, theo dõi nhà cung cấp', tl: '6–10 tuần', cx: 3,
+      easy: 'AI theo dõi tồn kho, dự báo bán hàng, gợi ý đặt hàng đúng lúc đúng lượng, và cảnh báo khi nhà cung cấp giao chậm.',
+      flow: [['Gom dữ liệu', 'Tồn kho, bán hàng, đơn mua, nhà cung cấp.'], ['Dự báo nhu cầu', 'Dự đoán lượng bán từng mã hàng theo tuần.'], ['Gợi ý đặt hàng', 'Đề xuất số lượng, thời điểm, nhà cung cấp.'], ['Theo dõi giao hàng', 'Cảnh báo chậm trễ, sai số lượng.'], ['Đánh giá nhà cung cấp', 'Chấm điểm chất lượng, mức đúng hạn.']],
+      ex: ['Chuỗi bán lẻ đặt hàng cho 50 cửa hàng', 'Nhà máy lập kế hoạch nguyên vật liệu'],
+      get: ['Giảm tồn kho dư thừa', 'Giảm tình trạng hết hàng', 'Quan hệ nhà cung cấp minh bạch'],
+      fit: ['Nhiều mã hàng, nhiều điểm bán hoặc nhà cung cấp'] },
+    { id: 'face', cat: 'phys', code: 'P04', n: 'Nhận diện khuôn mặt & ra vào', tag: 'Chấm công, kiểm soát ra vào, nhận diện khách VIP', tl: '3–6 tuần', cx: 2,
+      easy: 'Camera nhận ra nhân viên để chấm công không cần quẹt thẻ, mở cửa đúng người, và báo lễ tân khi khách VIP bước vào.',
+      flow: [['Đăng ký khuôn mặt', 'Nhân viên/khách đồng ý đăng ký ảnh mẫu.'], ['Camera nhận diện', 'Nhận ra người trong chưa tới một giây.'], ['Kiểm tra quyền', 'Người này được vào khu vực nào, ca làm nào.'], ['Hành động', 'Mở cửa, ghi chấm công, báo lễ tân.'], ['Báo cáo', 'Bảng công, lịch sử ra vào, cảnh báo người lạ.']],
+      branch: [2, 'Người lạ hoặc không đủ quyền', 'không mở cửa và gửi cảnh báo cho bảo vệ.'],
+      ex: ['Chấm công nhà máy hàng nghìn công nhân', 'Kiểm soát ra vào kho, phòng server', 'Nhận diện khách VIP tại showroom'],
+      get: ['Chấm công chính xác, không chấm hộ', 'An ninh chặt chẽ hơn'],
+      fit: ['Nhiều nhân sự, nhiều khu vực cần kiểm soát'] },
+    { id: 'edge', cat: 'llm', code: 'L06', n: 'Edge AI · AI chạy tại thiết bị', tag: 'AI xử lý ngay tại camera, máy tính, thiết bị tại chỗ', tl: '6–10 tuần', cx: 3,
+      easy: 'Thay vì gửi mọi thứ lên cloud, AI được đặt ngay trong thiết bị nhỏ tại cửa hàng hay nhà máy. Phản hồi tức thì, chạy cả khi mất mạng, dữ liệu không đi xa.',
+      flow: [['Chọn bài toán', 'Việc cần phản ứng tức thì hoặc nơi mạng yếu.'], ['Thu gọn mô hình', 'Nén mô hình AI để chạy trên thiết bị nhỏ.'], ['Cài lên thiết bị', 'Máy tính nhúng, camera AI, máy chủ mini tại chỗ.'], ['Xử lý tại chỗ', 'Phân tích ngay, chỉ gửi kết quả về trung tâm.'], ['Cập nhật từ xa', 'Nâng cấp mô hình cho hàng loạt thiết bị.']],
+      ex: ['Camera kiểm lỗi trên dây chuyền tốc độ cao', 'Kiosk tư vấn tại cửa hàng', 'Công trường không có internet ổn định'],
+      get: ['Phản hồi tính bằng mili giây', 'Hoạt động khi mất mạng', 'Giảm lượng dữ liệu phải truyền đi'],
+      fit: ['Nhiều điểm bán, nhà máy, nơi mạng không ổn định'] },
+    { id: 'eval', cat: 'gov', code: 'S05', n: 'Kiểm thử & đánh giá AI', tag: 'Đo AI trả lời đúng bao nhiêu trước khi đưa ra phục vụ khách', tl: '2–4 tuần', cx: 2,
+      easy: 'Như kiểm định xe trước khi lăn bánh: cho AI làm bài kiểm tra với hàng trăm câu hỏi thật, thử cả câu hỏi "gài bẫy", chấm điểm rồi mới cho phục vụ khách.',
+      flow: [['Xây bộ đề', 'Câu hỏi thật của khách, tình huống khó, câu gài bẫy.'], ['Chạy kiểm tra', 'AI trả lời toàn bộ bộ đề một cách tự động.'], ['Chấm điểm', 'Đúng/sai, đầy đủ, an toàn, đúng giọng thương hiệu.'], ['Tấn công thử', 'Thử khiến AI nói sai, lộ dữ liệu, vượt quy định.'], ['Báo cáo & sửa', 'Chỉ ra lỗi, sửa, rồi kiểm tra lại.']],
+      ex: ['Kiểm tra chatbot trước ngày ra mắt', 'Đánh giá lại sau mỗi lần cập nhật mô hình'],
+      get: ['Biết rõ AI trả lời đúng bao nhiêu phần trăm', 'Giảm rủi ro AI nói sai với khách'],
+      fit: ['Trước khi đưa bất kỳ AI nào ra phục vụ khách'] }
+  ];
+  // insert each new service after the last one of its category
+  NEW.forEach(function (s) {
+    var last = -1; SV.forEach(function (x, i) { if (x.cat === s.cat) last = i; });
+    if (last < 0) { var ci = CATS.map(function (c) { return c.id; }).indexOf(s.cat); last = -1; SV.forEach(function (x, i) { if (CATS.map(function (c) { return c.id; }).indexOf(x.cat) < ci) last = i; }); }
+    SV.splice(last + 1, 0, s);
+  });
+
+  /* ---- per-service specs: sz (quy mô), need (cần chuẩn bị), kpi, tech, ba (trước/sau), human (con người kiểm soát) ---- */
+  var X = {
+    chatbot: { sz: 'Mọi quy mô', need: ['Bộ câu hỏi thường gặp, chính sách, thông tin sản phẩm', 'Tài khoản Zalo OA, Fanpage, website', 'Kịch bản chuyển cho nhân viên'], kpi: ['Tỷ lệ AI tự xử lý', 'Thời gian phản hồi trung bình', 'Số lead thu được ngoài giờ'], tech: ['Zalo OA', 'Messenger', 'Web chat', 'LLM + RAG', 'CRM'], ba: [['Thời gian phản hồi', 'Vài phút đến vài giờ', 'Dưới 10 giây'], ['Ngoài giờ hành chính', 'Không ai trực', 'Tư vấn 24/7'], ['Thông tin khách', 'Ghi tay, dễ thất lạc', 'Tự lưu vào CRM']], human: 'Nhân viên nhận lại mọi cuộc hội thoại khó và có thể chen vào trả lời bất cứ lúc nào.' },
+    voice: { sz: 'Vừa & lớn', need: ['Kịch bản cuộc gọi mẫu', 'Tổng đài, đầu số (SIP)', 'Danh sách khách & quy tắc gọi'], kpi: ['Số cuộc gọi xử lý/ngày', 'Tỷ lệ gọi thành công', 'Tỷ lệ chuyển nhân viên'], tech: ['Speech-to-Text tiếng Việt', 'Text-to-Speech', 'LLM', 'Tổng đài SIP', 'CRM'], ba: [['Năng lực gọi', 'Vài trăm cuộc/ngày cho cả đội', 'Hàng nghìn cuộc/ngày'], ['Ghi chép cuộc gọi', 'Ghi tay, thiếu sót', 'Tóm tắt tự động 100%']], human: 'Nhân viên tiếp nhận ngay khi khách cần, nghe lại và chấm điểm cuộc gọi của AI.' },
+    salesagent: { sz: 'Mọi quy mô', need: ['Danh mục sản phẩm & điểm khác biệt', 'Kịch bản tư vấn của sales giỏi nhất', 'Bộ câu xử lý từ chối'], kpi: ['Tỷ lệ chuyển đổi tin nhắn → đơn', 'Giá trị đơn trung bình', 'Thời gian từ lead đến chốt'], tech: ['Zalo OA', 'Messenger', 'Website', 'LLM', 'CRM'], ba: [['Chất lượng tư vấn', 'Phụ thuộc từng người', 'Đồng đều theo kịch bản chuẩn'], ['Lead nóng', 'Lẫn trong hàng trăm tin nhắn', 'Được lọc và chuyển ngay cho sales']], human: 'Sales chốt các khách giá trị cao; AI không tự đưa cam kết ngoài chính sách.' },
+    avatar: { sz: 'Mọi quy mô', need: ['Kịch bản hoặc tài liệu nguồn', 'Ảnh/video mẫu nếu muốn avatar giống người thật (có đồng ý)', 'Bộ nhận diện thương hiệu'], kpi: ['Số video/tháng', 'Thời gian ra 1 video', 'Tỷ lệ xem hết video'], tech: ['Digital human', 'Voice cloning', 'LLM biên tập', 'Dịch đa ngôn ngữ'], ba: [['Làm 1 video', 'Vài ngày quay dựng', 'Vài phút'], ['Đa ngôn ngữ', 'Thuê người đọc từng thứ tiếng', 'Một kịch bản, nhiều ngôn ngữ']], human: 'Mọi video được duyệt trước khi phát hành; chỉ dùng hình ảnh, giọng nói khi có sự đồng ý.' },
+    journey: { sz: 'Mọi quy mô', need: ['Dữ liệu khách & lịch sử mua', 'Tài khoản Zalo OA/ZNS, email', 'Các mốc chăm sóc mong muốn'], kpi: ['Tỷ lệ mở tin', 'Tỷ lệ mua lại', 'Số khách cũ quay lại'], tech: ['Zalo ZNS', 'Email', 'SMS', 'CDP', 'LLM'], ba: [['Chăm sóc sau bán', 'Khi nhớ ra', 'Tự động theo hành trình'], ['Nội dung tin nhắn', 'Một mẫu cho tất cả', 'Riêng cho từng khách']], human: 'Đội marketing duyệt kịch bản và giới hạn tần suất gửi để không làm phiền khách.' },
+    translate: { sz: 'Mọi quy mô', need: ['Danh sách ngôn ngữ cần hỗ trợ', 'Bảng thuật ngữ ngành', 'Kênh giao tiếp: chat, họp, điện thoại'], kpi: ['Độ chính xác bản dịch', 'Thời gian phản hồi', 'Số hội thoại đa ngôn ngữ'], tech: ['LLM đa ngôn ngữ', 'Speech-to-Text', 'Text-to-Speech', 'Bảng thuật ngữ'], ba: [['Khách nước ngoài nhắn tin', 'Chờ người biết tiếng', 'Trả lời ngay'], ['Họp với đối tác', 'Thuê phiên dịch', 'Phụ đề dịch trực tiếp']], human: 'Nội dung quan trọng như hợp đồng được người có chuyên môn kiểm tra lại.' },
+    workflow: { sz: 'Mọi quy mô', need: ['Danh sách phần mềm đang dùng', 'Mô tả quy trình hiện tại', 'Tài khoản/API của các phần mềm'], kpi: ['Số thao tác thủ công loại bỏ', 'Số lần chạy/tháng', 'Tỷ lệ lỗi'], tech: ['n8n', 'Make', 'Zapier', 'Google Workspace', 'Zalo/Email', 'API'], ba: [['Chuyển thông tin giữa phần mềm', 'Copy–dán bằng tay', 'Tự động trong vài giây'], ['Nhắc việc', 'Nhớ thì làm', 'Tự nhắc đúng người, đúng lúc']], human: 'Các bước phê duyệt vẫn do người quyết định; mọi lần chạy đều có nhật ký.' },
+    rpa: { sz: 'Vừa & lớn', need: ['Quy trình thao tác chi tiết từng bước', 'Tài khoản phần mềm cho robot', 'Bộ dữ liệu mẫu để kiểm thử'], kpi: ['Số giao dịch robot xử lý', 'Tỷ lệ chạy thành công', 'Số giờ công được giải phóng'], tech: ['UiPath', 'Power Automate', 'Python', 'Playwright'], ba: [['Nhập 500 hóa đơn', '2–3 ngày công', 'Vài giờ, chạy ban đêm'], ['Sai sót gõ phím', 'Khó tránh khi làm nhiều', 'Gần như không có']], human: 'Robot dừng ở trường hợp ngoại lệ và chờ người xử lý.' },
+    idp: { sz: 'Vừa & lớn', need: ['50–100 mẫu chứng từ thường gặp', 'Danh sách trường dữ liệu cần lấy', 'Quy tắc kiểm tra hợp lệ'], kpi: ['Độ chính xác trích xuất', 'Số chứng từ/ngày', 'Thời gian xử lý/chứng từ'], tech: ['OCR tiếng Việt', 'Vision LLM', 'ERP/MISA', 'Google Drive'], ba: [['Nhập 1 hóa đơn', '3–5 phút', 'Vài giây'], ['Phát hiện sai lệch', 'Khi đối soát cuối tháng', 'Ngay khi nhận chứng từ']], human: 'Chứng từ có độ tin cậy thấp được đưa vào hàng chờ để người duyệt.' },
+    inbox: { sz: 'Mọi quy mô', need: ['Quyền truy cập hộp thư chung', 'Danh mục loại yêu cầu & người phụ trách', 'Mẫu trả lời chuẩn'], kpi: ['Thời gian phản hồi đầu tiên', 'Tỷ lệ xử lý đúng hạn', 'Số email tồn đọng'], tech: ['Gmail/Outlook', 'Helpdesk', 'LLM', 'Workflow'], ba: [['Phân loại email', 'Đọc từng thư', 'Tự gắn nhãn, chia việc'], ['Soạn trả lời', 'Viết từ đầu', 'Có sẵn bản nháp']], human: 'AI chỉ soạn nháp; nhân viên đọc lại và bấm gửi.' },
+    agent: { sz: 'Vừa & lớn', need: ['Mục tiêu & tiêu chí "xong việc" rõ ràng', 'Quyền truy cập công cụ, dữ liệu cần thiết', 'Danh sách hành động cần người duyệt'], kpi: ['Số nhiệm vụ hoàn thành', 'Tỷ lệ cần người can thiệp', 'Thời gian hoàn thành'], tech: ['LLM có tool-use', 'API nội bộ', 'MCP', 'Tìm kiếm web', 'Nhật ký kiểm toán'], ba: [['Báo cáo đối thủ hằng tuần', '1 ngày công', 'Có sẵn mỗi sáng thứ Hai'], ['Việc nhiều bước', 'Người làm từng bước', 'Agent làm, người duyệt kết quả']], human: 'Agent hỏi ý kiến trước mọi hành động có rủi ro: thanh toán, gửi khách, xóa dữ liệu.' },
+    multiagent: { sz: 'Doanh nghiệp lớn', need: ['Quy trình liên phòng ban được mô tả', 'Agent đơn lẻ đã chạy ổn định', 'Tiêu chí chất lượng đầu ra'], kpi: ['Thời gian hoàn thành dự án', 'Tỷ lệ đạt ở lần duyệt đầu', 'Số vòng chỉnh sửa'], tech: ['Điều phối agent', 'Nhiều mô hình LLM', 'MCP', 'Hàng đợi tác vụ'], ba: [['Hồ sơ dự thầu', '1–2 tuần, nhiều phòng ban', 'Bản nháp đầy đủ trong vài giờ'], ['Kiểm soát chất lượng', 'Phụ thuộc người soát', 'Agent kiểm duyệt chéo + người duyệt cuối']], human: 'Người phụ trách duyệt kết quả cuối và có thể dừng bất kỳ agent nào.' },
+    computeruse: { sz: 'Vừa & lớn', need: ['Danh sách hệ thống, cổng web cần thao tác', 'Tài khoản riêng cho agent', 'Ví dụ kết quả mong muốn'], kpi: ['Tỷ lệ hoàn thành', 'Thời gian mỗi lượt', 'Số lần cần hỗ trợ'], tech: ['Computer-use agent', 'Trình duyệt tự động', 'Máy ảo cô lập'], ba: [['Lấy dữ liệu từ 3 cổng web', 'Đăng nhập, tải tay từng nơi', 'Agent tự làm theo lịch'], ['Khi giao diện thay đổi', 'Robot cũ bị kẹt', 'Agent tự nhận biết và thích nghi']], human: 'Agent chạy trong máy ảo riêng, quyền hạn giới hạn, mọi thao tác được ghi lại.' },
+    copilot: { sz: 'Mọi quy mô', need: ['Danh sách vị trí ưu tiên', 'Quy trình, mẫu biểu từng vị trí', 'Quy định dữ liệu được phép dùng'], kpi: ['Số người dùng hằng tuần', 'Số giờ tiết kiệm/người', 'Mức hài lòng nhân viên'], tech: ['ChatGPT Enterprise', 'Claude', 'Gemini', 'Microsoft Copilot', 'Zalo/Teams'], ba: [['Soạn văn bản theo mẫu', '30 phút', '3 phút'], ['Nhân viên mới', 'Hỏi người cũ liên tục', 'Hỏi trợ lý, có câu trả lời ngay']], human: 'Nhân viên chịu trách nhiệm kiểm tra kết quả; dữ liệu nhạy cảm bị chặn tự động.' },
+    integration: { sz: 'Vừa & lớn', need: ['Tài liệu API của phần mềm (nếu có)', 'Danh sách chức năng AI cần dùng', 'Đầu mối IT hoặc nhà cung cấp phần mềm'], kpi: ['Số hệ thống đã kết nối', 'Tỷ lệ truy cập thành công', 'Số yêu cầu bị chặn vì sai quyền'], tech: ['REST API', 'MCP server', 'Webhook', 'OAuth/SSO', 'Nhật ký truy cập'], ba: [['AI trả lời về tồn kho', 'Theo tài liệu cũ', 'Theo số liệu thực tế'], ['Mỗi ứng dụng AI mới', 'Tích hợp lại từ đầu', 'Dùng lại kết nối có sẵn']], human: 'IT quyết định AI được truy cập gì; quyền có thể thu hồi bất cứ lúc nào.' },
+    rag: { sz: 'Mọi quy mô', need: ['Tài liệu nội bộ: quy trình, chính sách, hướng dẫn', 'Phân quyền ai được xem tài liệu nào', 'Người phụ trách cập nhật tài liệu'], kpi: ['Tỷ lệ câu trả lời đúng', 'Số câu hỏi/tháng', 'Thời gian onboarding'], tech: ['Vector database', 'Embedding', 'LLM', 'Google Drive/SharePoint', 'Zalo/Web'], ba: [['Tìm 1 quy định', 'Lục thư mục, hỏi người', 'Hỏi và có câu trả lời kèm nguồn'], ['Khi người cũ nghỉ việc', 'Kiến thức mất theo', 'Kiến thức ở lại trong hệ thống']], human: 'Câu trả lời luôn kèm nguồn để người dùng tự kiểm chứng.' },
+    bi: { sz: 'Vừa & lớn', need: ['Quyền truy cập nguồn dữ liệu', 'Danh sách chỉ số quan trọng (KPI)', 'Định nghĩa thống nhất cho từng chỉ số'], kpi: ['Thời gian làm báo cáo', 'Số câu hỏi dữ liệu/tuần', 'Độ chính xác truy vấn'], tech: ['Data warehouse', 'Text-to-SQL', 'Looker Studio', 'Power BI', 'LLM'], ba: [['Báo cáo tuần', '1–2 ngày tổng hợp', 'Tự gửi 8h sáng thứ Hai'], ['Câu hỏi bất chợt của sếp', 'Chờ nhân viên làm', 'Có câu trả lời trong 1 phút']], human: 'Chỉ số quan trọng có định nghĩa được duyệt; AI hiển thị cả câu truy vấn để đối chiếu.' },
+    predict: { sz: 'Vừa & lớn', need: ['1–2 năm dữ liệu bán hàng/vận hành', 'Lịch khuyến mãi, sự kiện', 'Mục tiêu dự báo cụ thể'], kpi: ['Sai số dự báo', 'Tỷ lệ hết hàng', 'Vòng quay tồn kho'], tech: ['Machine Learning', 'Dự báo chuỗi thời gian', 'Python', 'Data warehouse', 'Dashboard'], ba: [['Lên kế hoạch nhập hàng', 'Dựa vào kinh nghiệm', 'Dựa trên dự báo có số liệu'], ['Khách sắp rời bỏ', 'Biết khi đã mất', 'Cảnh báo trước để giữ chân']], human: 'Người quản lý quyết định cuối cùng; AI đưa con số và lý do.' },
+    personalize: { sz: 'Vừa & lớn', need: ['Dữ liệu mua hàng & hành vi', 'Danh mục sản phẩm có thuộc tính', 'Kênh tiếp cận khách: web, app, ZNS'], kpi: ['Tỷ lệ bấm vào gợi ý', 'Giá trị đơn trung bình', 'Tỷ lệ mua lại'], tech: ['Hệ gợi ý', 'CDP', 'Zalo ZNS', 'Email', 'A/B testing'], ba: [['Thông điệp gửi khách', 'Giống nhau cho tất cả', 'Riêng cho từng người'], ['Gợi ý sản phẩm', 'Hàng bán chạy chung', 'Theo sở thích từng khách']], human: 'Đội marketing đặt luật: tần suất gửi, sản phẩm ưu tiên, đối tượng loại trừ.' },
+    dataplatform: { sz: 'Vừa & lớn', need: ['Danh sách nguồn dữ liệu', 'Quyền truy cập các hệ thống', 'Người nắm nghiệp vụ để định nghĩa chỉ số'], kpi: ['Số nguồn dữ liệu đã kết nối', 'Tỷ lệ dữ liệu sạch', 'Độ trễ cập nhật'], tech: ['Data warehouse', 'ETL/ELT', 'BigQuery', 'PostgreSQL', 'dbt'], ba: [['Số liệu giữa các phòng', 'Mỗi nơi một con số', 'Một con số thống nhất'], ['Chuẩn bị dữ liệu cho dự án AI', 'Làm lại mỗi lần', 'Có sẵn, cập nhật tự động']], human: 'Mỗi nhóm dữ liệu có người chịu trách nhiệm về chất lượng.' },
+    meeting: { sz: 'Mọi quy mô', need: ['Nguồn ghi âm: Zoom, Meet, tổng đài', 'Mẫu biên bản mong muốn', 'Tiêu chí chấm điểm cuộc gọi'], kpi: ['Thời gian ra biên bản', 'Tỷ lệ cuộc gọi được chấm', 'Điểm chất lượng trung bình'], tech: ['Speech-to-Text tiếng Việt', 'LLM', 'Zoom/Meet', 'Tổng đài', 'CRM'], ba: [['Biên bản họp', 'Viết tay sau 1–2 ngày', 'Có ngay sau cuộc họp'], ['Kiểm tra chất lượng cuộc gọi', 'Nghe ngẫu nhiên vài cuộc', 'Phân tích 100% cuộc gọi']], human: 'Người dự họp xác nhận biên bản; chỉ ghi âm khi đã thông báo.' },
+    content: { sz: 'Mọi quy mô', need: ['Bộ nhận diện & giọng thương hiệu', 'Bài viết mẫu tốt nhất', 'Lịch chiến dịch'], kpi: ['Số bài/tháng', 'Thời gian sản xuất 1 bài', 'Tương tác trung bình'], tech: ['LLM', 'Google Sheets', 'Canva', 'Meta Business Suite', 'Workflow'], ba: [['Viết 1 bài chất lượng', '2–3 giờ', '20–30 phút gồm cả duyệt'], ['Lịch đăng', 'Lúc có lúc không', 'Đều đặn theo kế hoạch']], human: 'Mọi bài viết đều qua người duyệt trước khi đăng.' },
+    creative: { sz: 'Mọi quy mô', need: ['Ảnh sản phẩm gốc', 'Bộ nhận diện thương hiệu', 'Quy định quảng cáo của ngành'], kpi: ['Số ấn phẩm/tháng', 'Thời gian ra 1 ấn phẩm', 'Hiệu quả theo từng mẫu'], tech: ['Tạo ảnh AI', 'Video AI', 'Canva AI', 'CapCut', 'Giọng đọc AI'], ba: [['Ảnh studio cho 1 sản phẩm', 'Thuê chụp, chờ vài ngày', 'Vài phút từ ảnh điện thoại'], ['Mẫu quảng cáo để thử', '2–3 mẫu', 'Hàng chục mẫu']], human: 'Thiết kế viên duyệt cuối, đảm bảo đúng thương hiệu và bản quyền.' },
+    listening: { sz: 'Vừa & lớn', need: ['Danh sách thương hiệu, sản phẩm, đối thủ', 'Các kênh cần theo dõi', 'Người nhận cảnh báo'], kpi: ['Tỷ lệ đánh giá tích cực', 'Thời gian phát hiện vấn đề', 'Số chủ đề nổi bật'], tech: ['Thu thập dữ liệu mạng xã hội', 'Phân tích cảm xúc', 'LLM', 'Dashboard'], ba: [['Biết khách phàn nàn', 'Khi đã lan rộng', 'Ngay khi bắt đầu'], ['Đọc đánh giá', 'Thủ công vài chục cái', 'Tổng hợp hàng nghìn tự động']], human: 'Đội truyền thông quyết định cách phản hồi; AI chỉ phát hiện và đề xuất.' },
+    seo: { sz: 'Mọi quy mô', need: ['Website & quyền quản trị', 'Chuyên môn, dữ liệu riêng để viết', 'Danh sách sản phẩm trọng tâm'], kpi: ['Lượt truy cập tự nhiên', 'Số từ khóa top 10', 'Tần suất được AI trích dẫn'], tech: ['Google Search Console', 'Schema markup', 'LLM', 'Theo dõi AI search'], ba: [['Khách tìm thấy bạn', 'Chủ yếu nhờ quảng cáo', 'Tự tìm đến qua tìm kiếm'], ['Khi khách hỏi chatbot AI', 'Không nhắc tới bạn', 'Được gợi ý kèm nguồn']], human: 'Chuyên gia nội dung đảm bảo thông tin chính xác, không spam.' },
+    ads: { sz: 'Mọi quy mô', need: ['Quyền xem tài khoản quảng cáo', 'Dữ liệu đơn hàng, lead thực tế', 'Mục tiêu chiến dịch'], kpi: ['Tỷ lệ chuyển đổi', 'Số mẫu được thử/tuần', 'Tỷ lệ lead chất lượng'], tech: ['Meta Ads', 'Google Ads', 'TikTok Ads', 'LLM', 'Dashboard'], ba: [['Đọc số liệu quảng cáo', 'Cuối ngày, thủ công', 'Liên tục, có cảnh báo'], ['Mẫu quảng cáo mới', 'Vài mẫu mỗi tháng', 'Hàng chục mẫu mỗi tuần']], human: 'Người phụ trách duyệt mọi thay đổi lớn trên tài khoản quảng cáo trước khi áp dụng.' },
+    hr: { sz: 'Vừa & lớn', need: ['Mô tả vị trí & tiêu chí tuyển', 'Sổ tay nhân viên, chính sách', 'Phần mềm HR, email tuyển dụng'], kpi: ['Thời gian tuyển 1 vị trí', 'Số CV xử lý/ngày', 'Số câu hỏi HR tự động trả lời'], tech: ['LLM', 'RAG chính sách', 'Workflow', 'Phần mềm HR', 'Zalo'], ba: [['Lọc 300 CV', '2–3 ngày', 'Vài giờ, có shortlist'], ['Câu hỏi về nghỉ phép', 'Hỏi HR, chờ trả lời', 'Trợ lý trả lời ngay']], human: 'HR quyết định tuyển ai; tiêu chí lọc minh bạch, không phân biệt đối xử.' },
+    finance: { sz: 'Vừa & lớn', need: ['Phần mềm kế toán (MISA, Fast, ERP…)', 'Mẫu chứng từ & quy trình đối soát', 'Quyền truy cập sao kê'], kpi: ['Thời gian khóa sổ', 'Số chứng từ xử lý tự động', 'Số ngày thu hồi công nợ'], tech: ['OCR/IDP', 'RPA', 'MISA/ERP', 'Hóa đơn điện tử', 'Dashboard'], ba: [['Đối soát ngân hàng', 'Làm tay cuối tháng', 'Tự động mỗi ngày'], ['Nhắc công nợ', 'Khi nhớ ra', 'Theo lịch, cá nhân hóa']], human: 'Kế toán trưởng duyệt bút toán điều chỉnh và các khoản chênh lệch.' },
+    legal: { sz: 'Vừa & lớn', need: ['Bộ hợp đồng mẫu chuẩn', 'Danh sách điều khoản cần kiểm tra', 'Quy trình phê duyệt hợp đồng'], kpi: ['Thời gian rà soát 1 hợp đồng', 'Số rủi ro phát hiện', 'Số hợp đồng/tháng'], tech: ['LLM', 'RAG văn bản pháp luật', 'So sánh văn bản', 'Quản lý hợp đồng'], ba: [['Rà soát 1 hợp đồng', 'Vài giờ', 'Vài phút + thời gian duyệt'], ['So sánh phiên bản', 'Đọc đối chiếu từng dòng', 'Tự đánh dấu thay đổi']], human: 'AI chỉ hỗ trợ; ý kiến pháp lý cuối cùng do luật sư hoặc pháp chế đưa ra.' },
+    supply: { sz: 'Vừa & lớn', need: ['Dữ liệu tồn kho & bán hàng', 'Danh sách nhà cung cấp, thời gian giao', 'Quy tắc tồn kho tối thiểu'], kpi: ['Tỷ lệ hết hàng', 'Số ngày tồn kho', 'Tỷ lệ giao đúng hạn'], tech: ['Dự báo ML', 'ERP/WMS', 'Workflow', 'Dashboard', 'Agent'], ba: [['Đặt hàng', 'Theo kinh nghiệm', 'Theo dự báo có số liệu'], ['Nhà cung cấp giao chậm', 'Biết khi đã thiếu hàng', 'Cảnh báo sớm']], human: 'Bộ phận mua hàng duyệt mọi đơn đặt hàng trước khi gửi.' },
+    vision: { sz: 'Vừa & lớn', need: ['Vị trí camera & điều kiện ánh sáng', 'Ảnh mẫu lỗi/đối tượng cần nhận diện', 'Quy tắc cảnh báo'], kpi: ['Độ chính xác phát hiện', 'Tỷ lệ báo nhầm', 'Thời gian phản ứng'], tech: ['Camera IP', 'Computer Vision', 'Edge AI', 'Dashboard', 'Cảnh báo Zalo'], ba: [['Kiểm tra chất lượng', 'Lấy mẫu ngẫu nhiên', 'Kiểm tra 100% sản phẩm'], ['Phát hiện vi phạm an toàn', 'Khi đã có sự cố', 'Ngay lập tức']], human: 'Người phụ trách xác nhận cảnh báo; hình ảnh được bảo vệ theo quy định.' },
+    face: { sz: 'Vừa & lớn', need: ['Danh sách người & sự đồng ý xử lý dữ liệu', 'Vị trí lắp camera, cửa', 'Phần mềm chấm công/nhân sự'], kpi: ['Độ chính xác nhận diện', 'Thời gian nhận diện', 'Số cảnh báo người lạ'], tech: ['Camera AI', 'Nhận diện khuôn mặt', 'Kiểm soát cửa', 'Phần mềm HR'], ba: [['Chấm công', 'Quẹt thẻ, có thể chấm hộ', 'Nhận diện khuôn mặt, chính xác'], ['Người lạ vào khu vực cấm', 'Phát hiện muộn', 'Cảnh báo ngay']], human: 'Dữ liệu sinh trắc học được bảo vệ theo Nghị định 13/2023 và chỉ dùng khi có đồng ý.' },
+    robotics: { sz: 'Doanh nghiệp lớn', need: ['Sơ đồ mặt bằng', 'Mô tả công việc lặp lại', 'Hạ tầng mạng, điểm sạc'], kpi: ['Số chuyến/ca', 'Thời gian hoạt động', 'Số sự cố'], tech: ['Robot phục vụ', 'AMR', 'Cánh tay robot', 'Lidar', 'WMS/POS'], ba: [['Chạy món giờ cao điểm', 'Thiếu người', 'Robot chạy liên tục'], ['Chở hàng trong kho', 'Đi bộ nhiều km mỗi ca', 'Robot tự chở tới vị trí']], human: 'Nhân viên giám sát, xử lý tình huống và làm phần việc cần sự khéo léo.' },
+    iot: { sz: 'Doanh nghiệp lớn', need: ['Danh sách máy móc quan trọng', 'Lịch sử hỏng hóc', 'Hạ tầng mạng tại xưởng'], kpi: ['Số lần dừng máy đột xuất', 'Thời gian sửa chữa', 'Tuổi thọ thiết bị'], tech: ['Cảm biến IoT', 'Gateway', 'Phát hiện bất thường', 'CMMS', 'Dashboard'], ba: [['Bảo trì', 'Định kỳ hoặc khi đã hỏng', 'Đúng lúc máy có dấu hiệu'], ['Dừng dây chuyền', 'Bất ngờ', 'Được báo trước nhiều ngày']], human: 'Kỹ thuật viên kiểm tra thực tế trước khi thay linh kiện.' },
+    llmapi: { sz: 'Mọi quy mô', need: ['Tài khoản doanh nghiệp của nhà cung cấp AI', 'Quy định dữ liệu được gửi đi', 'Ứng dụng cần dùng AI'], kpi: ['Tốc độ phản hồi', 'Mức sử dụng theo phòng ban', 'Tỷ lệ lỗi'], tech: ['OpenAI', 'Anthropic Claude', 'Google Gemini', 'Azure OpenAI', 'AWS Bedrock'], ba: [['Thời gian bắt đầu', 'Vài tháng dựng hạ tầng', 'Vài ngày'], ['Chất lượng mô hình', 'Tự huấn luyện, khó theo kịp', 'Dùng ngay mô hình mạnh nhất']], human: 'Dữ liệu nhạy cảm được che trước khi gửi; quản trị viên kiểm soát ai được dùng.' },
+    llmprivate: { sz: 'Vừa & lớn', need: ['Tài khoản cloud doanh nghiệp', 'Yêu cầu bảo mật, vị trí lưu dữ liệu', 'Số người dùng dự kiến'], kpi: ['Thời gian hoạt động', 'Tốc độ phản hồi', 'Số người dùng đồng thời'], tech: ['VPC', 'GPU cloud', 'vLLM', 'Llama / Qwen', 'VPN riêng'], ba: [['Dữ liệu', 'Đi qua hạ tầng dùng chung', 'Nằm trong vùng riêng'], ['Mở rộng', 'Phụ thuộc gói dịch vụ', 'Tăng GPU khi cần']], human: 'Bộ phận IT nắm toàn quyền truy cập vùng cloud và nhật ký.' },
+    llmonprem: { sz: 'Doanh nghiệp lớn', need: ['Phòng server: điện, làm mát, mạng', 'Số người dùng & tác vụ chính', 'Đội IT phối hợp vận hành'], kpi: ['Thời gian hoạt động', 'Tốc độ phản hồi', 'Mức sử dụng GPU'], tech: ['Máy chủ GPU', 'vLLM / Ollama', 'Llama / Qwen', 'Kubernetes', 'LDAP/AD'], ba: [['Dữ liệu ra khỏi công ty', 'Có', 'Không bao giờ'], ['Khi mất internet', 'AI ngừng hoạt động', 'Vẫn hoạt động']], human: 'Toàn bộ hệ thống nằm trong quyền kiểm soát của doanh nghiệp.' },
+    finetune: { sz: 'Vừa & lớn', need: ['1.000+ ví dụ chất lượng', 'Chuyên gia nghiệp vụ để đánh giá', 'Bộ câu hỏi kiểm tra'], kpi: ['Độ chính xác trên bộ kiểm tra', 'Tốc độ phản hồi', 'Tỷ lệ đúng văn phong'], tech: ['LoRA / QLoRA', 'GPU', 'Mô hình mã nguồn mở', 'Bộ đánh giá tự động'], ba: [['Thuật ngữ chuyên ngành', 'Hay dùng sai', 'Dùng đúng, nhất quán'], ['Kích thước mô hình', 'Cần mô hình rất lớn', 'Mô hình nhỏ hơn vẫn đạt chất lượng']], human: 'Chuyên gia nghiệp vụ duyệt dữ liệu và chấm điểm mô hình trước khi dùng.' },
+    gateway: { sz: 'Vừa & lớn', need: ['Danh sách ứng dụng AI đang dùng', 'Quy tắc phân quyền', 'Danh sách dữ liệu cần che'], kpi: ['Số yêu cầu bị chặn', 'Mức sử dụng theo phòng ban', 'Thời gian phản hồi'], tech: ['LiteLLM', 'API Gateway', 'Che dữ liệu cá nhân', 'Giám sát', 'SSO'], ba: [['Kiểm soát AI', 'Mỗi ứng dụng một kiểu', 'Một cổng tập trung'], ['Khi nhà cung cấp gặp lỗi', 'Ứng dụng ngừng', 'Tự chuyển mô hình dự phòng']], human: 'Quản trị viên đặt chính sách và xem nhật ký kiểm toán bất cứ lúc nào.' },
+    edge: { sz: 'Vừa & lớn', need: ['Bài toán & yêu cầu tốc độ', 'Vị trí lắp đặt thiết bị', 'Dữ liệu mẫu để huấn luyện'], kpi: ['Độ trễ xử lý', 'Độ chính xác', 'Thời gian hoạt động thiết bị'], tech: ['NVIDIA Jetson', 'Mô hình nén', 'Camera AI', 'Quản lý thiết bị từ xa'], ba: [['Thời gian phản hồi', 'Phụ thuộc đường mạng', 'Gần như tức thì'], ['Khi mất internet', 'Ngừng hoạt động', 'Vẫn chạy bình thường']], human: 'Kết quả quan trọng được gửi về trung tâm để người phụ trách giám sát.' },
+    strategy: { sz: 'Mọi quy mô', need: ['Thời gian của ban lãnh đạo (2–3 buổi)', 'Đầu mối từng phòng ban', 'Mục tiêu kinh doanh 1–3 năm'], kpi: ['Số use-case được duyệt', 'Tỷ lệ use-case đạt KPI', 'Bậc trưởng thành AI'], tech: ['Đánh giá mức sẵn sàng AI', 'Ma trận ưu tiên', 'Lộ trình 30–60–90'], ba: [['Triển khai AI', 'Thử nghiệm rời rạc', 'Theo lộ trình có KPI'], ['Đồng thuận nội bộ', 'Mỗi phòng một ý', 'Cùng một kế hoạch']], human: 'Ban lãnh đạo quyết định ưu tiên; Drabuff AI cung cấp phân tích và phương án.' },
+    governance: { sz: 'Mọi quy mô', need: ['Danh sách công cụ AI đang dùng', 'Danh mục dữ liệu cá nhân đang xử lý', 'Đầu mối pháp chế/IT'], kpi: ['Tỷ lệ nhân viên được tập huấn', 'Số sự cố dữ liệu', 'Mức tuân thủ quy chế'], tech: ['Nghị định 13/2023', 'Phân loại dữ liệu', 'Chống rò rỉ dữ liệu', 'Nhật ký kiểm toán'], ba: [['Dùng AI', 'Tự phát, khó kiểm soát', 'Có quy chế, có phân quyền'], ['Dữ liệu khách hàng', 'Có thể bị dán vào AI công cộng', 'Được che hoặc chặn tự động']], human: 'Đầu mối AI của công ty phê duyệt công cụ và trường hợp sử dụng mới.' },
+    eval: { sz: 'Mọi quy mô', need: ['Câu hỏi thật từ khách hàng', 'Đáp án chuẩn do chuyên gia duyệt', 'Danh sách điều AI không được làm'], kpi: ['Tỷ lệ trả lời đúng', 'Số lỗ hổng phát hiện', 'Điểm an toàn'], tech: ['Bộ đánh giá tự động', 'LLM chấm điểm', 'Red-teaming', 'Báo cáo chất lượng'], ba: [['Ra mắt AI', 'Dựa vào cảm giác "có vẻ ổn"', 'Dựa trên điểm kiểm tra rõ ràng'], ['Lỗi của AI', 'Khách phát hiện trước', 'Phát hiện trong phòng thử nghiệm']], human: 'Chuyên gia nghiệp vụ duyệt đáp án chuẩn và quyết định ngưỡng đạt.' },
+    training: { sz: 'Mọi quy mô', need: ['Danh sách học viên & vị trí', 'Bài toán thực tế của từng phòng', 'Thời gian học phù hợp'], kpi: ['Điểm kiểm tra đầu vào – đầu ra', 'Số sản phẩm AI tạo ra sau khóa', 'Số giờ tiết kiệm/tuần'], tech: ['ChatGPT', 'Claude', 'Gemini', 'NotebookLM', 'Make / n8n'], ba: [['Nhân viên dùng AI', 'Tự mày mò, kết quả chung chung', 'Thành thạo, có quy trình chuẩn'], ['Sau khóa học', 'Quên dần', 'Đồng hành 30 ngày để áp dụng']], human: 'Quản lý theo dõi việc áp dụng; Drabuff AI hỗ trợ sau khóa.' },
+    managed: { sz: 'Mọi quy mô', need: ['Quyền giám sát hệ thống', 'Đầu mối tiếp nhận báo cáo', 'Kênh báo sự cố'], kpi: ['Thời gian hoạt động', 'Thời gian xử lý sự cố', 'Điểm chất lượng câu trả lời'], tech: ['Giám sát 24/7', 'Đánh giá tự động', 'Cập nhật mô hình', 'Báo cáo tháng'], ba: [['Sau triển khai', 'Tự xoay xở khi lỗi', 'Có đội chăm sóc'], ['Chất lượng AI', 'Giảm dần theo thời gian', 'Được đo và cải thiện hằng tháng']], human: 'Doanh nghiệp nhận báo cáo hằng tháng và quyết định các thay đổi lớn.' }
+  };
+  SV.forEach(function (s) { var x = X[s.id] || {}; for (var k in x) s[k] = x[k]; });
+
+  window.LAYERS = [
+    { n: 'Điểm chạm', d: 'Nơi khách hàng và nhân viên gặp AI', ids: ['chatbot', 'voice', 'salesagent', 'translate', 'avatar', 'copilot'] },
+    { n: 'Ứng dụng & tự động hóa', d: 'Các dây chuyền làm việc thay con người, theo từng phòng ban', ids: ['workflow', 'rpa', 'idp', 'inbox', 'journey', 'content', 'creative', 'seo', 'ads', 'listening', 'hr', 'finance', 'legal', 'supply'] },
+    { n: 'Agent · bộ não hành động', d: 'AI tự lên kế hoạch, dùng công cụ và điều phối công việc', ids: ['agent', 'multiagent', 'computeruse', 'integration'] },
+    { n: 'Tri thức & dữ liệu', d: 'Thứ AI cần biết để trả lời đúng về công ty bạn', ids: ['rag', 'meeting', 'bi', 'predict', 'personalize', 'dataplatform'] },
+    { n: 'Thế giới thật', d: 'Camera, cảm biến, robot đưa AI ra khỏi màn hình', ids: ['vision', 'face', 'robotics', 'iot'] },
+    { n: 'Nền tảng mô hình AI', d: 'Nơi đặt "bộ não": cloud công cộng, cloud riêng, on-premise, thiết bị', ids: ['llmapi', 'llmprivate', 'llmonprem', 'finetune', 'gateway', 'edge'] }
+  ];
+
+  window.PAINS = [
+    { t: 'Khách nhắn nhiều, trả lời không kịp', ids: ['chatbot', 'salesagent', 'journey', 'inbox'] },
+    { t: 'Tổng đài quá tải cuộc gọi', ids: ['voice', 'meeting', 'chatbot'] },
+    { t: 'Lead nhiều nhưng chốt ít', ids: ['salesagent', 'journey', 'personalize', 'ads', 'meeting'] },
+    { t: 'Nhân viên mất nhiều giờ nhập liệu', ids: ['rpa', 'idp', 'workflow', 'computeruse', 'finance'] },
+    { t: 'Hóa đơn, hợp đồng xử lý thủ công', ids: ['idp', 'finance', 'legal', 'rpa'] },
+    { t: 'Báo cáo chậm, số liệu rời rạc', ids: ['bi', 'dataplatform', 'agent', 'integration'] },
+    { t: 'Không dự đoán được nhu cầu, tồn kho', ids: ['predict', 'supply', 'dataplatform'] },
+    { t: 'Nội dung marketing không đều', ids: ['content', 'creative', 'seo', 'avatar'] },
+    { t: 'Quảng cáo kém hiệu quả', ids: ['ads', 'listening', 'personalize', 'seo'] },
+    { t: 'Kiến thức nằm trong đầu vài người', ids: ['rag', 'copilot', 'meeting', 'hr'] },
+    { t: 'Tuyển dụng, đào tạo mất thời gian', ids: ['hr', 'training', 'avatar', 'rag'] },
+    { t: 'Lo ngại lộ dữ liệu khi dùng AI', ids: ['llmonprem', 'llmprivate', 'governance', 'gateway', 'eval'] },
+    { t: 'Kiểm soát chất lượng, an toàn tại xưởng/kho', ids: ['vision', 'iot', 'face', 'edge', 'robotics'] },
+    { t: 'Thiếu lao động cho việc chân tay lặp lại', ids: ['robotics', 'vision', 'rpa'] },
+    { t: 'Phục vụ khách, đối tác nước ngoài', ids: ['translate', 'avatar', 'chatbot'] },
+    { t: 'Chưa biết bắt đầu từ đâu', ids: ['strategy', 'training', 'copilot', 'governance'] }
+  ];
+
+  window.MATURITY = [
+    { n: 'Thử nghiệm tự phát', d: 'Vài người tự dùng ChatGPT, chưa có quy chuẩn, dữ liệu có thể bị dán vào công cụ công cộng.', sign: ['Mỗi người dùng một kiểu', 'Chưa có quy chế dùng AI', 'Lãnh đạo chưa thấy kết quả rõ'], next: 'Đặt nền móng: quy chế, đào tạo, chọn việc làm trước.', ids: ['strategy', 'governance', 'training'] },
+    { n: 'Chuẩn hóa & phổ cập', d: 'Có quy chế, đội ngũ được đào tạo, mỗi vị trí có trợ lý AI riêng.', sign: ['Nhân viên dùng AI hằng ngày', 'Có thư viện prompt chung', 'Dữ liệu nhạy cảm được kiểm soát'], next: 'Đưa AI vào dây chuyền công việc.', ids: ['copilot', 'training', 'llmapi', 'meeting'] },
+    { n: 'Tự động hóa quy trình', d: 'AI chạy trong quy trình: trả lời khách, xử lý chứng từ, nối các phần mềm.', sign: ['Chatbot phục vụ khách 24/7', 'Ít thao tác copy–dán', 'Đo được giờ tiết kiệm'], next: 'Cho AI hiểu dữ liệu công ty và tự làm việc nhiều bước.', ids: ['chatbot', 'workflow', 'idp', 'rpa', 'content', 'journey'] },
+    { n: 'Tri thức & Agent', d: 'AI hiểu dữ liệu riêng, trả lời có nguồn, agent làm trọn việc nhiều bước.', sign: ['Hỏi đáp tài liệu nội bộ', 'Báo cáo tự động', 'Agent xử lý việc định kỳ'], next: 'Mở rộng toàn doanh nghiệp, làm chủ hạ tầng.', ids: ['rag', 'bi', 'dataplatform', 'agent', 'integration', 'salesagent'] },
+    { n: 'Doanh nghiệp AI-native', d: 'Đội agent phối hợp, mô hình riêng, dự báo và AI trong thế giới thật.', sign: ['AI tham gia ra quyết định', 'Hạ tầng AI riêng', 'AI trong sản xuất, kho, cửa hàng'], next: 'Liên tục đo lường, kiểm thử và tối ưu.', ids: ['multiagent', 'llmprivate', 'llmonprem', 'finetune', 'predict', 'eval'] }
+  ];
+
+  // a request travelling through the layers; d = direction of travel
+  window.SCENARIOS = [
+    { n: 'Khách nhắn Zalo lúc 23h', steps: [
+      ['chatbot', 'down', 'Khách nhắn Zalo OA: "Liệu trình này có hợp với da dầu không em?"'],
+      ['rag', 'down', 'Tra kho tri thức: thông tin liệu trình, chống chỉ định, chính sách.'],
+      ['gateway', 'down', 'AI Gateway che số điện thoại khách trước khi gửi tới mô hình.'],
+      ['llmapi', 'down', 'Mô hình ngôn ngữ soạn câu trả lời theo giọng thương hiệu.'],
+      ['workflow', 'up', 'Workflow lưu khách vào CRM và hẹn sales gọi lúc 9h sáng.'],
+      ['chatbot', 'up', 'Khách nhận câu tư vấn đầy đủ sau khoảng 6 giây.']] },
+    { n: 'Kế toán nhận 300 hóa đơn cuối tháng', steps: [
+      ['idp', 'down', 'AI đọc 300 hóa đơn PDF, lấy mã số thuế, ngày, số tiền.'],
+      ['llmonprem', 'down', 'Dữ liệu tài chính được xử lý trên máy chủ nội bộ, không ra internet.'],
+      ['finance', 'up', 'Đối soát với đơn mua và sao kê: phát hiện 4 hóa đơn lệch.'],
+      ['rpa', 'up', 'Robot nhập 296 hóa đơn hợp lệ vào phần mềm kế toán.'],
+      ['bi', 'down', 'Báo cáo tài chính tháng tự cập nhật.'],
+      ['copilot', 'up', 'Kế toán trưởng nhận thông báo và duyệt 4 hóa đơn lệch.']] },
+    { n: 'Giám đốc hỏi: "Vì sao doanh số tháng này giảm?"', steps: [
+      ['copilot', 'down', 'Giám đốc hỏi trợ lý AI ngay trên Zalo.'],
+      ['agent', 'down', 'Agent lập kế hoạch: lấy số theo chi nhánh, so cùng kỳ, tìm nguyên nhân.'],
+      ['integration', 'down', 'Kết nối an toàn vào phần mềm bán hàng và CRM.'],
+      ['dataplatform', 'down', 'Lấy số liệu đã làm sạch từ kho dữ liệu chung.'],
+      ['bi', 'up', 'Phân tích (ví dụ): chi nhánh B giảm do thiếu 2 mã hàng chủ lực.'],
+      ['llmprivate', 'down', 'Mô hình trên cloud riêng tổng hợp thành câu trả lời dễ hiểu.'],
+      ['copilot', 'up', 'Giám đốc nhận câu trả lời kèm biểu đồ trong chưa đầy một phút.']] },
+    { n: 'Camera phát hiện sản phẩm lỗi', steps: [
+      ['vision', 'down', 'Camera chụp từng sản phẩm trên băng chuyền.'],
+      ['edge', 'down', 'AI tại chỗ phát hiện vết nứt trong vài chục mili giây.'],
+      ['workflow', 'up', 'Gửi lệnh loại sản phẩm và báo trưởng ca qua Zalo.'],
+      ['iot', 'down', 'Đối chiếu cảm biến: máy ép số 3 đang rung bất thường.'],
+      ['bi', 'up', 'Dashboard cập nhật tỷ lệ lỗi theo ca.'],
+      ['copilot', 'up', 'Quản đốc nhận đề xuất lên lịch bảo trì máy số 3.']] }
+  ];
+
+  window.GLOSSARY = [
+    ['AI tạo sinh', 'AI có thể tạo ra nội dung mới: văn bản, hình ảnh, giọng nói, video.', 'Như một người viết, vẽ, nói theo yêu cầu của bạn.'],
+    ['LLM', 'Mô hình ngôn ngữ lớn, "bộ não" đứng sau ChatGPT, Claude, Gemini.', 'Như người đã đọc gần hết sách trên đời và biết diễn đạt lại.'],
+    ['Prompt', 'Câu lệnh, yêu cầu bạn đưa cho AI.', 'Như bản giao việc cho nhân viên: càng rõ, kết quả càng tốt.'],
+    ['Token', 'Đơn vị nhỏ AI dùng để đọc và viết chữ, khoảng một phần của từ.', 'Như những viên gạch nhỏ ghép thành câu.'],
+    ['"AI bịa" (Hallucination)', 'AI trả lời tự tin nhưng sai sự thật.', 'Như người không biết nhưng ngại nói "không biết".'],
+    ['RAG', 'Cho AI tra tài liệu của bạn trước khi trả lời.', 'Như làm bài thi được mở sách: trả lời đúng theo tài liệu.'],
+    ['Embedding / Vector', 'Cách biến chữ thành dãy số để máy tìm theo ý nghĩa, không chỉ theo từ khóa.', 'Như xếp sách theo nội dung thay vì theo tên.'],
+    ['AI Agent', 'AI tự lên kế hoạch và dùng công cụ để làm trọn một việc.', 'Như nhân viên được giao mục tiêu, tự tìm cách hoàn thành.'],
+    ['MCP', 'Chuẩn kết nối giúp AI dùng các phần mềm, dữ liệu một cách thống nhất.', 'Như cổng USB: một chuẩn cắm được nhiều thiết bị.'],
+    ['RPA', 'Robot phần mềm bắt chước thao tác chuột, bàn phím của người.', 'Như nhân viên ảo ngồi gõ máy tính theo đúng hướng dẫn.'],
+    ['OCR', 'Nhận dạng chữ trong ảnh hoặc file scan.', 'Như đôi mắt đọc giấy tờ và gõ lại thành chữ.'],
+    ['Fine-tuning', 'Huấn luyện thêm một mô hình có sẵn bằng dữ liệu riêng.', 'Như cho sinh viên giỏi đi thực tập chuyên sâu tại công ty.'],
+    ['API', 'Cửa giao tiếp để các phần mềm nói chuyện với nhau.', 'Như quầy giao dịch: đưa yêu cầu vào, nhận kết quả ra.'],
+    ['On-premise', 'Máy chủ và phần mềm đặt ngay tại doanh nghiệp.', 'Như tự xây nhà máy điện riêng.'],
+    ['Cloud riêng (VPC)', 'Vùng mạng riêng trên hạ tầng cloud, chỉ doanh nghiệp truy cập.', 'Như căn hộ có khóa riêng trong tòa nhà lớn.'],
+    ['Edge AI', 'AI chạy ngay trên thiết bị tại chỗ, không cần gửi lên cloud.', 'Như có chuyên gia đứng ngay tại hiện trường.'],
+    ['Computer Vision', 'AI hiểu hình ảnh và video.', 'Như cho camera một đôi mắt biết suy nghĩ.'],
+    ['Human-in-the-loop', 'Con người duyệt hoặc can thiệp ở những bước quan trọng.', 'Như tự lái có tài xế ngồi sẵn sau vô lăng.']
+  ];
+})();
 
 /* Drabuff AI — interactive voxel field + assembling AI core (Three.js r128) */
 (function () {
@@ -836,6 +1344,7 @@ window.LAYERS = [
     ndc.x = (e.clientX / innerWidth) * 2 - 1; ndc.y = -(e.clientY / innerHeight) * 2 + 1; hasPtr = true;
   }, { passive: true });
   var burst = 0;
+  api.burst = function () { burst = 1; };
   window.addEventListener('pointerdown', function () { burst = 1; }, { passive: true });
 
   function resize() {
@@ -917,235 +1426,441 @@ window.LAYERS = [
   requestAnimationFrame(frame);
 })();
 
-/* Drabuff AI — enterprise AI service catalogue app */
+/* Drabuff AI — enterprise AI service map v2 */
 (function () {
   var C = window.DRABUFF, CATS = window.CATS, SV = window.SERVICES, LAYERS = window.LAYERS;
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var fine = window.matchMedia && matchMedia('(pointer:fine)').matches;
   var byId = {}; SV.forEach(function (s) { byId[s.id] = s; });
   var catById = {}; CATS.forEach(function (c) { catById[c.id] = c; });
+  var layerOf = {}; LAYERS.forEach(function (l, i) { l.ids.forEach(function (id) { layerOf[id] = i; }); });
   var zDigits = C.zalo.replace(/\D/g, '');
+  var pad = function (n) { return String(n).padStart(2, '0'); };
+  var go = function (el, block) { if (el) el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: block || 'start' }); };
 
-  var KEY = 'drabuff-catalog-v1', st = { wish: [], seen: [] };
-  try { var raw = JSON.parse(localStorage.getItem(KEY) || 'null'); if (raw) st = { wish: raw.wish || [], seen: raw.seen || [] }; } catch (e) {}
+  var KEY = 'drabuff-catalog-v2', st = { wish: [], seen: [], lvl: 0 };
+  try { var raw = JSON.parse(localStorage.getItem(KEY) || 'null'); if (raw) { st.wish = raw.wish || []; st.seen = raw.seen || []; st.lvl = raw.lvl || 0; } } catch (e) {}
+  st.wish = st.wish.filter(function (id) { return byId[id]; }); st.seen = st.seen.filter(function (id) { return byId[id]; });
   function save() { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} }
 
-  var curTab = 'cx', cur = 'chatbot';
-  var app = $('#app');
+  var curTab = 'cx', cur = 'chatbot', query = '';
+  var chip = function (id, extra) { var s = byId[id]; return '<button type="button" class="chip2' + (extra || '') + '" data-open="' + id + '"><span>' + s.code + '</span>' + s.n + '</button>'; };
+  var dots = function (n, max) { var h = ''; for (var k = 1; k <= (max || 3); k++) h += '<i' + (k <= n ? ' class="on"' : '') + '></i>'; return h; };
+  var cxName = ['', 'Nhanh gọn', 'Trung bình', 'Chuyên sâu'];
 
-  /* ---------- static sections ---------- */
-  var isoLayers = LAYERS.slice().reverse(); // bottom slab = platform
-  app.innerHTML =
-    '<section class="hero" id="hero">' +
-      '<div class="hero-txt reveal">' +
-        '<p class="eyebrow"><span class="dot"></span>DRABUFF AI · BẢN ĐỒ DỊCH VỤ AI DOANH NGHIỆP</p>' +
-        '<h1>Toàn bộ AI cho doanh nghiệp, <em>từ A đến Z</em></h1>' +
-        '<p class="lead">' + SV.length + ' dịch vụ, từ chatbot, tự động hóa, robot phần mềm, AI Agent đến LLM trên cloud riêng và máy chủ on-premise. Mỗi dịch vụ có <b>sơ đồ hoạt động từng bước</b>, giải thích bằng ngôn ngữ đời thường, ví dụ thực tế và thời gian triển khai.</p>' +
-        '<div class="hero-cta"><a class="btn primary" href="#catalog">Khám phá ' + SV.length + ' dịch vụ <span class="arr">→</span></a><a class="btn ghost" href="#contact">Nhờ Drabuff AI tư vấn</a></div>' +
-        '<ul class="facts"><li><b>' + SV.length + '</b><span>dịch vụ AI triển khai</span></li><li><b>' + CATS.length + ' nhóm</b><span>từ điểm chạm đến hạ tầng</span></li><li><b>' + LAYERS.length + ' tầng</b><span>kiến trúc AI doanh nghiệp</span></li></ul>' +
-      '</div>' +
-      '<div class="hero-vis reveal" style="animation-delay:.12s"><div class="iso-wrap"><div class="iso" id="iso">' +
-        isoLayers.map(function (l, i) {
-          var li = LAYERS.indexOf(l);
-          return '<button type="button" class="slab' + (i === 0 ? ' base' : '') + '" style="--i:' + i + '" data-ly="' + li + '" aria-label="Tầng ' + (li + 1) + ': ' + l.n + '"><span class="side"></span><span class="side r"></span><span class="top"><span><small>TẦNG ' + String(li + 1).padStart(2, '0') + '</small><b>' + l.n + '</b></span></span></button>';
-        }).join('') +
-      '</div><span class="iso-cap">BẤM VÀO TỪNG TẦNG ĐỂ XEM</span></div></div>' +
-    '</section>' +
+  /* =============== PAGE =============== */
+  var isoLayers = LAYERS.slice().reverse();
+  var tickerRow = function (list) { var h = list.map(function (s) { return '<button type="button" class="tk" data-open="' + s.id + '"><b>' + s.code + '</b>' + s.n + '</button>'; }).join(''); return h + h; };
+  var half = Math.ceil(SV.length / 2);
 
-    '<section class="sec" id="catalog">' +
-      '<div class="sec-top"><p class="eyebrow"><span class="dot"></span>DANH MỤC DỊCH VỤ</p><h2>Bấm vào một dịch vụ để xem nó hoạt động thế nào</h2>' +
-      '<p>Chọn nhóm, rồi bấm phím dịch vụ. Sơ đồ bên dưới chạy từng bước để bạn thấy dữ liệu đi đâu, AI làm gì và con người can thiệp ở đâu.</p></div>' +
-      '<div class="tabs" role="tablist" aria-label="Nhóm dịch vụ">' +
-        '<button type="button" class="tab" role="tab" data-tab="all">Tất cả <span class="ct">' + SV.length + '</span></button>' +
-        CATS.map(function (c) { return '<button type="button" class="tab" role="tab" data-tab="' + c.id + '">' + c.n + ' <span class="ct">' + SV.filter(function (s) { return s.cat === c.id; }).length + '</span></button>'; }).join('') +
-      '</div>' +
-      '<div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline"><p class="cat-desc" id="catDesc"></p><span class="explored" id="explored"></span></div>' +
-      '<div class="keys" id="keys"></div>' +
-      '<article class="panel viewer" id="viewer" aria-live="polite"></article>' +
-    '</section>' +
+  $('#app').innerHTML =
+  /* ---------- HERO ---------- */
+  '<section class="hero" id="hero">' +
+    '<div class="hero-txt reveal">' +
+      '<p class="eyebrow"><span class="dot"></span>DRABUFF AI · BẢN ĐỒ DỊCH VỤ AI DOANH NGHIỆP</p>' +
+      '<h1 class="shine">Toàn bộ AI cho doanh nghiệp, <em>từ A đến Z</em></h1>' +
+      '<p class="typer mono" aria-hidden="true"><span class="tp-p">drabuff.deploy(</span><span id="typer"></span><span class="caret"></span><span class="tp-p">)</span></p>' +
+      '<p class="lead"><span class="cnt" data-count="' + SV.length + '">' + SV.length + '</span> dịch vụ, từ chatbot, robot phần mềm, AI Agent đến LLM trên cloud riêng và máy chủ on-premise. Mỗi dịch vụ có <b>sơ đồ hoạt động từng bước</b>, so sánh trước và sau khi có AI, ví dụ thực tế, chỉ số đo lường và những gì doanh nghiệp cần chuẩn bị.</p>' +
+      '<div class="hero-cta"><a class="btn primary" href="#finder">Tìm giải pháp cho tôi <span class="arr">→</span></a><a class="btn ghost" href="#catalog">Xem ' + SV.length + ' dịch vụ</a></div>' +
+      '<ul class="facts">' +
+        '<li><b class="cnt" data-count="' + SV.length + '">' + SV.length + '</b><span>dịch vụ AI triển khai</span></li>' +
+        '<li><b><span class="cnt" data-count="' + CATS.length + '">' + CATS.length + '</span> nhóm</b><span>từ điểm chạm đến hạ tầng</span></li>' +
+        '<li><b><span class="cnt" data-count="' + LAYERS.length + '">' + LAYERS.length + '</span> tầng</b><span>kiến trúc AI doanh nghiệp</span></li>' +
+      '</ul>' +
+    '</div>' +
+    '<div class="hero-vis reveal" style="animation-delay:.12s"><div class="iso-wrap"><div class="iso" id="iso">' +
+      isoLayers.map(function (l, i) {
+        var li = LAYERS.indexOf(l);
+        return '<button type="button" class="slab' + (i === 0 ? ' base' : '') + '" style="--i:' + i + ';--d:' + (i * 0.12) + 's" data-ly="' + li + '" aria-label="Tầng ' + (li + 1) + ': ' + l.n + '"><span class="side"></span><span class="side r"></span><span class="top"><span><small>TẦNG ' + pad(li + 1) + ' · ' + l.ids.length + ' DỊCH VỤ</small><b>' + l.n + '</b></span></span></button>';
+      }).join('') +
+    '</div><span class="iso-cap">BẤM VÀO TỪNG TẦNG ĐỂ XEM</span></div></div>' +
+  '</section>' +
+  '<div class="ticker" aria-label="Danh sách dịch vụ"><div class="tk-row">' + tickerRow(SV.slice(0, half)) + '</div><div class="tk-row rev">' + tickerRow(SV.slice(half)) + '</div></div>' +
 
-    '<section class="sec" id="arch">' +
-      '<div class="sec-top"><p class="eyebrow"><span class="dot"></span>BỨC TRANH TỔNG THỂ</p><h2>Các dịch vụ AI ghép lại với nhau như thế nào</h2>' +
-      '<p>Đọc từ trên xuống: yêu cầu bắt đầu ở nơi khách hàng và nhân viên chạm vào, đi xuống các lớp xử lý, tới "bộ não" AI ở dưới cùng, rồi kết quả đi ngược lên. Bấm bất kỳ ô nào để xem chi tiết.</p></div>' +
-      '<div class="arch2"><div class="stack2">' +
-        LAYERS.map(function (l, i) {
-          var arrow = i < LAYERS.length - 1 ? '<div class="ly-arrow" aria-hidden="true"><span class="dn"><em style="font-style:normal">giao việc</em><i></i></span><span class="up"><i></i><em style="font-style:normal">trả kết quả</em></span></div>' : '';
-          return '<div class="ly" id="ly-' + i + '"><div class="ly-h"><span class="mono">TẦNG ' + String(i + 1).padStart(2, '0') + '</span><h4>' + l.n + '</h4><p>' + l.d + '</p></div><div class="ly-b">' +
-            l.ids.map(function (id) { return '<button type="button" class="chip2" data-open="' + id + '"><span>' + byId[id].code + '</span>' + byId[id].n + '</button>'; }).join('') + '</div></div>' + arrow;
-        }).join('') +
-      '</div><aside class="gov"><span class="mono">XUYÊN SUỐT MỌI TẦNG</span><h4>Chiến lược, quản trị & con người</h4><p>Không thuộc riêng tầng nào: quyết định làm gì, dùng an toàn ra sao, đào tạo ai và ai chăm sóc hệ thống.</p><div class="ly-b">' +
-        SV.filter(function (s) { return s.cat === 'gov'; }).map(function (s) { return '<button type="button" class="chip2" data-open="' + s.id + '"><span>' + s.code + '</span>' + s.n + '</button>'; }).join('') +
-      '</div></aside></div>' +
-    '</section>' +
+  /* ---------- DOCK ---------- */
+  '<nav class="dock" aria-label="Mục lục"><div class="dock-in">' +
+    [['finder', 'Tìm giải pháp'], ['catalog', 'Danh mục'], ['arch', 'Kiến trúc & mô phỏng'], ['maturity', 'Bậc trưởng thành'], ['llm', 'Đặt LLM ở đâu'], ['table', 'Bảng tra cứu'], ['glossary', 'Từ điển AI'], ['journey', 'Quy trình'], ['faq', 'Hỏi đáp'], ['contact', 'Liên hệ']]
+      .map(function (d) { return '<a href="#' + d[0] + '" data-sec="' + d[0] + '">' + d[1] + '</a>'; }).join('') +
+  '</div></nav>' +
 
-    '<section class="sec" id="llm">' +
-      '<div class="sec-top"><p class="eyebrow"><span class="dot"></span>ĐẶT "BỘ NÃO" AI Ở ĐÂU?</p><h2>Cloud công cộng, cloud riêng hay on-premise</h2>' +
-      '<p>Câu hỏi đầu tiên của hầu hết doanh nghiệp: dữ liệu của tôi đi đâu? Ba cách đặt mô hình ngôn ngữ lớn (LLM), so sánh bằng ngôn ngữ đời thường.</p></div>' +
-      '<div class="cmp">' + [
-        { id: 'llmapi', t: 'Cloud công cộng', an: 'Như dùng điện lưới', ctl: 2, spd: 5, cost: 1, where: 'Trung tâm dữ liệu của nhà cung cấp AI (bản doanh nghiệp không dùng dữ liệu của bạn để huấn luyện)', inv: 'Gần như bằng 0', run: 'Trả theo lượng sử dụng', mdl: 'Mạnh nhất thị trường: GPT, Claude, Gemini', fit: 'Doanh nghiệp vừa và nhỏ, muốn bắt đầu nhanh, dữ liệu thông thường' },
-        { id: 'llmprivate', t: 'Cloud riêng', an: 'Như thuê căn hộ có khóa riêng', ctl: 4, spd: 3, cost: 3, where: 'Vùng mạng riêng trên cloud, chỉ doanh nghiệp truy cập', inv: 'Thấp đến trung bình', run: 'Thuê máy chủ GPU theo tháng', mdl: 'Mô hình mã nguồn mở hoặc bản doanh nghiệp riêng', fit: 'Ngân hàng, bảo hiểm, chuỗi lớn, dữ liệu nhạy cảm' },
-        { id: 'llmonprem', t: 'On-premise', an: 'Như tự xây nhà máy điện', ctl: 5, spd: 2, cost: 5, where: 'Phòng server ngay tại công ty, không ra internet', inv: 'Cao (mua máy chủ GPU)', run: 'Cố định: điện, bảo trì, nhân sự', mdl: 'Mã nguồn mở, có thể fine-tune riêng', fit: 'Cơ quan nhà nước, y tế, sản xuất, dữ liệu mật' }
-      ].map(function (m, i) {
-        var bars = function (n) { var h = ''; for (var k = 1; k <= 5; k++) h += '<i' + (k <= n ? ' class="on"' : '') + '></i>'; return '<span class="bars">' + h + '</span>'; };
-        return '<div class="cm' + (i === 1 ? ' mid' : '') + '"><span class="mono">' + byId[m.id].code + '</span><h4>' + m.t + '</h4><p class="an">' + m.an + '</p>' +
-          '<div class="meter"><div><span>Kiểm soát dữ liệu</span>' + bars(m.ctl) + '</div><div><span>Tốc độ bắt đầu</span>' + bars(m.spd) + '</div><div><span>Vốn đầu tư ban đầu</span>' + bars(m.cost) + '</div></div>' +
-          '<dl><div><dt>DỮ LIỆU NẰM Ở</dt><dd>' + m.where + '</dd></div><div><dt>ĐẦU TƯ BAN ĐẦU</dt><dd>' + m.inv + '</dd></div><div><dt>CHI PHÍ VẬN HÀNH</dt><dd>' + m.run + '</dd></div><div><dt>MÔ HÌNH</dt><dd>' + m.mdl + '</dd></div><div><dt>PHÙ HỢP</dt><dd>' + m.fit + '</dd></div></dl>' +
-          '<button type="button" class="btn ghost sm" data-open="' + m.id + '">Xem quy trình triển khai <span class="arr">→</span></button></div>';
-      }).join('') + '</div>' +
-      '<div class="hybrid"><span class="mono">PHƯƠNG ÁN LAI (HYBRID)</span>Nhiều doanh nghiệp kết hợp cả hai: việc thông thường như viết content dùng cloud công cộng cho mạnh và rẻ, dữ liệu mật như hợp đồng hay hồ sơ khách chạy trên cloud riêng hoặc on-premise. Một AI Gateway (L05) đứng giữa tự chọn đường đi cho từng yêu cầu.</div>' +
-    '</section>' +
+  /* ---------- FINDER ---------- */
+  '<section class="sec" id="finder">' +
+    '<div class="sec-top rv"><p class="eyebrow"><span class="dot"></span>TÌM GIẢI PHÁP TRONG 10 GIÂY</p><h2>Doanh nghiệp bạn đang gặp vấn đề gì?</h2>' +
+    '<p>Chọn một hoặc nhiều vấn đề. Drabuff AI xếp hạng ngay những dịch vụ phù hợp nhất để bạn xem chi tiết.</p></div>' +
+    '<div class="finder rv"><div class="pains" id="pains">' + window.PAINS.map(function (p, i) { return '<button type="button" class="pain" data-p="' + i + '" aria-pressed="false">' + p.t + '</button>'; }).join('') + '</div>' +
+    '<div class="fr-out"><div class="fr-h"><span class="mono" id="frLabel"></span><button type="button" class="btn ghost sm" id="frWish" hidden>+ Đánh dấu tất cả</button></div><div class="fr-list" id="frList"></div></div></div>' +
+  '</section>' +
 
-    '<section class="sec" id="journey">' +
-      '<div class="sec-top"><p class="eyebrow"><span class="dot"></span>LÀM VIỆC CÙNG DRABUFF AI</p><h2>Từ buổi trao đổi đầu tiên đến hệ thống chạy thật</h2></div>' +
-      '<ol class="jr"><li><b>Trao đổi miễn phí</b><span>30–60 phút để hiểu bài toán và mục tiêu của bạn.</span></li><li><b>Khảo sát & đánh giá</b><span>Xem quy trình, dữ liệu, hệ thống hiện có; chọn việc đáng làm nhất.</span></li><li><b>Chạy thử (POC)</b><span>Dựng bản thử trên dữ liệu thật, đo kết quả trước khi đầu tư lớn.</span></li><li><b>Triển khai & đào tạo</b><span>Tích hợp vào hệ thống, đào tạo đội ngũ sử dụng.</span></li><li><b>Vận hành & mở rộng</b><span>Theo dõi KPI hằng tháng, mở rộng sang việc tiếp theo.</span></li></ol>' +
-    '</section>' +
+  /* ---------- CATALOG ---------- */
+  '<section class="sec" id="catalog">' +
+    '<div class="sec-top rv"><p class="eyebrow"><span class="dot"></span>DANH MỤC ' + SV.length + ' DỊCH VỤ</p><h2>Bấm vào một dịch vụ để xem nó hoạt động thế nào</h2>' +
+    '<p>Chọn nhóm hoặc gõ tìm. Sơ đồ chạy từng bước cho thấy dữ liệu đi đâu, AI làm gì và con người kiểm soát ở đâu. Bấm vào từng bước để dừng lại xem kỹ.</p></div>' +
+    '<div class="cat-bar"><label class="search"><span class="mono">TÌM</span><input id="q" type="search" placeholder="VD: hóa đơn, Zalo, on-premise, tuyển dụng…" autocomplete="off"></label><span class="explored" id="explored"></span></div>' +
+    '<div class="tabs" role="tablist" aria-label="Nhóm dịch vụ">' +
+      '<button type="button" class="tab" role="tab" data-tab="all">Tất cả <span class="ct">' + SV.length + '</span></button>' +
+      CATS.map(function (c) { return '<button type="button" class="tab" role="tab" data-tab="' + c.id + '">' + c.n + ' <span class="ct">' + SV.filter(function (s) { return s.cat === c.id; }).length + '</span></button>'; }).join('') +
+    '</div>' +
+    '<p class="cat-desc" id="catDesc"></p>' +
+    '<div class="keys" id="keys"></div>' +
+    '<article class="panel viewer spot" id="viewer" aria-live="polite"></article>' +
+  '</section>' +
 
-    '<section class="sec" id="faq">' +
-      '<div class="sec-top"><p class="eyebrow"><span class="dot"></span>CÂU HỎI THƯỜNG GẶP</p><h2>Những điều lãnh đạo hay hỏi trước khi bắt đầu</h2></div>' +
-      '<div class="faq">' + [
-        ['AI có thay thế nhân viên của tôi không?', 'AI nhận phần việc lặp lại: trả lời câu hỏi giống nhau, nhập liệu, tổng hợp báo cáo. Con người tập trung vào việc cần phán đoán và quan hệ. Phần lớn doanh nghiệp không cắt giảm người mà làm được nhiều việc hơn với cùng đội ngũ.'],
-        ['Dữ liệu công ty có bị lộ khi dùng AI không?', 'Tùy cách triển khai. Bản doanh nghiệp của các nền tảng cloud lớn cam kết không dùng dữ liệu của bạn để huấn luyện. Dữ liệu nhạy cảm có thể chạy trên cloud riêng hoặc máy chủ on-premise. Hệ thống luôn có che dữ liệu, phân quyền và ghi nhật ký.'],
-        ['Không có đội IT thì có triển khai được không?', 'Được. Drabuff AI triển khai trọn gói, bàn giao màn hình quản trị đơn giản, đào tạo nhân sự và có gói vận hành, bảo trì hằng tháng (S04).'],
-        ['Nên bắt đầu từ dịch vụ nào?', 'Thường là những việc thấy kết quả nhanh trong 2–4 tuần: Chatbot đa kênh (C01), Workflow Automation (A01) hoặc Trợ lý AI cho nhân viên (G04). Nếu chưa rõ, bắt đầu bằng Tư vấn chiến lược (S01).'],
-        ['AI có trả lời sai không?', 'Có thể. Vì vậy Drabuff AI giới hạn AI trả lời trong phạm vi tài liệu của bạn kèm trích nguồn, để con người duyệt ở các bước quan trọng và giám sát chất lượng liên tục.'],
-        ['Chi phí khoảng bao nhiêu?', 'Phụ thuộc vào dịch vụ, quy mô người dùng và nơi đặt mô hình. Sau buổi trao đổi, Drabuff AI gửi báo giá theo từng giai đoạn để bạn bắt đầu nhỏ, đo kết quả rồi mới mở rộng.']
-      ].map(function (f, i) { return '<details' + (i === 0 ? ' open' : '') + '><summary>' + f[0] + '</summary><p>' + f[1] + '</p></details>'; }).join('') + '</div>' +
-    '</section>' +
+  /* ---------- ARCH + SIM ---------- */
+  '<section class="sec" id="arch">' +
+    '<div class="sec-top rv"><p class="eyebrow"><span class="dot"></span>BỨC TRANH TỔNG THỂ</p><h2>Các dịch vụ ghép lại với nhau như thế nào</h2>' +
+    '<p>Đọc từ trên xuống: yêu cầu bắt đầu ở nơi khách hàng và nhân viên chạm vào, đi xuống các lớp xử lý, tới "bộ não" AI ở dưới cùng, rồi kết quả đi ngược lên. Bấm <b>Chạy mô phỏng</b> để xem một yêu cầu thật đi qua hệ thống.</p></div>' +
+    '<div class="arch2"><div class="stack2" id="stack">' +
+      LAYERS.map(function (l, i) {
+        var arrow = i < LAYERS.length - 1 ? '<div class="ly-arrow" aria-hidden="true"><span class="dn"><em>giao việc</em><i></i></span><span class="up"><i></i><em>trả kết quả</em></span></div>' : '';
+        return '<div class="ly spot" id="ly-' + i + '"><div class="ly-h"><span class="mono">TẦNG ' + pad(i + 1) + '</span><h4>' + l.n + '</h4><p>' + l.d + '</p></div><div class="ly-b">' + l.ids.map(function (id) { return chip(id); }).join('') + '</div></div>' + arrow;
+      }).join('') +
+    '</div><aside class="side-col">' +
+      '<div class="sim" id="sim"><span class="mono">MÔ PHỎNG MỘT YÊU CẦU</span><h4>Chọn tình huống</h4>' +
+        '<div class="sim-sc">' + window.SCENARIOS.map(function (s, i) { return '<button type="button" class="tab sc" data-sc="' + i + '" aria-pressed="' + (i === 0) + '">' + s.n + '</button>'; }).join('') + '</div>' +
+        '<button type="button" class="btn primary" id="simRun">▶ Chạy mô phỏng</button>' +
+        '<ol class="sim-log" id="simLog"></ol></div>' +
+      '<div class="gov"><span class="mono">XUYÊN SUỐT MỌI TẦNG</span><h4>Chiến lược, quản trị & con người</h4><p>Không thuộc riêng tầng nào: quyết định làm gì, dùng an toàn ra sao, kiểm thử, đào tạo và chăm sóc hệ thống.</p><div class="ly-b">' +
+        SV.filter(function (s) { return s.cat === 'gov'; }).map(function (s) { return chip(s.id); }).join('') + '</div></div>' +
+    '</aside></div>' +
+  '</section>' +
 
-    '<section class="sec" id="contact"><div class="panel cta">' +
-      '<div class="cta-l"><p class="eyebrow"><span class="dot"></span>BƯỚC TIẾP THEO</p>' +
-        '<h2>Chưa chắc nên bắt đầu từ đâu? Hỏi chuyên gia Drabuff AI</h2>' +
-        '<p>Drabuff AI sẽ nghe bài toán của bạn, đề xuất tổ hợp dịch vụ phù hợp với ngân sách và mức độ bảo mật, rồi gửi lộ trình triển khai kèm báo giá theo từng giai đoạn.</p>' +
-        '<p class="explored" style="margin-top:20px">DỊCH VỤ BẠN ĐÃ ĐÁNH DẤU QUAN TÂM</p><div id="wish"></div>' +
-      '</div><div class="cta-r">' +
-        '<div class="idbox"><div class="z"><span>ZALO ' + C.brand.toUpperCase() + '</span><b>' + C.display + '</b></div><div><span>ĐÃ ĐÁNH DẤU</span><b id="wishN">0 dịch vụ</b></div></div>' +
-        '<a class="btn primary" href="https://zalo.me/' + zDigits + '" target="_blank" rel="noopener">Nhắn Zalo cho ' + C.brand + ' <span class="arr">→</span></a>' +
-        '<button class="btn ghost" id="copy" type="button">Sao chép danh sách để gửi</button>' +
-        '<p class="copied" id="copied" aria-live="polite"></p><textarea id="sumtxt" readonly hidden></textarea>' +
-      '</div></div></section>';
+  /* ---------- MATURITY ---------- */
+  '<section class="sec" id="maturity">' +
+    '<div class="sec-top rv"><p class="eyebrow"><span class="dot"></span>5 BẬC TRƯỞNG THÀNH AI</p><h2>Doanh nghiệp bạn đang đứng ở bậc nào?</h2>' +
+    '<p>Mỗi bậc là một bước lên: bấm vào bậc giống doanh nghiệp bạn nhất để xem dấu hiệu nhận biết, bước tiếp theo và dịch vụ nên làm.</p></div>' +
+    '<div class="stairs rv" id="stairs">' + window.MATURITY.map(function (m, i) { return '<button type="button" class="stair" data-lv="' + i + '" style="--h:' + (i + 1) + '"><span class="st-top"><b>BẬC ' + (i + 1) + '</b>' + m.n + '</span></button>'; }).join('') + '</div>' +
+    '<div class="panel lv-card spot rv" id="lvCard"></div>' +
+  '</section>' +
 
-  /* ---------- catalog ---------- */
-  function renderTabs() {
-    $$('.tab').forEach(function (t) { t.setAttribute('aria-selected', t.dataset.tab === curTab); });
-    var c = catById[curTab];
-    $('#catDesc').innerHTML = c ? '<b>' + c.n + ':</b> ' + c.d : 'Toàn bộ <b>' + SV.length + ' dịch vụ</b> Drabuff AI triển khai, xếp theo nhóm.';
-    var list = curTab === 'all' ? SV : SV.filter(function (s) { return s.cat === curTab; });
-    $('#keys').innerHTML = list.map(function (s) {
-      return '<button type="button" class="key" data-id="' + s.id + '" aria-pressed="' + (s.id === cur) + '">' +
-        (st.wish.indexOf(s.id) > -1 ? '<span class="star" title="Đã đánh dấu quan tâm"></span>' : '') +
-        '<span class="kc">' + s.code + '<i>' + (st.seen.indexOf(s.id) > -1 ? 'đã xem' : '') + '</i></span><b>' + s.n + '</b><small>' + s.tag + '</small></button>';
+  /* ---------- LLM ---------- */
+  '<section class="sec" id="llm">' +
+    '<div class="sec-top rv"><p class="eyebrow"><span class="dot"></span>ĐẶT "BỘ NÃO" AI Ở ĐÂU?</p><h2>Cloud công cộng, cloud riêng, on-premise hay ngay tại thiết bị</h2>' +
+    '<p>Câu hỏi đầu tiên của hầu hết lãnh đạo: dữ liệu của tôi đi đâu? Chọn điều bạn ưu tiên nhất, Drabuff AI chỉ ra phương án phù hợp.</p></div>' +
+    '<div class="prio2 rv" id="prio">' + [['llmapi', 'Bắt đầu nhanh nhất'], ['llmprivate', 'Cân bằng bảo mật & linh hoạt'], ['llmonprem', 'Bảo mật tuyệt đối'], ['edge', 'Nhiều điểm, mạng không ổn định'], ['hybrid', 'Kết hợp nhiều phương án']].map(function (p) { return '<button type="button" class="tab" data-pr="' + p[0] + '" aria-pressed="false">' + p[1] + '</button>'; }).join('') + '</div>' +
+    '<div class="cmp" id="cmp">' + [
+      { id: 'llmapi', t: 'Cloud công cộng', an: 'Như dùng điện lưới', m: [2, 5, 2, 1], where: 'Trung tâm dữ liệu của nhà cung cấp AI; bản doanh nghiệp không dùng dữ liệu của bạn để huấn luyện', mdl: 'Mạnh nhất thị trường: GPT, Claude, Gemini', gov: 'Nhà cung cấp vận hành, bạn quản lý tài khoản & quyền', fit: 'Bắt đầu nhanh, dữ liệu thông thường' },
+      { id: 'llmprivate', t: 'Cloud riêng', an: 'Như căn hộ có khóa riêng', m: [4, 3, 4, 1], where: 'Vùng mạng riêng trên cloud, chỉ doanh nghiệp truy cập', mdl: 'Mã nguồn mở hoặc bản doanh nghiệp riêng', gov: 'IT của bạn cùng Drabuff AI quản trị', fit: 'Ngân hàng, bảo hiểm, chuỗi lớn, dữ liệu nhạy cảm' },
+      { id: 'llmonprem', t: 'On-premise', an: 'Như tự xây nhà máy điện', m: [5, 2, 5, 5], where: 'Phòng server ngay tại công ty, không cần internet', mdl: 'Mã nguồn mở, có thể fine-tune riêng', gov: 'Doanh nghiệp toàn quyền kiểm soát', fit: 'Cơ quan nhà nước, y tế, sản xuất, dữ liệu mật' },
+      { id: 'edge', t: 'Edge AI', an: 'Như chuyên gia đứng tại hiện trường', m: [5, 2, 4, 5], where: 'Ngay trên thiết bị: camera, máy tính nhúng tại chỗ', mdl: 'Mô hình nhỏ, đã được nén cho thiết bị', gov: 'Quản lý tập trung, cập nhật từ xa', fit: 'Nhà máy, chuỗi cửa hàng, nơi mạng yếu' }
+    ].map(function (m) {
+      var bars = function (n) { return '<span class="bars">' + dots(n, 5) + '</span>'; };
+      return '<div class="cm spot" data-cm="' + m.id + '"><span class="badge">PHÙ HỢP NHẤT</span><span class="mono">' + byId[m.id].code + '</span><h4>' + m.t + '</h4><p class="an">' + m.an + '</p>' +
+        '<div class="meter"><div><span>Kiểm soát dữ liệu</span>' + bars(m.m[0]) + '</div><div><span>Tốc độ bắt đầu</span>' + bars(m.m[1]) + '</div><div><span>Mức tùy biến</span>' + bars(m.m[2]) + '</div><div><span>Chạy khi mất mạng</span>' + bars(m.m[3]) + '</div></div>' +
+        '<dl><div><dt>DỮ LIỆU NẰM Ở</dt><dd>' + m.where + '</dd></div><div><dt>MÔ HÌNH</dt><dd>' + m.mdl + '</dd></div><div><dt>QUẢN TRỊ</dt><dd>' + m.gov + '</dd></div><div><dt>PHÙ HỢP</dt><dd>' + m.fit + '</dd></div></dl>' +
+        '<button type="button" class="btn ghost sm" data-open="' + m.id + '">Xem quy trình triển khai <span class="arr">→</span></button></div>';
+    }).join('') + '</div>' +
+    '<div class="hybrid rv" id="hybrid"><span class="mono">PHƯƠNG ÁN KẾT HỢP (HYBRID)</span><div class="hy-flow"><span class="hy-n">Yêu cầu từ nhân viên, khách hàng</span><i></i><span class="hy-n acc">AI Gateway (L05) phân loại</span><i></i><span class="hy-split"><span class="hy-n">Việc thông thường → Cloud công cộng</span><span class="hy-n">Dữ liệu mật → Cloud riêng / On-premise</span><span class="hy-n">Tại hiện trường → Edge AI</span></span></div><p>Nhiều doanh nghiệp không chọn một mà kết hợp: mỗi yêu cầu tự đi đúng đường theo mức độ nhạy cảm của dữ liệu.</p></div>' +
+  '</section>' +
+
+  /* ---------- TABLE ---------- */
+  '<section class="sec" id="table">' +
+    '<div class="sec-top rv"><p class="eyebrow"><span class="dot"></span>BẢNG TRA CỨU NHANH</p><h2>Toàn bộ ' + SV.length + ' dịch vụ trên một bảng</h2>' +
+    '<p>Lọc theo nhóm, độ phức tạp hoặc gõ tìm. Bấm vào một dòng để xem sơ đồ chi tiết.</p></div>' +
+    '<div class="tb-bar rv"><label class="search"><span class="mono">TÌM</span><input id="tq" type="search" placeholder="Tên, mã, công nghệ…" autocomplete="off"></label>' +
+      '<select id="tcat" aria-label="Lọc theo nhóm"><option value="">Tất cả nhóm</option>' + CATS.map(function (c) { return '<option value="' + c.id + '">' + c.n + '</option>'; }).join('') + '</select>' +
+      '<div class="seg" id="tcx">' + ['Mọi mức', 'Nhanh gọn', 'Trung bình', 'Chuyên sâu'].map(function (t, i) { return '<button type="button" data-cx="' + i + '" aria-pressed="' + (i === 0) + '">' + t + '</button>'; }).join('') + '</div>' +
+      '<select id="tsort" aria-label="Sắp xếp"><option value="code">Sắp xếp: theo mã</option><option value="fast">Triển khai nhanh nhất</option><option value="cx">Độ phức tạp tăng dần</option></select>' +
+      '<span class="explored" id="tcount"></span></div>' +
+    '<div class="tb-wrap rv"><table class="tb"><thead><tr><th>Mã</th><th>Dịch vụ</th><th>Nhóm</th><th>Triển khai</th><th>Độ phức tạp</th><th>Quy mô phù hợp</th><th>Cần chuẩn bị chính</th></tr></thead><tbody id="tbody"></tbody></table></div>' +
+  '</section>' +
+
+  /* ---------- GLOSSARY ---------- */
+  '<section class="sec" id="glossary">' +
+    '<div class="sec-top rv"><p class="eyebrow"><span class="dot"></span>TỪ ĐIỂN AI CHO NGƯỜI MỚI</p><h2>' + window.GLOSSARY.length + ' thuật ngữ, giải thích bằng lời thường</h2>' +
+    '<p>Bấm vào thẻ để lật xem định nghĩa và ví dụ so sánh đời thường.</p></div>' +
+    '<div class="gl rv">' + window.GLOSSARY.map(function (g) { return '<button type="button" class="flip"><span class="fl-in"><span class="fl-f"><b>' + g[0] + '</b><small>Bấm để lật</small></span><span class="fl-b"><b>' + g[0] + '</b><span>' + g[1] + '</span><em>' + g[2] + '</em></span></span></button>'; }).join('') + '</div>' +
+  '</section>' +
+
+  /* ---------- JOURNEY ---------- */
+  '<section class="sec" id="journey">' +
+    '<div class="sec-top rv"><p class="eyebrow"><span class="dot"></span>LÀM VIỆC CÙNG DRABUFF AI</p><h2>Từ buổi trao đổi đầu tiên đến hệ thống chạy thật</h2></div>' +
+    '<ol class="jr rv">' + [
+      ['Trao đổi', '30–60 phút để hiểu bài toán, mục tiêu và mức độ bảo mật cần có.', 'Hướng đi ban đầu'],
+      ['Khảo sát & đánh giá', 'Xem quy trình, dữ liệu, hệ thống hiện có; chọn việc đáng làm nhất.', 'Báo cáo hiện trạng & danh sách ưu tiên'],
+      ['Chạy thử (POC)', 'Dựng bản thử trên dữ liệu thật, đo kết quả trước khi mở rộng.', 'Bản chạy thử có số liệu'],
+      ['Triển khai & đào tạo', 'Tích hợp vào hệ thống, kiểm thử, đào tạo đội ngũ sử dụng.', 'Hệ thống chạy thật + đội ngũ thành thạo'],
+      ['Vận hành & mở rộng', 'Theo dõi KPI hằng tháng, tối ưu và mở rộng sang việc tiếp theo.', 'Báo cáo KPI định kỳ']
+    ].map(function (j) { return '<li><b>' + j[0] + '</b><span>' + j[1] + '</span><small><i>NHẬN ĐƯỢC</i>' + j[2] + '</small></li>'; }).join('') + '</ol>' +
+  '</section>' +
+
+  /* ---------- FAQ ---------- */
+  '<section class="sec" id="faq">' +
+    '<div class="sec-top rv"><p class="eyebrow"><span class="dot"></span>CÂU HỎI THƯỜNG GẶP</p><h2>Những điều lãnh đạo hay hỏi trước khi bắt đầu</h2></div>' +
+    '<div class="faq rv">' + [
+      ['AI có thay thế nhân viên của tôi không?', 'AI nhận phần việc lặp lại: trả lời câu hỏi giống nhau, nhập liệu, tổng hợp báo cáo. Con người tập trung vào việc cần phán đoán và quan hệ. Phần lớn doanh nghiệp không cắt giảm người mà làm được nhiều việc hơn với cùng đội ngũ.'],
+      ['Dữ liệu công ty có bị lộ khi dùng AI không?', 'Tùy cách triển khai. Bản doanh nghiệp của các nền tảng cloud lớn cam kết không dùng dữ liệu của bạn để huấn luyện. Dữ liệu nhạy cảm có thể chạy trên cloud riêng, on-premise hoặc ngay tại thiết bị. Hệ thống luôn có che dữ liệu, phân quyền và ghi nhật ký.'],
+      ['Không có đội IT thì có triển khai được không?', 'Được. Drabuff AI triển khai trọn gói, bàn giao màn hình quản trị đơn giản, đào tạo nhân sự và có dịch vụ vận hành, bảo trì hằng tháng (S04).'],
+      ['Nên bắt đầu từ dịch vụ nào?', 'Thường là những việc thấy kết quả nhanh trong 2–4 tuần: Chatbot đa kênh (C01), Workflow Automation (A01) hoặc Trợ lý AI cho nhân viên (G04). Nếu chưa rõ, hãy dùng bộ Tìm giải pháp ở đầu trang hoặc bắt đầu bằng Tư vấn chiến lược (S01).'],
+      ['AI có trả lời sai không?', 'Có thể. Vì vậy Drabuff AI giới hạn AI trả lời trong phạm vi tài liệu của bạn kèm trích nguồn, kiểm thử trước khi ra mắt (S05), để con người duyệt ở các bước quan trọng và giám sát chất lượng liên tục.'],
+      ['Làm sao biết giải pháp nào hợp với doanh nghiệp tôi?', 'Mỗi doanh nghiệp có quy trình, dữ liệu và mục tiêu khác nhau. Hãy dùng bộ Tìm giải pháp để có gợi ý ban đầu, rồi liên hệ Drabuff AI để được tư vấn chi tiết theo đúng bài toán của bạn.'],
+      ['Sau khi triển khai, Drabuff AI có đồng hành không?', 'Có. Drabuff AI theo dõi hệ thống, kiểm thử định kỳ, cập nhật kiến thức mới cho AI và báo cáo KPI hằng tháng.']
+    ].map(function (f, i) { return '<details' + (i === 0 ? ' open' : '') + '><summary>' + f[0] + '</summary><p>' + f[1] + '</p></details>'; }).join('') + '</div>' +
+  '</section>' +
+
+  /* ---------- CTA ---------- */
+  '<section class="sec" id="contact"><div class="panel cta glow-border">' +
+    '<div class="cta-l"><p class="eyebrow"><span class="dot"></span>BƯỚC TIẾP THEO</p>' +
+      '<h2>Liên hệ Drabuff AI để được tư vấn chi tiết</h2>' +
+      '<p>Drabuff AI sẽ nghe bài toán của bạn, đề xuất tổ hợp dịch vụ phù hợp với mục tiêu và mức độ bảo mật, rồi gửi lộ trình triển khai chi tiết. Mọi thông tin về phương án được tư vấn trực tiếp.</p>' +
+      '<p class="explored" style="margin-top:22px">DỊCH VỤ BẠN ĐÃ ĐÁNH DẤU QUAN TÂM</p><div id="wish"></div>' +
+    '</div><div class="cta-r">' +
+      '<div class="idbox"><div class="z"><span>ZALO ' + C.brand.toUpperCase() + '</span><b>' + C.display + '</b></div><div><span>ĐÃ ĐÁNH DẤU</span><b id="wishN">0 dịch vụ</b></div></div>' +
+      '<a class="btn primary" href="https://zalo.me/' + zDigits + '" target="_blank" rel="noopener">Nhắn Zalo cho ' + C.brand + ' <span class="arr">→</span></a>' +
+      '<button class="btn ghost" id="copy" type="button">Sao chép danh sách để gửi</button>' +
+      '<p class="copied" id="copied" aria-live="polite"></p><textarea id="sumtxt" readonly hidden></textarea>' +
+    '</div></div></section>';
+
+  document.body.insertAdjacentHTML('beforeend', '<div class="progress" aria-hidden="true"><i id="prog"></i></div><div class="sim-toast" id="simToast" aria-live="polite"></div><a class="fab" href="#contact"><span class="fab-dot"></span><span class="fab-t">Tư vấn cùng Drabuff AI</span><b id="fabN">0</b></a>');
+
+  /* =============== FINDER =============== */
+  var painSel = [];
+  function renderFinder() {
+    $$('.pain').forEach(function (b) { b.setAttribute('aria-pressed', painSel.indexOf(+b.dataset.p) > -1); });
+    var list, label;
+    if (!painSel.length) {
+      list = ['chatbot', 'workflow', 'copilot', 'rag', 'strategy', 'training'].map(function (id) { return { id: id, pct: 0, why: [] }; });
+      label = 'GỢI Ý PHỔ BIẾN ĐỂ BẮT ĐẦU · CHỌN VẤN ĐỀ ĐỂ XẾP HẠNG RIÊNG';
+    } else {
+      var sc = {}, why = {}, max = 0;
+      painSel.forEach(function (pi) {
+        var p = window.PAINS[pi]; max += 3;
+        p.ids.forEach(function (id, k) { sc[id] = (sc[id] || 0) + Math.max(1, 3 - k * 0.5); (why[id] = why[id] || []).push(p.t); });
+      });
+      list = Object.keys(sc).sort(function (a, b) { return sc[b] - sc[a] || byId[a].cx - byId[b].cx; }).slice(0, 6)
+        .map(function (id) { return { id: id, pct: Math.min(99, Math.round(sc[id] / max * 100)), why: why[id] }; });
+      var top = list[0].pct; list.forEach(function (r) { r.pct = Math.max(35, Math.round(r.pct / top * 96)); });
+      label = 'XẾP HẠNG THEO ' + painSel.length + ' VẤN ĐỀ BẠN CHỌN';
+    }
+    $('#frLabel').textContent = label;
+    $('#frWish').hidden = !painSel.length;
+    $('#frList').innerHTML = list.map(function (r, i) {
+      var s = byId[r.id];
+      return '<button type="button" class="fr spot" data-open="' + s.id + '" style="--dl:' + (i * 0.06) + 's"><span class="fr-rk mono">' + pad(i + 1) + '</span><span class="fr-b"><span class="kc">' + s.code + ' · ' + catById[s.cat].n + '</span><b>' + s.n + '</b><small>' + s.tag + '</small>' +
+        (r.pct ? '<span class="fr-bar"><i style="width:' + r.pct + '%"></i></span><span class="fr-w">Giải quyết: ' + r.why.join(' · ') + '</span>' : '') + '</span><span class="fr-go">Xem →</span></button>';
     }).join('');
+    $('#frList').dataset.ids = list.map(function (r) { return r.id; }).join(',');
   }
+
+  /* =============== CATALOG =============== */
+  function match(s, q) { q = q.toLowerCase(); return (s.code + ' ' + s.n + ' ' + s.tag + ' ' + s.easy + ' ' + (s.tech || []).join(' ') + ' ' + catById[s.cat].n).toLowerCase().indexOf(q) > -1; }
+  function renderTabs() {
+    $$('#catalog .tab').forEach(function (t) { t.setAttribute('aria-selected', !query && t.dataset.tab === curTab); });
+    var c = catById[curTab], list;
+    if (query) { list = SV.filter(function (s) { return match(s, query); }); $('#catDesc').innerHTML = 'Tìm thấy <b>' + list.length + ' dịch vụ</b> khớp với "' + window.UI_esc(query) + '".'; }
+    else { list = curTab === 'all' ? SV : SV.filter(function (s) { return s.cat === curTab; }); $('#catDesc').innerHTML = c ? '<b>' + c.n + ':</b> ' + c.d : 'Toàn bộ <b>' + SV.length + ' dịch vụ</b> Drabuff AI triển khai, xếp theo nhóm.'; }
+    $('#keys').innerHTML = list.length ? list.map(function (s, i) {
+      return '<button type="button" class="key spot" data-id="' + s.id + '" aria-pressed="' + (s.id === cur) + '" style="--dl:' + Math.min(i, 12) * 0.03 + 's">' +
+        (st.wish.indexOf(s.id) > -1 ? '<span class="star" title="Đã đánh dấu quan tâm"></span>' : '') +
+        '<span class="kc">' + s.code + '<i>' + (st.seen.indexOf(s.id) > -1 ? 'đã xem' : cxName[s.cx]) + '</i></span><b>' + s.n + '</b><small>' + s.tag + '</small></button>';
+    }).join('') : '<p class="empty">Chưa có dịch vụ khớp. Hãy thử từ khóa khác, hoặc <a href="#contact">hỏi trực tiếp Drabuff AI</a>.</p>';
+  }
+  window.UI_esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
   function renderExplored() {
-    $('#explored').innerHTML = 'ĐÃ XEM <b>' + st.seen.length + '</b> / ' + SV.length;
+    $('#explored').innerHTML = 'ĐÃ KHÁM PHÁ <b>' + st.seen.length + '</b> / ' + SV.length;
     window.Scene3D.setProgress(0.08 + st.seen.length / SV.length * 0.92);
   }
 
-  var timer = null, step = 0;
+  var timer = null, step = 0, playing = true;
   function renderViewer(id) {
     var s = byId[id], n = s.flow.length, cat = catById[s.cat];
-    var cx = ''; for (var k = 1; k <= 3; k++) cx += '<i' + (k <= s.cx ? ' class="on"' : '') + '></i>';
     var br = s.branch, bs = 1, bx = '25%';
     if (br) { bs = Math.min(br[0] + 1, n - 1); bx = bs === br[0] + 1 ? '25%' : '75%'; }
     var idx = SV.indexOf(s), prev = SV[(idx - 1 + SV.length) % SV.length], next = SV[(idx + 1) % SV.length];
     var inList = st.wish.indexOf(id) > -1;
-    $('#viewer').innerHTML =
+    var ly = layerOf[id];
+    var related = SV.filter(function (x) { return x.cat === s.cat && x.id !== id; }).slice(0, 4);
+    var box = function (title, items, cls) { return '<div class="vc"><h5>' + title + '</h5><ul' + (cls ? ' class="' + cls + '"' : '') + '>' + (items || []).map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ul></div>'; };
+    $('#viewer').innerHTML = '<div class="vw-in">' +
       '<div class="vw-h"><div class="cube3"><span>' + s.code + '</span></div>' +
-        '<div><p class="eyebrow">' + cat.n.toUpperCase() + '</p><h3>' + s.n + '</h3><p class="tg">' + s.tag + '</p></div>' +
-        '<div class="vw-meta"><div><span>THỜI GIAN TRIỂN KHAI</span><b>' + s.tl + '</b></div><div><span>ĐỘ PHỨC TẠP</span><span class="cxm">' + cx + '</span></div></div></div>' +
+        '<div><p class="eyebrow">' + cat.n.toUpperCase() + (ly != null ? ' · TẦNG ' + pad(ly + 1) : ' · XUYÊN SUỐT') + '</p><h3>' + s.n + '</h3><p class="tg">' + s.tag + '</p></div>' +
+        '<div class="vw-meta"><div><span>TRIỂN KHAI</span><b>' + s.tl + '</b></div><div><span>ĐỘ PHỨC TẠP</span><span class="cxm">' + dots(s.cx) + '</span><small>' + cxName[s.cx] + '</small></div><div><span>QUY MÔ PHÙ HỢP</span><b>' + (s.sz || 'Mọi quy mô') + '</b></div></div></div>' +
       '<div class="easy"><span>NÓI CHO DỄ HIỂU</span><p>' + s.easy + '</p></div>' +
-      '<div class="fl-h"><div><h4>Cách hoạt động, từng bước</h4><p>Chấm sáng đi qua từng bước theo đúng thứ tự dữ liệu được xử lý.</p></div><button type="button" class="btn ghost sm" id="replay">Chạy lại sơ đồ</button></div>' +
+      '<div class="fl-h"><div><h4>Cách hoạt động, từng bước</h4><p>Chấm sáng đi theo đúng thứ tự dữ liệu được xử lý. Bấm vào một bước để dừng lại xem.</p></div>' +
+        '<div class="fl-ctl"><span class="mono" id="stepTxt"></span><button type="button" class="btn ghost sm" id="pp">❚❚ Tạm dừng</button><button type="button" class="btn ghost sm" id="replay">↺ Chạy lại</button></div></div>' +
       '<div class="flow2" id="flow" style="--n:' + n + '"><div class="track"><span class="fill"></span><span class="pk"></span></div>' +
         s.flow.map(function (f, i) {
-          return '<div class="nd" data-i="' + i + '">' + (br && br[0] === i ? '<span class="bt">NHÁNH</span>' : '') +
-            '<div class="nd-k">' + String(i + 1).padStart(2, '0') + '</div><h5>' + f[0] + '</h5><p>' + f[1] + '</p></div>';
+          return '<button type="button" class="nd" data-i="' + i + '">' + (br && br[0] === i ? '<span class="bt">NHÁNH</span>' : '') +
+            '<span class="nd-k">' + pad(i + 1) + '<span class="ring"></span></span><span class="nd-t">' + f[0] + '</span><span class="nd-p">' + f[1] + '</span></button>';
         }).join('') + '</div>' +
-      (br ? '<div class="branch" style="--n:' + n + '"><div class="br-box" style="--bs:' + bs + ';--bx:' + bx + '"><span class="mono">NHÁNH XỬ LÝ TẠI BƯỚC ' + String(br[0] + 1).padStart(2, '0') + '</span><b>Nếu</b> ' + br[1].charAt(0).toLowerCase() + br[1].slice(1) + ' <b>→</b> ' + br[2] + '</div></div>' : '') +
-      '<div class="vw-cols">' +
-        '<div class="vc"><h5>VÍ DỤ THỰC TẾ</h5><ul>' + s.ex.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ul></div>' +
-        '<div class="vc"><h5>DOANH NGHIỆP NHẬN ĐƯỢC</h5><ul class="checks">' + s.get.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ul></div>' +
-        '<div class="vc"><h5>PHÙ HỢP KHI</h5><ul>' + s.fit.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ul></div>' +
+      (br ? '<div class="branch" style="--n:' + n + '"><div class="br-box" style="--bs:' + bs + ';--bx:' + bx + '"><span class="mono">NHÁNH XỬ LÝ TẠI BƯỚC ' + pad(br[0] + 1) + '</span><b>Nếu</b> ' + br[1].charAt(0).toLowerCase() + br[1].slice(1) + ' <b>→</b> ' + br[2] + '</div></div>' : '') +
+      (s.ba ? '<div class="ba"><div class="ba-h"><h4>Trước và sau khi có AI</h4><div class="seg" id="baSeg"><button type="button" data-ba="both" aria-pressed="true">So sánh</button><button type="button" data-ba="before" aria-pressed="false">Trước</button><button type="button" data-ba="after" aria-pressed="false">Sau</button></div></div>' +
+        '<div class="ba-g" id="baG"><div class="ba-row ba-hd"><span></span><span class="b">TRƯỚC</span><span></span><span class="a">SAU KHI CÓ AI</span></div>' +
+        s.ba.map(function (r, i) { return '<div class="ba-row" style="--dl:' + i * 0.08 + 's"><span class="lb">' + r[0] + '</span><span class="b">' + r[1] + '</span><span class="ar" aria-hidden="true"></span><span class="a">' + r[2] + '</span></div>'; }).join('') + '</div></div>' : '') +
+      '<div class="vw-cols four">' + box('VÍ DỤ THỰC TẾ', s.ex) + box('DOANH NGHIỆP NHẬN ĐƯỢC', s.get, 'checks') + box('CẦN CHUẨN BỊ', s.need, 'need') + box('ĐO HIỆU QUẢ BẰNG', s.kpi, 'kpi') + '</div>' +
+      '<div class="vw-cols two">' +
+        '<div class="vc"><h5>CÔNG NGHỆ & TÍCH HỢP</h5><div class="chips">' + (s.tech || []).map(function (t) { return '<span class="chip">' + t + '</span>'; }).join('') + '</div><h5 style="margin-top:12px">PHÙ HỢP KHI</h5><ul>' + s.fit.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ul></div>' +
+        '<div class="vc human"><h5>CON NGƯỜI KIỂM SOÁT Ở ĐÂU</h5><p>' + (s.human || '') + '</p>' + (related.length ? '<h5 style="margin-top:14px">CÙNG NHÓM</h5><div class="ly-b">' + related.map(function (x) { return chip(x.id); }).join('') + '</div>' : '') + '</div>' +
       '</div>' +
       '<div class="vw-foot"><div class="grp"><button type="button" class="btn ghost sm" data-open="' + prev.id + '">← ' + prev.code + '</button><button type="button" class="btn ghost sm" data-open="' + next.id + '">' + next.code + ' →</button></div>' +
         '<div class="grp"><button type="button" class="btn ghost sm' + (inList ? ' on-list' : '') + '" id="wishBtn">' + (inList ? '✓ Đã đánh dấu quan tâm' : '+ Đánh dấu quan tâm') + '</button>' +
-        '<a class="btn primary sm" href="#contact">Hỏi Drabuff AI về giải pháp này <span class="arr">→</span></a></div></div>';
-    play();
+        '<a class="btn primary sm" href="#contact">Tư vấn giải pháp này cùng Drabuff AI <span class="arr">→</span></a></div></div>' +
+    '</div>';
+    playing = !reduce; play();
   }
 
-  function play() {
-    clearInterval(timer); step = 0;
+  function paintFlow() {
     var flow = $('#flow'); if (!flow) return;
-    var nodes = $$('.nd', flow), n = nodes.length, track = $('.track', flow);
-    var paint = function () {
-      nodes.forEach(function (nd, i) { nd.classList.toggle('on', i === step); nd.classList.toggle('done', i < step); });
-      track.style.setProperty('--p', (n > 1 ? step / (n - 1) * 100 : 0) + '%');
-    };
-    if (reduce) { step = n - 1; paint(); nodes.forEach(function (nd) { nd.classList.add('done'); }); return; }
-    paint();
-    timer = setInterval(function () {
-      step++;
-      if (step >= n + 1) { step = 0; }
-      if (step === n) { nodes.forEach(function (nd) { nd.classList.remove('on'); nd.classList.add('done'); }); track.style.setProperty('--p', '100%'); return; }
-      paint();
-    }, 1500);
+    var nodes = $$('.nd', flow), n = nodes.length;
+    var all = step >= n;
+    nodes.forEach(function (nd, i) { nd.classList.toggle('on', !all && i === step); nd.classList.toggle('done', all || i < step); });
+    $('.track', flow).style.setProperty('--p', (all ? 100 : (n > 1 ? step / (n - 1) * 100 : 0)) + '%');
+    $('#stepTxt').textContent = all ? 'HOÀN TẤT ' + n + '/' + n : 'BƯỚC ' + (step + 1) + '/' + n;
+    $('#pp').textContent = playing ? '❚❚ Tạm dừng' : '▶ Chạy tiếp';
+  }
+  function play() {
+    clearInterval(timer); step = reduce ? 99 : 0;
+    var n = byId[cur].flow.length;
+    if (reduce) { step = n; paintFlow(); return; }
+    paintFlow();
+    timer = setInterval(function () { if (!playing) return; step = step >= n ? 0 : step + 1; paintFlow(); }, 1600);
   }
 
   function open(id, scroll) {
     if (!byId[id]) return;
     cur = id;
-    if (curTab !== 'all' && byId[id].cat !== curTab) curTab = byId[id].cat;
+    if (!query && curTab !== 'all' && byId[id].cat !== curTab) curTab = byId[id].cat;
     if (st.seen.indexOf(id) < 0) { st.seen.push(id); save(); }
     renderTabs(); renderViewer(id); renderExplored();
-    if (scroll) $('#viewer').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    if (window.Scene3D.burst) window.Scene3D.burst();
+    if (scroll) go($('#viewer'));
   }
 
-  /* ---------- wish list / CTA ---------- */
+  /* =============== SIMULATOR =============== */
+  var sc = 0, simT = null;
+  function simReset() {
+    clearTimeout(simT);
+    $$('#stack .chip2.hot').forEach(function (c) { c.classList.remove('hot'); });
+    $$('.ly.flash').forEach(function (l) { l.classList.remove('flash'); });
+    var s = window.SCENARIOS[sc];
+    $('#simLog').innerHTML = s.steps.map(function (p, i) { var x = byId[p[0]]; return '<li data-i="' + i + '"><span class="sl-k">' + x.code + '</span><span><b>' + (p[1] === 'down' ? '↓ ' : '↑ ') + 'Tầng ' + pad(layerOf[p[0]] + 1) + ' · ' + x.n + '</b>' + p[2] + '</span></li>'; }).join('');
+    $('#simRun').textContent = '▶ Chạy mô phỏng';
+  }
+  function simRun() {
+    simReset();
+    var s = window.SCENARIOS[sc], i = 0;
+    $('#simRun').textContent = '■ Đang chạy…';
+    var tick = function () {
+      $$('#stack .chip2.hot').forEach(function (c) { c.classList.remove('hot'); });
+      $$('.ly.flash').forEach(function (l) { l.classList.remove('flash'); });
+      $$('#simLog li').forEach(function (li, k) { li.classList.toggle('on', k === i); li.classList.toggle('done', k < i); });
+      if (i >= s.steps.length) { setTimeout(function () { $('#simToast').classList.remove('on'); }, 1500); $('#simRun').textContent = '↺ Chạy lại'; $$('#simLog li').forEach(function (li) { li.classList.add('done'); }); return; }
+      var id = s.steps[i][0], c = $('#stack .chip2[data-open="' + id + '"]');
+      if (c) c.classList.add('hot');
+      var l = $('#ly-' + layerOf[id]); if (l) l.classList.add('flash');
+      if (l) { var rr = l.getBoundingClientRect(); if (rr.top < 120 || rr.bottom > innerHeight - 40) go(l, 'center'); }
+      var stp = s.steps[i], tt = $('#simToast'); tt.innerHTML = '<span class="mono">BƯỚC ' + (i + 1) + '/' + s.steps.length + ' · ' + byId[id].code + (stp[1] === 'down' ? ' ↓' : ' ↑') + '</span>' + stp[2]; tt.classList.add('on');
+      if (window.Scene3D.burst) window.Scene3D.burst();
+      i++; simT = setTimeout(tick, reduce ? 900 : 1900);
+    };
+    tick();
+  }
+
+  /* =============== MATURITY =============== */
+  function renderLevel() {
+    var m = window.MATURITY[st.lvl];
+    $$('.stair').forEach(function (b, i) { b.classList.toggle('on', i === st.lvl); b.classList.toggle('below', i < st.lvl); });
+    $('#lvCard').innerHTML = '<div class="lv-in"><div><span class="mono">BẬC ' + (st.lvl + 1) + ' / 5</span><h3>' + m.n + '</h3><p class="lv-d">' + m.d + '</p>' +
+      '<div class="lv-next"><span class="mono">BƯỚC TIẾP THEO</span>' + m.next + '</div></div>' +
+      '<div><h5>DẤU HIỆU NHẬN BIẾT</h5><ul class="checks">' + m.sign.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ul></div>' +
+      '<div><h5>DỊCH VỤ NÊN TRIỂN KHAI Ở BẬC NÀY</h5><div class="ly-b">' + m.ids.map(function (id) { return chip(id); }).join('') + '</div></div></div>';
+  }
+
+  /* =============== TABLE =============== */
+  var tcx = 0;
+  var weeks = function (s) { var m = /(\d+)/.exec(s.tl); return m ? +m[1] : 0; };
+  function renderTable() {
+    var q = ($('#tq').value || '').trim(), cat = $('#tcat').value, sort = $('#tsort').value;
+    var list = SV.filter(function (s) { return (!q || match(s, q)) && (!cat || s.cat === cat) && (!tcx || s.cx === tcx); });
+    if (sort === 'fast') list = list.slice().sort(function (a, b) { return weeks(a) - weeks(b) || a.cx - b.cx; });
+    if (sort === 'cx') list = list.slice().sort(function (a, b) { return a.cx - b.cx || weeks(a) - weeks(b); });
+    $('#tcount').innerHTML = 'HIỂN THỊ <b>' + list.length + '</b> / ' + SV.length;
+    $('#tbody').innerHTML = list.map(function (s) {
+      return '<tr data-open="' + s.id + '" tabindex="0"><td class="mono c">' + s.code + '</td><td><b>' + s.n + '</b><small>' + s.tag + '</small></td><td>' + catById[s.cat].n + '</td><td class="nw">' + s.tl + '</td><td><span class="cxm">' + dots(s.cx) + '</span></td><td class="nw">' + (s.sz || '') + '</td><td>' + ((s.need || [])[0] || '') + '</td></tr>';
+    }).join('') || '<tr><td colspan="7" class="empty">Không có dịch vụ khớp bộ lọc.</td></tr>';
+  }
+
+  /* =============== WISH / CTA =============== */
   function summary() {
     var items = st.wish.map(function (id) { return byId[id]; });
     return ['[Drabuff AI] Yêu cầu tư vấn triển khai AI',
       items.length ? 'Tôi quan tâm ' + items.length + ' dịch vụ:' : 'Tôi muốn được tư vấn giải pháp AI cho doanh nghiệp.'
     ].concat(items.map(function (s) { return '- ' + s.code + ' · ' + s.n; }))
-      .concat(['Tên doanh nghiệp: ', 'Người liên hệ: ', 'Nhu cầu chính: ']).join('\n');
+      .concat(painSel.length ? ['Vấn đề đang gặp: ' + painSel.map(function (i) { return window.PAINS[i].t; }).join('; ')] : [])
+      .concat(['Bậc trưởng thành AI hiện tại: Bậc ' + (st.lvl + 1) + ' – ' + window.MATURITY[st.lvl].n, 'Tên doanh nghiệp: ', 'Người liên hệ: ']).join('\n');
   }
   function renderWish() {
-    var w = $('#wish');
-    w.innerHTML = st.wish.length
+    $('#wish').innerHTML = st.wish.length
       ? '<div class="wish">' + st.wish.map(function (id) { var s = byId[id]; return '<button type="button" class="chip2" data-unwish="' + id + '" title="Bỏ khỏi danh sách"><span>' + s.code + '</span>' + s.n + '<em>×</em></button>'; }).join('') + '</div>'
       : '<p class="wish-empty">Chưa có dịch vụ nào. Khi xem một dịch vụ, bấm "Đánh dấu quan tâm" để thêm vào đây; danh sách sẽ được gửi kèm khi bạn nhắn Drabuff AI.</p>';
     $('#wishN').textContent = st.wish.length + ' dịch vụ';
+    $('#fabN').textContent = st.wish.length;
+    $('#fabN').hidden = !st.wish.length;
     $('#sumtxt').value = summary();
   }
+  function toggleWish(id, force) {
+    var i = st.wish.indexOf(id);
+    if (i > -1 && force !== true) st.wish.splice(i, 1); else if (i < 0) st.wish.push(id);
+    save(); renderWish(); renderTabs();
+    var fab = $('.fab'); fab.classList.remove('bump'); void fab.offsetWidth; fab.classList.add('bump');
+  }
 
-  /* ---------- events ---------- */
+  /* =============== EVENTS =============== */
   document.addEventListener('click', function (e) {
-    var t;
-    if ((t = e.target.closest('.tab'))) { curTab = t.dataset.tab; renderTabs(); return; }
-    if ((t = e.target.closest('.key'))) { open(t.dataset.id, true); return; }
-    if ((t = e.target.closest('[data-open]'))) { curTab = byId[t.dataset.open].cat; open(t.dataset.open, true); return; }
-    if ((t = e.target.closest('#replay'))) { play(); return; }
-    if ((t = e.target.closest('#wishBtn'))) {
-      var i = st.wish.indexOf(cur); if (i > -1) st.wish.splice(i, 1); else st.wish.push(cur);
-      save(); renderWish(); renderTabs();
-      t.classList.toggle('on-list', i < 0); t.textContent = i < 0 ? '✓ Đã đánh dấu quan tâm' : '+ Đánh dấu quan tâm';
-      return;
+    var t = e.target;
+    var q;
+    if ((q = t.closest('#catalog .tab'))) { curTab = q.dataset.tab; query = ''; $('#q').value = ''; renderTabs(); return; }
+    if ((q = t.closest('.key'))) { open(q.dataset.id, true); return; }
+    if ((q = t.closest('.nd'))) { playing = false; step = +q.dataset.i; paintFlow(); return; }
+    if ((q = t.closest('#pp'))) { playing = !playing; if (step >= byId[cur].flow.length && playing) step = 0; paintFlow(); return; }
+    if ((q = t.closest('#replay'))) { playing = true; play(); return; }
+    if ((q = t.closest('#baSeg button'))) { $$('#baSeg button').forEach(function (b) { b.setAttribute('aria-pressed', b === q); }); $('#baG').dataset.mode = q.dataset.ba; return; }
+    if ((q = t.closest('#wishBtn'))) { var on = st.wish.indexOf(cur) < 0; toggleWish(cur); q.classList.toggle('on-list', on); q.textContent = on ? '✓ Đã đánh dấu quan tâm' : '+ Đánh dấu quan tâm'; return; }
+    if ((q = t.closest('[data-unwish]'))) { toggleWish(q.dataset.unwish); if (q.dataset.unwish === cur) renderViewer(cur); return; }
+    if ((q = t.closest('.pain'))) { var p = +q.dataset.p, k = painSel.indexOf(p); if (k > -1) painSel.splice(k, 1); else painSel.push(p); renderFinder(); renderWish(); return; }
+    if ((q = t.closest('#frWish'))) { $('#frList').dataset.ids.split(',').forEach(function (id) { toggleWish(id, true); }); q.textContent = '✓ Đã đánh dấu'; return; }
+    if ((q = t.closest('[data-sc]'))) { sc = +q.dataset.sc; $$('[data-sc]').forEach(function (b) { b.setAttribute('aria-pressed', b === q); }); simReset(); return; }
+    if ((q = t.closest('#simRun'))) { simRun(); return; }
+    if ((q = t.closest('.stair'))) { st.lvl = +q.dataset.lv; save(); renderLevel(); renderWish(); return; }
+    if ((q = t.closest('[data-pr]'))) {
+      var pr = q.dataset.pr; $$('[data-pr]').forEach(function (b) { b.setAttribute('aria-pressed', b === q); });
+      $$('.cm').forEach(function (c) { c.classList.toggle('pick', c.dataset.cm === pr); c.classList.toggle('dim', pr !== 'hybrid' && c.dataset.cm !== pr); });
+      $('#hybrid').classList.toggle('pick', pr === 'hybrid'); return;
     }
-    if ((t = e.target.closest('[data-unwish]'))) { st.wish.splice(st.wish.indexOf(t.dataset.unwish), 1); save(); renderWish(); renderTabs(); if (t.dataset.unwish === cur) renderViewer(cur); return; }
-    if ((t = e.target.closest('.slab'))) {
-      var ly = document.getElementById('ly-' + t.dataset.ly);
-      ly.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
-      ly.classList.add('flash'); setTimeout(function () { ly.classList.remove('flash'); }, 1800);
-      return;
+    if ((q = t.closest('#tcx button'))) { tcx = +q.dataset.cx; $$('#tcx button').forEach(function (b) { b.setAttribute('aria-pressed', b === q); }); renderTable(); return; }
+    if ((q = t.closest('.flip'))) { q.classList.toggle('on'); return; }
+    if ((q = t.closest('[data-open]'))) { var id = q.dataset.open; if (!query) curTab = byId[id].cat; open(id, true); return; }
+    if ((q = t.closest('.slab'))) {
+      var ly = document.getElementById('ly-' + q.dataset.ly); go(ly, 'center');
+      ly.classList.add('flash'); setTimeout(function () { ly.classList.remove('flash'); }, 1800); return;
     }
-    if ((t = e.target.closest('#copy'))) {
+    if ((q = t.closest('#copy'))) {
       var txt = summary(), ok = function () { $('#copied').textContent = 'Đã sao chép. Mở Zalo ' + C.display + ' và dán vào tin nhắn.'; };
       var fb = function () { var ta = $('#sumtxt'); ta.hidden = false; ta.focus(); ta.select(); $('#copied').textContent = 'Trình duyệt chặn sao chép tự động. Nội dung đã được bôi đen, nhấn Ctrl/⌘ + C.'; };
       try { navigator.clipboard.writeText(txt).then(ok, fb); } catch (err) { fb(); }
     }
   });
+  document.addEventListener('keydown', function (e) {
+    var tr = e.target.closest && e.target.closest('tr[data-open]');
+    if (tr && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); open(tr.dataset.open, true); return; }
+    if (/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
+    var r = $('#viewer').getBoundingClientRect();
+    if (r.top < innerHeight * 0.6 && r.bottom > innerHeight * 0.3 && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')) {
+      var i = SV.indexOf(byId[cur]); open(SV[(i + (e.key === 'ArrowRight' ? 1 : -1) + SV.length) % SV.length].id, false);
+    }
+  });
+  var qT; $('#q').addEventListener('input', function (e) { clearTimeout(qT); qT = setTimeout(function () { query = e.target.value.trim(); renderTabs(); }, 120); });
+  ['#tq', '#tcat', '#tsort'].forEach(function (s) { $(s).addEventListener(s === '#tq' ? 'input' : 'change', renderTable); });
 
-  // hero iso tilt follows pointer
-  if (!reduce && window.matchMedia && matchMedia('(pointer:fine)').matches) {
+  /* =============== EFFECTS =============== */
+  // spotlight follows pointer on .spot surfaces
+  if (fine && !reduce) document.addEventListener('pointermove', function (e) {
+    var el = e.target.closest && e.target.closest('.spot'); if (!el) return;
+    var r = el.getBoundingClientRect(); el.style.setProperty('--mx', (e.clientX - r.left) + 'px'); el.style.setProperty('--my', (e.clientY - r.top) + 'px');
+  }, { passive: true });
+  // hero iso tilt
+  if (fine && !reduce) {
     var iso = $('#iso'), host = iso.parentElement;
     host.addEventListener('pointermove', function (e) {
       var r = host.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
@@ -1153,9 +1868,42 @@ window.LAYERS = [
     });
     host.addEventListener('pointerleave', function () { iso.style.transform = ''; });
   }
+  // typewriter
+  (function () {
+    var el = $('#typer'), words = SV.map(function (s) { return s.n; }), w = 0, c = 0, del = false;
+    if (reduce) { el.textContent = words[0]; return; }
+    (function loop() {
+      var word = words[w];
+      c += del ? -1 : 1; el.textContent = word.slice(0, c);
+      var d = del ? 28 : 55;
+      if (!del && c >= word.length) { del = true; d = 1400; }
+      else if (del && c <= 0) { del = false; w = (w + 1) % words.length; d = 300; }
+      setTimeout(loop, d);
+    })();
+  })();
+  // count-up
+  if (!reduce) $$('.cnt').forEach(function (el) {
+    var to = +el.dataset.count, t0 = performance.now();
+    (function f(now) { var p = Math.min(1, (now - t0) / 1400); el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(f); })(t0);
+  });
+  // scroll progress + dock active section
+  var secs = $$('.sec'), prog = $('#prog');
+  function onScroll() {
+    var h = document.documentElement.scrollHeight - innerHeight; prog.style.width = (h > 0 ? scrollY / h * 100 : 0) + '%';
+    var active = null; secs.forEach(function (s) { if (s.getBoundingClientRect().top < innerHeight * 0.35) active = s.id; });
+    $$('.dock a').forEach(function (a) { var on = a.dataset.sec === active; if (on !== a.classList.contains('on')) { a.classList.toggle('on', on); if (on && a.scrollIntoView && a.parentElement.scrollWidth > a.parentElement.clientWidth) a.parentElement.scrollTo({ left: a.offsetLeft - 16, behavior: 'smooth' }); } });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  // reveal on scroll (only for elements that start below the fold, so the first frame is complete)
+  if ('IntersectionObserver' in window && !reduce) {
+    var io = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) { en.target.classList.remove('rv-wait'); io.unobserve(en.target); } }); }, { rootMargin: '0px 0px -8% 0px' });
+    $$('.rv').forEach(function (el) { if (el.getBoundingClientRect().top > innerHeight) { el.classList.add('rv-wait'); io.observe(el); } });
+  }
 
-  renderTabs(); renderViewer(cur); renderExplored(); renderWish();
+  /* =============== INIT =============== */
+  renderFinder(); renderTabs(); renderViewer(cur); renderExplored(); simReset(); renderLevel(); renderTable(); renderWish(); onScroll();
   if (st.seen.indexOf(cur) < 0) { st.seen.push(cur); save(); renderExplored(); }
+  $('.prio2 [data-pr="llmprivate"]').click();
 })();
 
 </script>

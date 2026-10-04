@@ -70,6 +70,7 @@
     ndc.x = (e.clientX / innerWidth) * 2 - 1; ndc.y = -(e.clientY / innerHeight) * 2 + 1; hasPtr = true;
   }, { passive: true });
   var burst = 0;
+  api.burst = function () { burst = 1; };
   window.addEventListener('pointerdown', function () { burst = 1; }, { passive: true });
 
   function resize() {

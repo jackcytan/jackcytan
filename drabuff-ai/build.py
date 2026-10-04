@@ -30,7 +30,7 @@ PAGES = {
         'title': 'Drabuff AI Service Map',
         'desc': 'Bản đồ toàn bộ dịch vụ AI triển khai cho doanh nghiệp, có sơ đồ quy trình trực quan — Drabuff AI',
         'css': ['base.css', 'catalog.css'],
-        'js': ['catalog-data.js', 'scene.js', 'catalog.js'],
+        'js': ['catalog-data.js', 'catalog-data2.js', 'scene.js', 'catalog.js'],
         'accent': '--acc:#B69CFF;--acc-d:#8E6EF2;--acc-dd:#46308F;--acc-ink:#120A2A;--acc-glow:rgba(182,156,255,.5);'
                   '--acc-soft:rgba(182,156,255,.08);--acc-soft2:rgba(182,156,255,.18);--acc2:#45E3FF;--acc2-soft:rgba(69,227,255,.1);',
         'status': 'AI SERVICE MAP',
