@@ -287,7 +287,7 @@ input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;bac
     <p class="note" id="mNote"></p>
     <div class="row">
       <button class="btn" id="mClose" type="button">Đóng</button>
-      <a class="btn primary" id="mLink" download>Tải lại lần nữa</a>
+      <button class="btn primary" id="mLink" type="button">Tải lại lần nữa</button>
     </div>
   </div>
 </div>
@@ -557,7 +557,20 @@ function encodeBMP(c){
   return new Blob([buf],{type:'image/bmp'});
 }
 
-let lastUrl = null;
+let lastUrl = null, lastBlob = null, lastName = '', dl = null, inArtifact = false;
+// Inside the Claude artifact viewer, plain download links are blocked; use its downloads capability there.
+try { if (window.claude?.use){ inArtifact = true; window.claude.use('downloads').then(n => dl = n).catch(() => {}); } } catch {}
+const SAVEABLE = ['png','jpg','webp'];
+async function deliver(){
+  const ext = lastName.split('.').pop();
+  if (dl){
+    if (!SAVEABLE.includes(ext)) return 'manual';
+    try { await dl.save({filename:lastName, data:lastBlob}); toast('Đã tải về: ' + lastName); return 'ok'; }
+    catch(e){ if (e?.code==='declined'){ toast('Bạn đã huỷ tải xuống'); return 'ok'; } if (e?.code==='rate_limited'){ toast('Hộp thoại lưu đang mở, thử lại sau giây lát'); return 'ok'; } return 'manual'; }
+  }
+  if (inArtifact) return 'manual';
+  try { const t = document.createElement('a'); t.href = lastUrl; t.download = lastName; document.body.append(t); t.click(); t.remove(); return 'ok'; } catch { return 'manual'; }
+}
 async function exportImage(){
   if (!src) return;
   const btns = [$('#btnDl'), $('#btnQuick')]; btns.forEach(b => b.disabled = true);
@@ -572,16 +585,20 @@ async function exportImage(){
       x.fillStyle = '#fff'; x.fillRect(0,0,w,h); x.drawImage(c,0,0);
     }
     const blob = fmt.id==='bmp' ? encodeBMP(out) : await new Promise((res,rej) => out.toBlob(b => b ? res(b) : rej(new Error('encode')), fmt.mime, +q.value/100));
-    if (lastUrl) URL.revokeObjectURL(lastUrl); lastUrl = URL.createObjectURL(blob);
-    const name = ($('#outName').value.trim().replace(/[\\/:*?"<>|]+/g,'-') || 'anh-tan-ai') + '.' + fmt.ext;
-    const a = $('#mLink'); a.href = lastUrl; a.download = name;
-    try { const t = document.createElement('a'); t.href = lastUrl; t.download = name; document.body.append(t); t.click(); t.remove(); } catch {}
+    if (lastUrl) URL.revokeObjectURL(lastUrl); lastUrl = URL.createObjectURL(blob); lastBlob = blob;
+    lastName = ($('#outName').value.trim().replace(/[\\/:*?"<>|&]+/g,'-') || 'anh-tan-ai') + '.' + fmt.ext;
     $('#mImg').src = fmt.id==='bmp' ? out.toDataURL('image/png') : lastUrl;
-    $('#mNote').innerHTML = `<b>${name}</b> · ${w}×${h} px · ${kb(blob.size)}<br>Nếu máy chưa tự tải về: bấm “Tải lại lần nữa”, hoặc nhấn giữ / chuột phải vào ảnh và chọn “Lưu ảnh”.`;
-    $('#modal').hidden = false; $('#toast').hidden = true;
+    $('#toast').hidden = true;
+    const r = await deliver();
+    $('#mLink').hidden = r === 'manual';
+    $('#mNote').innerHTML = `<b>${lastName}</b> · ${w}×${h} px · ${kb(blob.size)}<br>` + (r === 'manual'
+      ? 'Định dạng này không tải tự động được ở đây: nhấn giữ (điện thoại) hoặc chuột phải (máy tính) vào ảnh và chọn “Lưu ảnh”. Hoặc chọn PNG, JPG, WEBP để tải trực tiếp.'
+      : 'Nếu máy chưa tự tải về, bấm “Tải lại lần nữa”, hoặc nhấn giữ / chuột phải vào ảnh và chọn “Lưu ảnh”.');
+    $('#modal').hidden = false;
   } catch(e){ toast('Không xuất được ảnh. Hãy thử giảm kích thước hoặc đổi sang JPG.'); }
   btns.forEach(b => b.disabled = false);
 }
+$('#mLink').onclick = deliver;
 $('#btnDl').onclick = exportImage;
 $('#btnQuick').onclick = exportImage;
 $('#mClose').onclick = () => $('#modal').hidden = true;
