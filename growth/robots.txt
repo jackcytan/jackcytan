@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# Cho phép các trình thu thập AI/GEO đọc nội dung công khai
+User-agent: GPTBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
